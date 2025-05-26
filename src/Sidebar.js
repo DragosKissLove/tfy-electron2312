@@ -117,24 +117,13 @@ const Sidebar = ({ active, onChange, user }) => {
         ))}
       </div>
 
-      {/* Version & Logout */}
+      {/* Logout Button and Version */}
       <div style={{ 
         display: 'flex', 
         flexDirection: 'column', 
         alignItems: 'center',
-        gap: 8,
-        marginTop: 'auto',
-        paddingBottom: 16
+        gap: 8
       }}>
-        <motion.span
-          style={{
-            fontSize: '10px',
-            color: theme.text,
-            opacity: 0.3
-          }}
-        >
-          v3.0.0
-        </motion.span>
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -155,6 +144,16 @@ const Sidebar = ({ active, onChange, user }) => {
         >
           <FiLogOut size={24} />
         </motion.button>
+        <motion.span
+          style={{
+            fontSize: '10px',
+            color: theme.text,
+            opacity: 0.3,
+            marginBottom: '16px'
+          }}
+        >
+          v3.0.0
+        </motion.span>
       </div>
     </motion.div>
   );

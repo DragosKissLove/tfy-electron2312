@@ -9,9 +9,9 @@ const Extra = () => {
 
   const handleRobloxDowngrade = async () => {
     try {
-      if (window.api && robloxVersion) {
+      if (window.electron && robloxVersion) {
         setStatus('Starting Roblox downgrade...');
-        await window.api.runPythonFunction('download_roblox_player', robloxVersion);
+        await window.electron.runFunction('download_roblox_player', robloxVersion);
         setStatus('Roblox downgrade completed!');
       }
     } catch (error) {
@@ -73,6 +73,7 @@ const Extra = () => {
               )`,
               mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
               maskComposite: 'exclude',
+              pointerEvents: 'none'
             }}
           />
           <h3 style={{ 
@@ -94,7 +95,9 @@ const Extra = () => {
               background: theme.cardBg,
               color: theme.text,
               boxShadow: `0 0 20px ${primaryColor}22`,
-              outline: 'none'
+              outline: 'none',
+              position: 'relative',
+              zIndex: 1
             }}
           />
           <motion.button
@@ -112,7 +115,9 @@ const Extra = () => {
               fontSize: '15px',
               fontWeight: 500,
               opacity: robloxVersion ? 1 : 0.7,
-              boxShadow: `0 0 20px ${primaryColor}40`
+              boxShadow: `0 0 20px ${primaryColor}40`,
+              position: 'relative',
+              zIndex: 1
             }}
           >
             Downgrade Roblox
