@@ -27,8 +27,8 @@ const Apps = () => {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3
+        staggerChildren: 0.03,
+        delayChildren: 0.1
       }
     }
   };
@@ -37,7 +37,7 @@ const Apps = () => {
     hidden: { 
       opacity: 0,
       y: 20,
-      scale: 0.8
+      scale: 0.9
     },
     show: { 
       opacity: 1,
@@ -45,8 +45,8 @@ const Apps = () => {
       scale: 1,
       transition: {
         type: "spring",
-        stiffness: 200,
-        damping: 20
+        stiffness: 400,
+        damping: 15
       }
     }
   };
@@ -54,15 +54,18 @@ const Apps = () => {
   const headerVariants = {
     hidden: { 
       opacity: 0,
-      x: -50
+      x: -20,
+      scale: 0.95
     },
     show: { 
       opacity: 1,
       x: 0,
+      scale: 1,
       transition: {
         type: "spring",
-        stiffness: 200,
-        damping: 20
+        stiffness: 400,
+        damping: 20,
+        duration: 0.2
       }
     }
   };
@@ -99,10 +102,11 @@ const Apps = () => {
             boxShadow: `0 0 10px ${primaryColor}`
           }}
           animate={{
-            opacity: [0.5, 1, 0.5]
+            opacity: [0.5, 1, 0.5],
+            scaleX: [0.8, 1.2, 0.8]
           }}
           transition={{
-            duration: 2,
+            duration: 1.5,
             repeat: Infinity,
             ease: "easeInOut"
           }}
