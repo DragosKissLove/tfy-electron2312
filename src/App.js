@@ -95,11 +95,10 @@ const App = () => {
         zIndex: 1000
       }}>
         <span style={{
-          fontSize: '12px',
-          color: primaryColor,
-          opacity: 0.8,
-          marginRight: 8,
-          filter: `drop-shadow(0 0 8px ${primaryColor}66)`
+          fontSize: '10px',
+          color: theme.text,
+          opacity: 0.3,
+          marginRight: 8
         }}>
           v3.0.0
         </span>
