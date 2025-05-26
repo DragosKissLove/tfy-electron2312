@@ -124,7 +124,7 @@ const Sidebar = ({ active, onChange, user }) => {
         flexDirection: 'column', 
         alignItems: 'center',
         gap: 4,
-        marginTop: -200
+        marginTop: -400
       }}>
         <motion.button
           whileHover={{ scale: 1.1 }}
