@@ -5,7 +5,7 @@ files:
   - filter:
       - build/**/*
 extraMetadata:
-  main: build/electron.js
+  main: main.js
 appId: com.tfy.tool
 productName: TFY Tool
 win:
