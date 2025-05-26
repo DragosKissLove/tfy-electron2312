@@ -101,7 +101,9 @@ const Settings = () => {
                 borderRadius: '20px',
                 padding: '4px',
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                boxShadow: `0 0 20px ${primaryColor}40`,
+                border: `1px solid ${primaryColor}33`
               }}
             >
               <input
@@ -115,7 +117,8 @@ const Settings = () => {
                   borderRadius: '16px',
                   cursor: 'pointer',
                   background: 'transparent',
-                  marginRight: '10px'
+                  marginRight: '10px',
+                  filter: `drop-shadow(0 0 8px ${primaryColor})`
                 }}
               />
               <span style={{ 
