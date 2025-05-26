@@ -122,7 +122,8 @@ const Sidebar = ({ active, onChange, user }) => {
         display: 'flex', 
         flexDirection: 'column', 
         alignItems: 'center',
-        gap: 8
+        gap: 4,
+        marginTop: '-80px'
       }}>
         <motion.button
           whileHover={{ scale: 1.1 }}
@@ -146,10 +147,10 @@ const Sidebar = ({ active, onChange, user }) => {
         </motion.button>
         <motion.span
           style={{
-            fontSize: '10px',
+            fontSize: '8px',
             color: theme.text,
-            opacity: 0.3,
-            marginBottom: '16px'
+            opacity: 0.2,
+            marginBottom: '8px'
           }}
         >
           v3.0.0
