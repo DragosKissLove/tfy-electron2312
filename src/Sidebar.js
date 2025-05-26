@@ -29,7 +29,7 @@ const Sidebar = ({ active, onChange, user }) => {
         background: 'rgba(255, 255, 255, 0.03)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        borderRight: `1px solid ${theme.border}`,
+        borderRight: `1px solid ${primaryColor}22`,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -39,7 +39,8 @@ const Sidebar = ({ active, onChange, user }) => {
         top: 0,
         overflow: 'hidden',
         borderTopLeftRadius: '12px',
-        borderBottomLeftRadius: '12px'
+        borderBottomLeftRadius: '12px',
+        boxShadow: `0 0 20px ${primaryColor}11`
       }}
     >
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16, marginTop: 20 }}>
@@ -65,7 +66,10 @@ const Sidebar = ({ active, onChange, user }) => {
                 justifyContent: 'center',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                position: 'relative'
+                position: 'relative',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                boxShadow: id === active ? `0 0 20px ${primaryColor}44` : 'none'
               }}
             >
               <Icon size={24} />
@@ -100,7 +104,7 @@ const Sidebar = ({ active, onChange, user }) => {
                 left: 0,
                 top: '50%',
                 transform: 'translateY(-50%)',
-                background: theme.cardBg,
+                background: 'rgba(255, 255, 255, 0.03)',
                 padding: '8px 12px',
                 borderRadius: '8px',
                 fontSize: '14px',
@@ -108,7 +112,9 @@ const Sidebar = ({ active, onChange, user }) => {
                 pointerEvents: 'none',
                 whiteSpace: 'nowrap',
                 boxShadow: `0 4px 12px ${primaryColor}33`,
-                border: `1px solid ${theme.border}`,
+                border: `1px solid ${primaryColor}22`,
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
                 zIndex: 1000
               }}
             >
@@ -141,7 +147,9 @@ const Sidebar = ({ active, onChange, user }) => {
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)'
           }}
         >
           <FiLogOut size={24} />
