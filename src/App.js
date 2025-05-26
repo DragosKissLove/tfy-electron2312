@@ -90,7 +90,7 @@ const App = () => {
         top: 12,
         right: 12,
         display: 'flex',
-        gap: 8,
+        gap: 12,
         zIndex: 1000
       }}>
         <motion.button
@@ -98,36 +98,38 @@ const App = () => {
           whileTap={{ scale: 0.9 }}
           onClick={handleMinimize}
           style={{
-            width: 24,
-            height: 24,
+            width: 32,
+            height: 32,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             background: 'transparent',
             border: 'none',
-            color: theme.text,
-            cursor: 'pointer'
+            color: primaryColor,
+            cursor: 'pointer',
+            filter: `drop-shadow(0 0 8px ${primaryColor}66)`
           }}
         >
-          <FiMinus size={18} />
+          <FiMinus size={24} />
         </motion.button>
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={handleClose}
           style={{
-            width: 24,
-            height: 24,
+            width: 32,
+            height: 32,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             background: 'transparent',
             border: 'none',
-            color: theme.text,
-            cursor: 'pointer'
+            color: primaryColor,
+            cursor: 'pointer',
+            filter: `drop-shadow(0 0 8px ${primaryColor}66)`
           }}
         >
-          <FiX size={18} />
+          <FiX size={24} />
         </motion.button>
       </div>
       
