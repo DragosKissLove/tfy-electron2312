@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTheme } from '../ThemeContext';
 import { motion } from 'framer-motion';
 import { downloadAndRun } from '../utils/installer';
+import { FiDownload } from 'react-icons/fi';
 
 const apps = [
   { name: 'Spotify', icon: 'spotify.png', url: 'https://download.scdn.co/SpotifySetup.exe' },
@@ -136,16 +137,42 @@ const Apps = () => {
                 opacity: hoveredApp && hoveredApp !== app.name ? 0.6 : 1,
               }}
             >
-              <img
-                src={`icons/${app.icon}`}
-                alt={app.name}
+              <div
                 style={{
-                  width: '28px',
-                  height: '28px',
+                  width: '40px',
+                  height: '40px',
                   marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: `linear-gradient(135deg, ${primaryColor}22, ${primaryColor}44)`,
+                  borderRadius: '12px',
+                  padding: '8px',
+                  transition: 'all 0.3s ease'
                 }}
-              />
+              >
+                <img
+                  src={`icons/${app.icon}`}
+                  alt={app.name}
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    filter: `drop-shadow(0 0 4px ${primaryColor}66)`,
+                    transition: 'all 0.3s ease'
+                  }}
+                />
+              </div>
               {app.name}
+              {isHovered && (
+                <FiDownload 
+                  size={16} 
+                  style={{ 
+                    marginTop: '8px',
+                    color: primaryColor,
+                    animation: 'bounce 1s infinite'
+                  }} 
+                />
+              )}
             </motion.button>
           );
         })}
