@@ -57,44 +57,44 @@ const Sidebar = ({ active, onChange, user }) => {
         gap: 8
       }}>
         <motion.button
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.1, backgroundColor: `${primaryColor}22` }}
           whileTap={{ scale: 0.9 }}
           onClick={handleMinimize}
           style={{
-            width: 20,
-            height: 20,
-            borderRadius: '50%',
-            border: 'none',
-            background: '#FBD024',
+            width: 24,
+            height: 24,
+            borderRadius: '8px',
+            border: `1px solid ${theme.border}`,
+            background: 'transparent',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#000',
-            fontSize: 14
+            color: theme.text,
+            transition: 'all 0.2s ease'
           }}
         >
-          <FiMinus size={12} />
+          <FiMinus size={14} />
         </motion.button>
         <motion.button
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.1, backgroundColor: '#ff5f5722' }}
           whileTap={{ scale: 0.9 }}
           onClick={handleClose}
           style={{
-            width: 20,
-            height: 20,
-            borderRadius: '50%',
-            border: 'none',
-            background: '#FF5F57',
+            width: 24,
+            height: 24,
+            borderRadius: '8px',
+            border: `1px solid ${theme.border}`,
+            background: 'transparent',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#000',
-            fontSize: 14
+            color: '#FF5F57',
+            transition: 'all 0.2s ease'
           }}
         >
-          <FiX size={12} />
+          <FiX size={14} />
         </motion.button>
       </div>
 
