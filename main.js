@@ -133,47 +133,6 @@ async function downloadApp(name, url) {
   }
 }
 
-async function downloadRobloxPlayer(versionHash, logCallback, progressCallback) {
-  try {
-    const base_url = "https://setup.rbxcdn.com";
-    versionHash = versionHash.strip().toLowerCase();
-    if (!versionHash.startsWith("version-")) {
-      versionHash = `version-${versionHash}`;
-    }
-
-    const manifest_url = `${base_url}/${versionHash}-rbxPkgManifest.txt`;
-    const response = await axios.get(manifest_url);
-    const lines = response.data.split('\n').filter(line => line.trim().endsWith('.zip'));
-
-    const target_root = path.join("C:", "Program Files (x86)", "Roblox", "Versions", versionHash);
-    fs.mkdirSync(target_root, { recursive: true });
-
-    const xml = '<?xml version="1.0" encoding="UTF-8"?><Settings><ContentFolder>content</ContentFolder><BaseUrl>http://www.roblox.com</BaseUrl></Settings>';
-    fs.writeFileSync(path.join(target_root, "AppSettings.xml"), xml);
-
-    for (const name of lines) {
-      const blob_url = `${base_url}/${versionHash}-${name}`;
-      const response = await axios.get(blob_url, {
-        responseType: 'arraybuffer',
-        onDownloadProgress: (progressEvent) => {
-          const percentage = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          progressCallback(percentage);
-        }
-      });
-
-      const zipPath = path.join(target_root, name);
-      fs.writeFileSync(zipPath, response.data);
-      await extract(zipPath, { dir: target_root });
-      fs.unlinkSync(zipPath);
-      logCallback(`Extracted ${name}`);
-    }
-
-    return { success: true, message: 'Roblox version installed successfully!' };
-  } catch (error) {
-    throw new Error(`Failed to download Roblox: ${error.message}`);
-  }
-}
-
 async function handleGithubAuth() {
   // Implementation will be added in the next update
   throw new Error('Function not implemented yet');

@@ -1,16 +1,12 @@
 export const downloadAndRun = async (name, url) => {
   try {
-    // Use electron's IPC to handle downloads
-    const result = await window.electron.runFunction('download-app', {
-      name,
-      url,
-    });
+    // Use the exposed downloadApp function
+    const result = await window.electron.downloadApp(name, url);
 
     if (result.success) {
-      // Show success message
-      alert(`✅ ${name} has been downloaded successfully. Please run the installer.`);
+      alert(`✅ ${name} has been downloaded to your Downloads folder. Please run the installer.`);
     } else {
-      throw new Error(result.error);
+      throw new Error(result.error || 'Download failed');
     }
   } catch (error) {
     alert(`❌ Download failed: ${error.message}`);
