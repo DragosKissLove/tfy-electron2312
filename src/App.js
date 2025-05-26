@@ -90,9 +90,19 @@ const App = () => {
         top: 12,
         right: 12,
         display: 'flex',
-        gap: 8,
+        alignItems: 'center',
+        gap: 12,
         zIndex: 1000
       }}>
+        <span style={{
+          fontSize: '12px',
+          color: primaryColor,
+          opacity: 0.8,
+          marginRight: 8,
+          filter: `drop-shadow(0 0 8px ${primaryColor}66)`
+        }}>
+          v3.0.0
+        </span>
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
