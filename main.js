@@ -6,8 +6,6 @@ const fs = require('fs');
 const axios = require('axios');
 const extract = require('extract-zip');
 const store = new Store();
-const https = require('https');
-const os = require('os');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -27,17 +25,20 @@ function createWindow() {
 app.whenReady().then(() => {
   createWindow();
 
+  // Handle IPC calls
   ipcMain.handle('run-function', async (event, { name, args }) => {
     try {
       switch (name) {
-        case 'download-app':
-          return await downloadApp(args.name, args.url);
         case 'check-updates':
           return await checkForUpdates();
         case 'clean-temp':
           return await cleanTemp();
         case 'run-optimization':
           return await runOptimization();
+        case 'download-roblox':
+          return await downloadRobloxPlayer(args.version, args.logCallback, args.progressCallback);
+        case 'github-auth':
+          return await handleGithubAuth();
         default:
           throw new Error('Function not found');
       }
@@ -47,6 +48,7 @@ app.whenReady().then(() => {
     }
   });
 
+  // Handle settings storage
   ipcMain.handle('get-settings', () => {
     return store.get('settings');
   });
@@ -56,28 +58,6 @@ app.whenReady().then(() => {
     return true;
   });
 });
-
-async function downloadApp(name, url) {
-  try {
-    const downloadPath = path.join(os.homedir(), 'Downloads', `${name}.exe`);
-    
-    const response = await axios({
-      url,
-      method: 'GET',
-      responseType: 'stream',
-    });
-
-    const writer = fs.createWriteStream(downloadPath);
-    response.data.pipe(writer);
-
-    return new Promise((resolve, reject) => {
-      writer.on('finish', () => resolve({ success: true }));
-      writer.on('error', reject);
-    });
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-}
 
 async function checkForUpdates() {
   try {
@@ -126,6 +106,52 @@ async function runOptimization() {
   } catch (error) {
     throw new Error(`Failed to run optimization: ${error.message}`);
   }
+}
+
+async function downloadRobloxPlayer(versionHash, logCallback, progressCallback) {
+  try {
+    const base_url = "https://setup.rbxcdn.com";
+    versionHash = versionHash.strip().toLowerCase();
+    if (!versionHash.startsWith("version-")) {
+      versionHash = `version-${versionHash}`;
+    }
+
+    const manifest_url = `${base_url}/${versionHash}-rbxPkgManifest.txt`;
+    const response = await axios.get(manifest_url);
+    const lines = response.data.split('\n').filter(line => line.trim().endsWith('.zip'));
+
+    const target_root = path.join("C:", "Program Files (x86)", "Roblox", "Versions", versionHash);
+    fs.mkdirSync(target_root, { recursive: true });
+
+    const xml = '<?xml version="1.0" encoding="UTF-8"?><Settings><ContentFolder>content</ContentFolder><BaseUrl>http://www.roblox.com</BaseUrl></Settings>';
+    fs.writeFileSync(path.join(target_root, "AppSettings.xml"), xml);
+
+    for (const name of lines) {
+      const blob_url = `${base_url}/${versionHash}-${name}`;
+      const response = await axios.get(blob_url, {
+        responseType: 'arraybuffer',
+        onDownloadProgress: (progressEvent) => {
+          const percentage = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          progressCallback(percentage);
+        }
+      });
+
+      const zipPath = path.join(target_root, name);
+      fs.writeFileSync(zipPath, response.data);
+      await extract(zipPath, { dir: target_root });
+      fs.unlinkSync(zipPath);
+      logCallback(`Extracted ${name}`);
+    }
+
+    return { success: true, message: 'Roblox version installed successfully!' };
+  } catch (error) {
+    throw new Error(`Failed to download Roblox: ${error.message}`);
+  }
+}
+
+async function handleGithubAuth() {
+  // Implementation will be added in the next update
+  throw new Error('Function not implemented yet');
 }
 
 app.on('window-all-closed', () => {

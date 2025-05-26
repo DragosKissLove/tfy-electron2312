@@ -1,22 +1,22 @@
-export const isElectronAvailable = () => {
-  return window.electron !== undefined;
-};
-
 export const downloadAndRun = async (name, url) => {
   try {
-    if (!isElectronAvailable()) {
-      throw new Error('This feature is only available in the desktop application');
-    }
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const file = new Blob([blob], { type: 'application/octet-stream' });
+    const fileURL = URL.createObjectURL(file);
 
-    const result = await window.electron.runFunction('download-app', { name, url });
-    
-    if (result.success) {
-      return { success: true, message: `${name} has been downloaded to your Downloads folder` };
-    } else {
-      throw new Error(result.error || 'Download failed');
-    }
+    const link = document.createElement('a');
+    link.href = fileURL;
+    link.download = `${name}.exe`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Dacă ai un sistem de notificare în React, folosește-l aici
+    alert(`🔧 ${name} se descarcă... deschide installer-ul manual după ce se termină.`);
   } catch (error) {
-    console.error('Download error:', error);
-    throw new Error(`Download failed: ${error.message}`);
+    alert(`❌ Eroare la descărcare: ${error.message}`);
   }
 };
+
+

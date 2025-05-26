@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTheme } from '../ThemeContext';
 import { motion } from 'framer-motion';
-import { downloadAndRun, isElectronAvailable } from '../utils/installer';
+import { downloadAndRun } from '../utils/installer';
 
 const apps = [
   { name: 'Spotify', icon: 'spotify.png', url: 'https://download.scdn.co/SpotifySetup.exe' },
@@ -21,7 +21,6 @@ const apps = [
 const Apps = () => {
   const { theme, primaryColor } = useTheme();
   const [hoveredApp, setHoveredApp] = useState(null);
-  const [error, setError] = useState(null);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -71,15 +70,6 @@ const Apps = () => {
     }
   };
 
-  const handleDownload = async (app) => {
-    try {
-      setError(null);
-      await downloadAndRun(app.name, app.url);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
   return (
     <motion.div
       style={{ padding: '30px' }}
@@ -103,32 +93,6 @@ const Apps = () => {
         Install Apps
       </motion.h2>
 
-      {!isElectronAvailable() && (
-        <div style={{
-          padding: '12px',
-          marginBottom: '20px',
-          background: 'rgba(255, 87, 87, 0.1)',
-          border: '1px solid rgba(255, 87, 87, 0.3)',
-          borderRadius: '8px',
-          color: theme.text
-        }}>
-          ⚠️ App installation is only available in the desktop application
-        </div>
-      )}
-
-      {error && (
-        <div style={{
-          padding: '12px',
-          marginBottom: '20px',
-          background: 'rgba(255, 87, 87, 0.1)',
-          border: '1px solid rgba(255, 87, 87, 0.3)',
-          borderRadius: '8px',
-          color: theme.text
-        }}>
-          ❌ {error}
-        </div>
-      )}
-
       <motion.div
         variants={containerVariants}
         style={{
@@ -147,8 +111,7 @@ const Apps = () => {
               whileTap={{ scale: 0.95 }}
               onMouseEnter={() => setHoveredApp(app.name)}
               onMouseLeave={() => setHoveredApp(null)}
-              onClick={() => handleDownload(app)}
-              disabled={!isElectronAvailable()}
+              onClick={() => downloadAndRun(app.name, app.url)}
               style={{
                 background: 'rgba(255, 255, 255, 0.03)',
                 border: `1px solid ${primaryColor}33`,
@@ -159,7 +122,7 @@ const Apps = () => {
                 padding: '16px 12px',
                 fontSize: '14px',
                 fontWeight: 500,
-                cursor: isElectronAvailable() ? 'pointer' : 'not-allowed',
+                cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -170,7 +133,7 @@ const Apps = () => {
                   ? `0 4px 22px ${primaryColor}66`
                   : `0 2px 12px ${primaryColor}33`,
                 filter: hoveredApp && hoveredApp !== app.name ? 'blur(2px) brightness(0.7)' : 'none',
-                opacity: !isElectronAvailable() ? 0.5 : hoveredApp && hoveredApp !== app.name ? 0.6 : 1,
+                opacity: hoveredApp && hoveredApp !== app.name ? 0.6 : 1,
               }}
             >
               <img
