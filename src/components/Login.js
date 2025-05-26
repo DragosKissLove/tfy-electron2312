@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../ThemeContext';
-import { FiGithub } from 'react-icons/fi';
+import { FiGithub, FiUser } from 'react-icons/fi';
 
 const Login = ({ onLogin }) => {
   const { theme, primaryColor } = useTheme();
@@ -19,6 +19,14 @@ const Login = ({ onLogin }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleGuestLogin = () => {
+    onLogin({ 
+      id: 'guest',
+      name: 'Guest User',
+      type: 'guest'
+    });
   };
 
   return (
@@ -65,29 +73,52 @@ const Login = ({ onLogin }) => {
           Welcome to TFY Tool
         </motion.h1>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleGithubLogin}
-          disabled={isLoading}
-          style={{
-            width: '100%',
-            padding: '12px',
-            background: theme.glass,
-            border: `1px solid ${theme.border}`,
-            borderRadius: '12px',
-            color: theme.text,
-            fontSize: '16px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '10px'
-          }}
-        >
-          <FiGithub size={20} />
-          {isLoading ? 'Connecting...' : 'Continue with GitHub'}
-        </motion.button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleGithubLogin}
+            disabled={isLoading}
+            style={{
+              padding: '12px',
+              background: theme.glass,
+              border: `1px solid ${theme.border}`,
+              borderRadius: '12px',
+              color: theme.text,
+              fontSize: '16px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px'
+            }}
+          >
+            <FiGithub size={20} />
+            {isLoading ? 'Connecting...' : 'Continue with GitHub'}
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleGuestLogin}
+            style={{
+              padding: '12px',
+              background: 'transparent',
+              border: `1px solid ${theme.border}`,
+              borderRadius: '12px',
+              color: theme.text,
+              fontSize: '16px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px'
+            }}
+          >
+            <FiUser size={20} />
+            Continue as Guest
+          </motion.button>
+        </div>
       </motion.div>
     </motion.div>
   );

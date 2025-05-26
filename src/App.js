@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { useTheme } from './ThemeContext';
 import Sidebar from './Sidebar';
@@ -14,23 +14,6 @@ const App = () => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('Apps');
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const settings = await window.electron.getSettings();
-        if (settings?.user) {
-          setUser(settings.user);
-        }
-      } catch (error) {
-        console.error('Auth check failed:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    checkAuth();
-  }, []);
 
   const pageVariants = {
     initial: { opacity: 0, x: 20 },
@@ -40,39 +23,7 @@ const App = () => {
 
   const handleLogin = (userData) => {
     setUser(userData);
-    window.electron.saveSettings({ user: userData });
   };
-
-  if (isLoading) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        background: theme.background 
-      }}>
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 360]
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          style={{
-            width: 50,
-            height: 50,
-            borderRadius: '50%',
-            border: `3px solid ${theme.primary}`,
-            borderTopColor: 'transparent'
-          }}
-        />
-      </div>
-    );
-  }
 
   if (!user) {
     return <Login onLogin={handleLogin} />;
