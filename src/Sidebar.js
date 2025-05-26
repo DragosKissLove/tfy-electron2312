@@ -16,7 +16,8 @@ const Sidebar = ({ active, onChange, user }) => {
 
   const handleLogout = () => {
     localStorage.removeItem('guestSession');
-    window.location.reload();
+    // Force a clean reload without any white flash
+    window.location.replace(window.location.href);
   };
 
   const sidebarVariants = {
