@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../ThemeContext';
-import { FiGithub, FiMessageCircle, FiDownload, FiZap, FiTool } from 'react-icons/fi';
+import { FiMessageCircle, FiDownload, FiZap, FiTool } from 'react-icons/fi';
 
 const About = () => {
   const { theme, primaryColor } = useTheme();
