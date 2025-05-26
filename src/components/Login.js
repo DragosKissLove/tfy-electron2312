@@ -46,7 +46,6 @@ const Login = ({ onLogin }) => {
         overflow: 'hidden'
       }}
     >
-      {/* Animated background particles */}
       {[...Array(5)].map((_, i) => (
         <motion.div
           key={i}
@@ -55,9 +54,9 @@ const Login = ({ onLogin }) => {
             width: '400px',
             height: '400px',
             borderRadius: '50%',
-            background: `radial-gradient(circle, ${primaryColor}44 0%, transparent 70%)`,
+            background: `radial-gradient(circle, ${primaryColor}22 0%, transparent 70%)`,
             filter: 'blur(60px)',
-            opacity: 0.6,
+            opacity: 0.3,
             pointerEvents: 'none'
           }}
           animate={{
@@ -82,7 +81,7 @@ const Login = ({ onLogin }) => {
           background: 'rgba(255, 255, 255, 0.05)',
           padding: '40px',
           borderRadius: '20px',
-          boxShadow: `0 0 40px ${primaryColor}44`,
+          boxShadow: `0 0 40px ${primaryColor}22`,
           border: `1px solid ${primaryColor}33`,
           width: '100%',
           maxWidth: '400px',

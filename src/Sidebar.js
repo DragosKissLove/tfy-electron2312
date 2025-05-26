@@ -19,10 +19,38 @@ const Sidebar = ({ active, onChange, user }) => {
     window.location.reload();
   };
 
+  const sidebarVariants = {
+    initial: { x: -100, opacity: 0 },
+    animate: { 
+      x: 0, 
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 200,
+        damping: 20,
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    initial: { x: -20, opacity: 0 },
+    animate: { 
+      x: 0, 
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 25
+      }
+    }
+  };
+
   return (
     <motion.div
-      initial={{ x: -100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
+      variants={sidebarVariants}
+      initial="initial"
+      animate="animate"
       style={{
         width: 80,
         height: '100vh',
@@ -47,6 +75,7 @@ const Sidebar = ({ active, onChange, user }) => {
         {tabs.map(({ id, icon: Icon, tooltip }) => (
           <motion.div
             key={id}
+            variants={itemVariants}
             style={{ position: 'relative' }}
             whileHover="hover"
           >
@@ -130,6 +159,7 @@ const Sidebar = ({ active, onChange, user }) => {
         marginBottom: 20
       }}>
         <motion.button
+          variants={itemVariants}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={handleLogout}
@@ -150,6 +180,7 @@ const Sidebar = ({ active, onChange, user }) => {
           <FiLogOut size={24} />
         </motion.button>
         <motion.span
+          variants={itemVariants}
           style={{
             fontSize: '8px',
             color: theme.text,
