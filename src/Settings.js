@@ -1,12 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from './ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiRefreshCw } from 'react-icons/fi';
+import UpdateNotification from './components/UpdateNotification';
 
 const Settings = () => {
   const { primaryColor, setPrimaryColor, theme } = useTheme();
   const [updateStatus, setUpdateStatus] = useState('');
   const [isChecking, setIsChecking] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState(null);
+  const [downloadProgress, setDownloadProgress] = useState(null);
+
+  useEffect(() => {
+    if (window.electron) {
+      window.electron.onUpdateStatus((event, message) => {
+        setUpdateStatus(message);
+      });
+
+      window.electron.onUpdateAvailable((event, info) => {
+        setUpdateInfo(info);
+      });
+
+      window.electron.onUpdateNotAvailable(() => {
+        setUpdateStatus('You have the latest version!');
+        setTimeout(() => setUpdateStatus(''), 3000);
+      });
+
+      window.electron.onDownloadProgress((event, progress) => {
+        setDownloadProgress(progress.percent);
+      });
+
+      window.electron.onUpdateDownloaded(() => {
+        setDownloadProgress(100);
+      });
+    }
+  }, []);
 
   const handleColorChange = (e) => {
     setPrimaryColor(e.target.value);
@@ -16,17 +44,19 @@ const Settings = () => {
     try {
       setIsChecking(true);
       setUpdateStatus('Checking for updates...');
-      const result = await window.electron.runFunction('check-updates');
-      
-      if (result.hasUpdate) {
-        setUpdateStatus(`Update available! Version ${result.latestVersion}\n${result.changelog}`);
-      } else {
-        setUpdateStatus('You have the latest version!');
-      }
+      await window.electron.startUpdate();
     } catch (error) {
       setUpdateStatus(`Error checking updates: ${error.message}`);
     } finally {
       setIsChecking(false);
+    }
+  };
+
+  const handleInstallUpdate = async () => {
+    if (downloadProgress === 100) {
+      await window.electron.installUpdate();
+    } else {
+      await window.electron.startUpdate();
     }
   };
 
@@ -65,31 +95,6 @@ const Settings = () => {
             overflow: 'hidden'
           }}
         >
-          <motion.div
-            animate={{
-              backgroundPosition: ['0% 0%', '100% 0%'],
-              opacity: [0.5, 1, 0.5]
-            }}
-            transition={{
-              duration: 3,
-              ease: "linear",
-              repeat: Infinity,
-              repeatType: "reverse"
-            }}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              borderRadius: 16,
-              padding: '1px',
-              background: `linear-gradient(90deg, 
-                ${primaryColor}00 0%, 
-                ${primaryColor} 50%,
-                ${primaryColor}00 100%
-              )`,
-              mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-              maskComposite: 'exclude',
-            }}
-          />
           <h3 style={{ marginBottom: 16 }}>Appearance</h3>
           <div style={{ 
             display: 'flex', 
@@ -147,31 +152,6 @@ const Settings = () => {
             overflow: 'hidden'
           }}
         >
-          <motion.div
-            animate={{
-              backgroundPosition: ['0% 0%', '100% 0%'],
-              opacity: [0.5, 1, 0.5]
-            }}
-            transition={{
-              duration: 3,
-              ease: "linear",
-              repeat: Infinity,
-              repeatType: "reverse"
-            }}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              borderRadius: 16,
-              padding: '1px',
-              background: `linear-gradient(90deg, 
-                ${primaryColor}00 0%, 
-                ${primaryColor} 50%,
-                ${primaryColor}00 100%
-              )`,
-              mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-              maskComposite: 'exclude',
-            }}
-          />
           <h3 style={{ marginBottom: 16 }}>Updates</h3>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -201,21 +181,6 @@ const Settings = () => {
               }} 
             />
             Check for Updates
-            {isChecking && (
-              <motion.div
-                style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  height: '2px',
-                  background: primaryColor,
-                  width: '100%'
-                }}
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 1, repeat: Infinity }}
-              />
-            )}
           </motion.button>
 
           <AnimatePresence>
@@ -235,25 +200,17 @@ const Settings = () => {
                 }}
               >
                 {updateStatus}
-                <motion.div
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: '1px',
-                    background: primaryColor,
-                    opacity: 0.5
-                  }}
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.5 }}
-                />
               </motion.div>
             )}
           </AnimatePresence>
         </motion.div>
       </div>
+
+      <UpdateNotification 
+        updateInfo={updateInfo}
+        onInstall={handleInstallUpdate}
+        downloadProgress={downloadProgress}
+      />
     </motion.div>
   );
 };

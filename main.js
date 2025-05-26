@@ -90,5 +90,3 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
-// Your existing IPC handlers and functions...
