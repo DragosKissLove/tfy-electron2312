@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../ThemeContext';
 import { FiUser } from 'react-icons/fi';
 
 const Login = ({ onLogin }) => {
   const { theme, primaryColor } = useTheme();
+  const [username, setUsername] = useState('User');
+
+  useEffect(() => {
+    // Get Windows username from environment
+    if (window.electron) {
+      window.electron.runFunction('get-username')
+        .then(name => setUsername(name || 'User'))
+        .catch(() => setUsername('User'));
+    }
+  }, []);
 
   const handleGuestLogin = () => {
     const guestData = {
       id: `guest-${Date.now()}`,
-      name: 'Guest User',
+      name: username,
       type: 'guest',
       loginTime: new Date().toISOString()
     };
@@ -75,12 +85,12 @@ const Login = ({ onLogin }) => {
             )`,
             mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
             maskComposite: 'exclude',
-            pointerEvents: 'none', // Add this to allow clicking through
-            zIndex: 0 // Add this to ensure it stays behind the content
+            pointerEvents: 'none',
+            zIndex: 0
           }}
         />
 
-        <motion.h1
+        <motion.div
           style={{
             fontSize: '24px',
             marginBottom: '30px',
@@ -88,12 +98,27 @@ const Login = ({ onLogin }) => {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             filter: `drop-shadow(0 0 10px ${primaryColor}66)`,
-            position: 'relative', // Add this
-            zIndex: 1 // Add this
+            position: 'relative',
+            zIndex: 1
           }}
         >
-          Welcome to TFY Tool 2025
-        </motion.h1>
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            style={{ fontSize: '28px', marginBottom: '10px' }}
+          >
+            Hi {username}! 👋
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            style={{ fontSize: '16px', opacity: 0.8 }}
+          >
+            Welcome to your personal optimization toolkit
+          </motion.p>
+        </motion.div>
 
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -113,8 +138,8 @@ const Login = ({ onLogin }) => {
             gap: '10px',
             boxShadow: `0 0 20px ${primaryColor}40`,
             width: '100%',
-            position: 'relative', // Add this
-            zIndex: 1 // Add this
+            position: 'relative',
+            zIndex: 1
           }}
         >
           <FiUser size={20} style={{ color: primaryColor }} />

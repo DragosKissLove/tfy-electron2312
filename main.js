@@ -5,6 +5,7 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const axios = require('axios');
 const extract = require('extract-zip');
+const os = require('os');
 const store = new Store();
 
 function createWindow() {
@@ -29,6 +30,11 @@ function createWindow() {
   ipcMain.handle('close-window', () => {
     win.close();
   });
+
+  // Add username handler
+  ipcMain.handle('get-username', () => {
+    return os.userInfo().username;
+  });
 }
 
 app.whenReady().then(() => {
@@ -38,6 +44,8 @@ app.whenReady().then(() => {
   ipcMain.handle('run-function', async (event, { name, args }) => {
     try {
       switch (name) {
+        case 'get-username':
+          return os.userInfo().username;
         case 'check-updates':
           return await checkForUpdates();
         case 'clean-temp':
