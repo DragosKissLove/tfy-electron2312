@@ -48,8 +48,8 @@
     },
     "publish": {
       "provider": "github",
-      "owner": "YOUR_GITHUB_USERNAME",
-      "repo": "tfy-tool"
+      "owner": "DragosKissLove",
+      "repo": "tfy-electron2312"
     },
     "win": {
       "target": "nsis",
