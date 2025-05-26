@@ -28,7 +28,8 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "react-spring": "^9.7.3",
-    "electron-builder": "^24.9.1"
+    "electron-builder": "^24.9.1",
+    "electron-log": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -36,7 +37,8 @@
     "electron": "electron main.js",
     "dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "pack": "npm run build && electron-builder --dir",
-    "dist": "npm run build && electron-builder"
+    "dist": "npm run build && electron-builder",
+    "release": "npm run build && electron-builder -p always"
   },
   "build": {
     "appId": "com.tfy.tool",
@@ -44,14 +46,25 @@
     "directories": {
       "output": "dist"
     },
+    "publish": {
+      "provider": "github",
+      "owner": "YOUR_GITHUB_USERNAME",
+      "repo": "tfy-tool"
+    },
     "win": {
       "target": "nsis",
-      "icon": "public/favicon.ico"
+      "icon": "public/favicon.ico",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true
+      "createDesktopShortcut": true,
+      "installerIcon": "public/favicon.ico",
+      "uninstallerIcon": "public/favicon.ico",
+      "installerHeaderIcon": "public/favicon.ico",
+      "menuCategory": true,
+      "createStartMenuShortcut": true
     }
   },
   "eslintConfig": {
