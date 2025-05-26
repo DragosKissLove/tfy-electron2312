@@ -7,7 +7,9 @@ const tools = [
   { name: 'Atlas Tools', function: 'install_atlas_tools' },
   { name: 'WiFi Passwords', function: 'wifi_passwords' },
   { name: 'Activate Windows', function: 'activate_windows' },
-  { name: 'Spotify Modded', function: 'install_spicetify_from_github' }
+  { name: 'Spotify Modded', function: 'install_spicetify_from_github' },
+  { name: 'TFY Optimizations', function: 'run-optimization' },
+  { name: 'Clean Temp Files', function: 'clean-temp' }
 ];
 
 const Tools = () => {
