@@ -1,20 +1,28 @@
-// src/ThemeContext.js
 import React, { createContext, useContext, useState } from 'react';
-import { lightTheme, darkTheme } from './themes';
+
+const darkTheme = {
+  background: '#0A0A0A',
+  text: '#FFFFFF',
+  glass: 'rgba(255, 255, 255, 0.05)',
+  border: 'rgba(255, 255, 255, 0.1)',
+  cardBg: 'rgba(255, 255, 255, 0.03)',
+  hover: 'rgba(255, 255, 255, 0.1)',
+  shadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+  accent: '#2563EB'
+};
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [darkMode, setDarkMode] = useState(true);
-  const [primaryColor, setPrimaryColor] = useState('#C0392B'); // default red
+  const [primaryColor, setPrimaryColor] = useState('#C0392B');
 
   const theme = {
-    ...(darkMode ? darkTheme : lightTheme),
+    ...darkTheme,
     primary: primaryColor
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, darkMode, setDarkMode, primaryColor, setPrimaryColor }}>
+    <ThemeContext.Provider value={{ theme, primaryColor, setPrimaryColor }}>
       {children}
     </ThemeContext.Provider>
   );

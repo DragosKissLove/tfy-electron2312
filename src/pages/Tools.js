@@ -28,6 +28,18 @@ const Tools = () => {
     }
   };
 
+  const buttonVariants = {
+    initial: { scale: 0.95, opacity: 0 },
+    animate: { scale: 1, opacity: 1 },
+    hover: { 
+      scale: 1.02,
+      boxShadow: `0 8px 20px ${primaryColor}40`,
+      transition: { duration: 0.2 }
+    },
+    tap: { scale: 0.98 },
+    exit: { scale: 0.95, opacity: 0 }
+  };
+
   return (
     <motion.div
       style={{ padding: '30px' }}
@@ -45,16 +57,24 @@ const Tools = () => {
       </h2>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <AnimatePresence>
-          {tools.map((tool) => (
+        <AnimatePresence mode="popLayout">
+          {tools.map((tool, index) => (
             <motion.button
               key={tool.function}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              variants={buttonVariants}
+              initial="initial"
+              animate="animate"
+              whileHover="hover"
+              whileTap="tap"
+              exit="exit"
               onClick={() => handleClick(tool.function)}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
+              transition={{ 
+                duration: 0.3,
+                delay: index * 0.1,
+                type: "spring",
+                stiffness: 500,
+                damping: 25
+              }}
               style={{
                 height: '48px',
                 border: `1px solid ${theme.border}`,
@@ -76,41 +96,65 @@ const Tools = () => {
               {activeButton === tool.function && (
                 <motion.div
                   initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
+                  animate={{ 
+                    scale: 1,
+                    rotate: 360 
+                  }}
+                  transition={{
+                    duration: 1,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
                   style={{
                     width: 16,
                     height: 16,
                     border: '2px solid #fff',
                     borderTop: '2px solid transparent',
                     borderRadius: '50%',
-                    marginRight: 8,
-                    animation: 'spin 1s linear infinite'
+                    marginRight: 8
                   }}
                 />
               )}
               {tool.name}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ 
+                  scaleX: activeButton === tool.function ? 1 : 0 
+                }}
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: 2,
+                  background: primaryColor,
+                  transformOrigin: 'left'
+                }}
+              />
             </motion.button>
           ))}
         </AnimatePresence>
       </div>
 
-      {status && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          style={{
-            marginTop: '20px',
-            padding: '12px',
-            borderRadius: '8px',
-            background: theme.cardBg,
-            border: `1px solid ${theme.border}`,
-            color: theme.text
-          }}
-        >
-          {status}
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {status && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            style={{
+              marginTop: '20px',
+              padding: '12px',
+              borderRadius: '8px',
+              background: theme.cardBg,
+              border: `1px solid ${theme.border}`,
+              color: theme.text
+            }}
+          >
+            {status}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

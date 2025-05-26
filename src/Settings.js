@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { useTheme } from './ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMoon, FiSun, FiRefreshCw } from 'react-icons/fi';
+import { FiRefreshCw } from 'react-icons/fi';
 
 const Settings = () => {
-  const { darkMode, setDarkMode, primaryColor, setPrimaryColor, theme } = useTheme();
+  const { primaryColor, setPrimaryColor, theme } = useTheme();
   const [updateStatus, setUpdateStatus] = useState('');
   const [isChecking, setIsChecking] = useState(false);
-
-  const handleThemeToggle = () => {
-    setDarkMode(!darkMode);
-  };
 
   const handleColorChange = (e) => {
     setPrimaryColor(e.target.value);
@@ -66,25 +62,6 @@ const Settings = () => {
         >
           <h3 style={{ marginBottom: 16 }}>Appearance</h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleThemeToggle}
-              style={{
-                padding: '12px 24px',
-                borderRadius: 12,
-                background: 'rgba(255,255,255,0.1)',
-                border: 'none',
-                color: '#fff',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8
-              }}
-            >
-              {darkMode ? <FiMoon /> : <FiSun />}
-              {darkMode ? 'Dark Mode' : 'Light Mode'}
-            </motion.button>
             <input
               type="color"
               value={primaryColor}
