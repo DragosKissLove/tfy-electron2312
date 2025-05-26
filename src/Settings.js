@@ -61,14 +61,29 @@ const Settings = () => {
             overflow: 'hidden'
           }}
         >
-          <div 
+          <motion.div
+            animate={{
+              backgroundPosition: ['0% 0%', '100% 0%'],
+              opacity: [0.5, 1, 0.5]
+            }}
+            transition={{
+              duration: 3,
+              ease: "linear",
+              repeat: Infinity,
+              repeatType: "reverse"
+            }}
             style={{
               position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: '2px',
-              background: `linear-gradient(90deg, ${primaryColor}00, ${primaryColor}, ${primaryColor}00)`
+              inset: 0,
+              borderRadius: 16,
+              padding: '1px',
+              background: `linear-gradient(90deg, 
+                ${primaryColor}00 0%, 
+                ${primaryColor} 50%,
+                ${primaryColor}00 100%
+              )`,
+              mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+              maskComposite: 'exclude',
             }}
           />
           <h3 style={{ marginBottom: 16 }}>Appearance</h3>
@@ -125,14 +140,29 @@ const Settings = () => {
             overflow: 'hidden'
           }}
         >
-          <div 
+          <motion.div
+            animate={{
+              backgroundPosition: ['0% 0%', '100% 0%'],
+              opacity: [0.5, 1, 0.5]
+            }}
+            transition={{
+              duration: 3,
+              ease: "linear",
+              repeat: Infinity,
+              repeatType: "reverse"
+            }}
             style={{
               position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: '2px',
-              background: `linear-gradient(90deg, ${primaryColor}00, ${primaryColor}, ${primaryColor}00)`
+              inset: 0,
+              borderRadius: 16,
+              padding: '1px',
+              background: `linear-gradient(90deg, 
+                ${primaryColor}00 0%, 
+                ${primaryColor} 50%,
+                ${primaryColor}00 100%
+              )`,
+              mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+              maskComposite: 'exclude',
             }}
           />
           <h3 style={{ marginBottom: 16 }}>Updates</h3>
