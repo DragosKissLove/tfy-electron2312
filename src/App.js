@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { useTheme } from './ThemeContext';
 import Sidebar from './Sidebar';
@@ -14,6 +14,14 @@ const App = () => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('Apps');
   const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Check for existing guest session
+    const guestSession = localStorage.getItem('guestSession');
+    if (guestSession) {
+      setUser(JSON.parse(guestSession));
+    }
+  }, []);
 
   const pageVariants = {
     initial: { opacity: 0, x: 20 },

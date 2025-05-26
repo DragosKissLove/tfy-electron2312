@@ -10,10 +10,8 @@ const Login = ({ onLogin }) => {
   const handleGithubLogin = async () => {
     try {
       setIsLoading(true);
-      const result = await window.electron.runFunction('github-auth');
-      if (result.success) {
-        onLogin(result.user);
-      }
+      // GitHub login functionality will be implemented later
+      console.log('GitHub login not implemented yet');
     } catch (error) {
       console.error('Login failed:', error);
     } finally {
@@ -22,11 +20,17 @@ const Login = ({ onLogin }) => {
   };
 
   const handleGuestLogin = () => {
-    onLogin({ 
-      id: 'guest',
+    const guestData = {
+      id: `guest-${Date.now()}`,
       name: 'Guest User',
-      type: 'guest'
-    });
+      type: 'guest',
+      loginTime: new Date().toISOString()
+    };
+    
+    // Store guest session in localStorage
+    localStorage.setItem('guestSession', JSON.stringify(guestData));
+    
+    onLogin(guestData);
   };
 
   return (
