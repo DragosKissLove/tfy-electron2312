@@ -29,9 +29,9 @@ const Login = ({ onLogin }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       style={{
         position: 'fixed',
         top: 0,
@@ -42,9 +42,56 @@ const Login = ({ onLogin }) => {
         alignItems: 'center',
         justifyContent: 'center',
         background: theme.background,
-        zIndex: 1000
+        zIndex: 1000,
+        overflow: 'hidden'
       }}
     >
+      {/* Background Glow Effects */}
+      <motion.div
+        style={{
+          position: 'absolute',
+          width: '150%',
+          height: '150%',
+          background: `radial-gradient(circle, ${primaryColor}22 0%, transparent 70%)`,
+          filter: 'blur(80px)',
+          transform: 'translate(-50%, -50%)',
+          top: '50%',
+          left: '50%',
+          pointerEvents: 'none'
+        }}
+        animate={{
+          opacity: [0.3, 0.8, 0.3],
+          scale: [1, 1.2, 1],
+          rotate: [0, 180, 360]
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+
+      <motion.div
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          background: `linear-gradient(45deg, ${primaryColor}11, ${primaryColor}33)`,
+          filter: 'blur(100px)',
+          pointerEvents: 'none'
+        }}
+        animate={{
+          opacity: [0.2, 0.5, 0.2],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          repeatType: "reverse",
+          ease: "easeInOut"
+        }}
+      />
+
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -58,39 +105,26 @@ const Login = ({ onLogin }) => {
           maxWidth: '400px',
           textAlign: 'center',
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          backdropFilter: 'blur(10px)'
         }}
       >
         <motion.div
-          animate={{
-            opacity: [0.2, 0.8, 0.2],
-            scale: [1, 1.2, 1],
-            filter: [
-              `blur(10px) brightness(0.5)`,
-              `blur(15px) brightness(1)`,
-              `blur(10px) brightness(0.5)`
-            ]
-          }}
-          transition={{
-            duration: 2,
-            ease: "easeInOut",
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
           style={{
             position: 'absolute',
             inset: 0,
-            borderRadius: '20px',
-            padding: '1px',
-            background: `linear-gradient(90deg, 
-              ${primaryColor}00 0%, 
-              ${primaryColor} 50%,
-              ${primaryColor}00 100%
-            )`,
-            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-            maskComposite: 'exclude',
-            pointerEvents: 'none',
-            zIndex: 0
+            background: `linear-gradient(90deg, transparent, ${primaryColor}44, transparent)`,
+            filter: 'blur(5px)',
+            pointerEvents: 'none'
+          }}
+          animate={{
+            x: ['-100%', '100%']
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "linear",
+            repeatDelay: 1
           }}
         />
 
@@ -98,10 +132,6 @@ const Login = ({ onLogin }) => {
           style={{
             fontSize: '24px',
             marginBottom: '30px',
-            background: `linear-gradient(45deg, ${theme.text}, ${primaryColor})`,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            filter: `drop-shadow(0 0 10px ${primaryColor}66)`,
             position: 'relative',
             zIndex: 1
           }}
@@ -110,7 +140,13 @@ const Login = ({ onLogin }) => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            style={{ fontSize: '28px', marginBottom: '10px' }}
+            style={{ 
+              fontSize: '28px', 
+              marginBottom: '10px',
+              background: `linear-gradient(45deg, ${theme.text}, ${primaryColor})`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
           >
             Hi {username}!
           </motion.h1>
@@ -120,7 +156,7 @@ const Login = ({ onLogin }) => {
             transition={{ delay: 0.4 }}
             style={{ fontSize: '16px', opacity: 0.8 }}
           >
-            Welcome to TFY Utility Hub - Enhance your system performance and gaming experience with our powerful tools and utilities.
+            Welcome to TFY Utility Hub - Enhance your system performance and gaming experience.
           </motion.p>
         </motion.div>
 
@@ -143,7 +179,8 @@ const Login = ({ onLogin }) => {
             boxShadow: `0 0 20px ${primaryColor}40`,
             width: '100%',
             position: 'relative',
-            zIndex: 1
+            zIndex: 1,
+            backdropFilter: 'blur(5px)'
           }}
         >
           <FiUser size={20} style={{ color: primaryColor }} />
