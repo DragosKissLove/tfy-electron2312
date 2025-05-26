@@ -107,7 +107,7 @@ const Login = ({ onLogin }) => {
             transition={{ delay: 0.2 }}
             style={{ fontSize: '28px', marginBottom: '10px' }}
           >
-            Welcome back, {username}
+            Hi {username}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -115,7 +115,7 @@ const Login = ({ onLogin }) => {
             transition={{ delay: 0.4 }}
             style={{ fontSize: '16px', opacity: 0.8 }}
           >
-            Your personal optimization suite awaits
+            Welcome to TFY utility hub
           </motion.p>
         </motion.div>
 
