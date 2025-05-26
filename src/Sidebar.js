@@ -1,14 +1,14 @@
 import React from 'react';
 import { useTheme } from './ThemeContext';
 import { motion } from 'framer-motion';
-import { FiGrid, FiTool, FiStar, FiSettings, FiInfo, FiLogOut, FiUser } from 'react-icons/fi';
+import { FiGrid, FiTool, FiStar, FiSettings, FiInfo, FiLogOut } from 'react-icons/fi';
 
 const tabs = [
   { id: 'Apps', icon: FiGrid, tooltip: 'Install Applications' },
   { id: 'Tools', icon: FiTool, tooltip: 'System Tools' },
   { id: 'Extra', icon: FiStar, tooltip: 'Extra Features' },
   { id: 'Settings', icon: FiSettings, tooltip: 'Preferences' },
-  { id: 'About', icon: FiInfo, tooltip: 'About TFY Tool' }
+  { id: 'About', icon: FiInfo, tooltip: 'About' }
 ];
 
 const Sidebar = ({ active, onChange, user }) => {
@@ -39,40 +39,6 @@ const Sidebar = ({ active, onChange, user }) => {
         top: 0
       }}
     >
-      {/* User Avatar */}
-      <motion.div
-        whileHover={{ scale: 1.1 }}
-        style={{
-          width: 48,
-          height: 48,
-          borderRadius: '50%',
-          background: primaryColor,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: 16,
-          position: 'relative',
-          cursor: 'pointer'
-        }}
-      >
-        <FiUser size={24} color="#FFF" />
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.5 }}
-          style={{
-            position: 'absolute',
-            bottom: -2,
-            right: -2,
-            width: 12,
-            height: 12,
-            borderRadius: '50%',
-            background: '#10B981',
-            border: `2px solid ${theme.cardBg}`
-          }}
-        />
-      </motion.div>
-
       {/* Navigation Tabs */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}>
         {tabs.map(({ id, icon: Icon, tooltip }) => (
@@ -162,9 +128,9 @@ const Sidebar = ({ active, onChange, user }) => {
       }}>
         <motion.span
           style={{
-            fontSize: '12px',
+            fontSize: '10px',
             color: theme.text,
-            opacity: 0.7
+            opacity: 0.3
           }}
         >
           v3.0.0

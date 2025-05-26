@@ -1,23 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../ThemeContext';
-import { FiGithub, FiUser } from 'react-icons/fi';
+import { FiUser } from 'react-icons/fi';
 
 const Login = ({ onLogin }) => {
   const { theme, primaryColor } = useTheme();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleGithubLogin = async () => {
-    try {
-      setIsLoading(true);
-      // GitHub login functionality will be implemented later
-      console.log('GitHub login not implemented yet');
-    } catch (error) {
-      console.error('Login failed:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleGuestLogin = () => {
     const guestData = {
@@ -104,54 +91,29 @@ const Login = ({ onLogin }) => {
           Welcome to TFY Tool 2025
         </motion.h1>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleGithubLogin}
-            disabled={isLoading}
-            style={{
-              padding: '12px',
-              background: theme.glass,
-              border: `1px solid ${theme.border}`,
-              borderRadius: '12px',
-              color: theme.text,
-              fontSize: '16px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              boxShadow: `0 0 20px ${primaryColor}40`
-            }}
-          >
-            <FiGithub size={20} style={{ color: primaryColor }} />
-            {isLoading ? 'Connecting...' : 'Continue with GitHub'}
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleGuestLogin}
-            style={{
-              padding: '12px',
-              background: 'transparent',
-              border: `1px solid ${theme.border}`,
-              borderRadius: '12px',
-              color: theme.text,
-              fontSize: '16px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              boxShadow: `0 0 20px ${primaryColor}40`
-            }}
-          >
-            <FiUser size={20} style={{ color: primaryColor }} />
-            Continue as Guest
-          </motion.button>
-        </div>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleGuestLogin}
+          style={{
+            padding: '12px',
+            background: 'transparent',
+            border: `1px solid ${theme.border}`,
+            borderRadius: '12px',
+            color: theme.text,
+            fontSize: '16px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px',
+            boxShadow: `0 0 20px ${primaryColor}40`,
+            width: '100%'
+          }}
+        >
+          <FiUser size={20} style={{ color: primaryColor }} />
+          Continue as Guest
+        </motion.button>
       </motion.div>
     </motion.div>
   );
