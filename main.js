@@ -6,6 +6,8 @@ const fs = require('fs');
 const axios = require('axios');
 const extract = require('extract-zip');
 const store = new Store();
+const https = require('https');
+const os = require('os');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -35,8 +37,8 @@ app.whenReady().then(() => {
           return await cleanTemp();
         case 'run-optimization':
           return await runOptimization();
-        case 'download-roblox':
-          return await downloadRobloxPlayer(args.version, args.logCallback, args.progressCallback);
+        case 'download-app':
+          return await downloadApp(args.name, args.url);
         case 'github-auth':
           return await handleGithubAuth();
         default:
@@ -105,6 +107,29 @@ async function runOptimization() {
     });
   } catch (error) {
     throw new Error(`Failed to run optimization: ${error.message}`);
+  }
+}
+
+async function downloadApp(name, url) {
+  try {
+    const downloadPath = path.join(os.homedir(), 'Downloads', `${name}.exe`);
+    
+    const response = await axios({
+      url,
+      method: 'GET',
+      responseType: 'stream',
+    });
+
+    const writer = fs.createWriteStream(downloadPath);
+
+    response.data.pipe(writer);
+
+    return new Promise((resolve, reject) => {
+      writer.on('finish', () => resolve({ success: true }));
+      writer.on('error', reject);
+    });
+  } catch (error) {
+    return { success: false, error: error.message };
   }
 }
 
