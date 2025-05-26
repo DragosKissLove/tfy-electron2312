@@ -66,10 +66,7 @@ const Sidebar = ({ active, onChange, user }) => {
                 justifyContent: 'center',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                position: 'relative',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                boxShadow: id === active ? `0 0 20px ${primaryColor}44` : 'none'
+                position: 'relative'
               }}
             >
               <Icon size={24} />
@@ -147,9 +144,7 @@ const Sidebar = ({ active, onChange, user }) => {
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)'
+            transition: 'all 0.3s ease'
           }}
         >
           <FiLogOut size={24} />
