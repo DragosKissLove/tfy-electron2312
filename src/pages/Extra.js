@@ -27,7 +27,18 @@ const Extra = () => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
     >
-      <h2 style={{ marginBottom: 20 }}>Extra Features</h2>
+      <h2 style={{ 
+        fontSize: '28px',
+        fontWeight: '600',
+        marginBottom: '20px',
+        color: theme.text,
+        borderBottom: `2px solid ${primaryColor}`,
+        paddingBottom: '10px',
+        display: 'inline-block',
+        position: 'relative'
+      }}>
+        Extra Features
+      </h2>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{

@@ -40,10 +40,14 @@ const Settings = () => {
     >
       <motion.h2 
         style={{
-          marginBottom: 20,
+          fontSize: '28px',
+          fontWeight: '600',
+          marginBottom: '20px',
           color: theme.text,
-          padding: '10px',
-          borderRadius: '8px'
+          borderBottom: `2px solid ${primaryColor}`,
+          paddingBottom: '10px',
+          display: 'inline-block',
+          position: 'relative'
         }}
       >
         Settings

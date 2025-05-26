@@ -22,7 +22,18 @@ const About = () => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
     >
-      <h2 style={{ marginBottom: 20 }}>About TFY Tool</h2>
+      <h2 style={{ 
+        fontSize: '28px',
+        fontWeight: '600',
+        marginBottom: '20px',
+        color: theme.text,
+        borderBottom: `2px solid ${primaryColor}`,
+        paddingBottom: '10px',
+        display: 'inline-block',
+        position: 'relative'
+      }}>
+        TFY Tool
+      </h2>
       
       <div style={{
         background: theme.cardBg,
