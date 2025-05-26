@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../ThemeContext';
-import { FiGithub, FiMessageCircle, FiCpu, FiZap, FiShield } from 'react-icons/fi';
+import { FiGithub, FiMessageCircle, FiDownload, FiZap, FiTool } from 'react-icons/fi';
 
 const About = () => {
   const { theme, primaryColor } = useTheme();
@@ -16,19 +16,19 @@ const About = () => {
 
   const features = [
     {
-      icon: FiCpu,
-      title: "System Optimization",
-      description: "Advanced tools to enhance your PC's performance"
+      icon: FiDownload,
+      title: "One-Click Installers",
+      description: "Quick and easy installation of popular applications"
     },
     {
       icon: FiZap,
-      title: "Gaming Tools",
-      description: "Specialized utilities for the ultimate gaming experience"
+      title: "Performance Boosters",
+      description: "Advanced tools to enhance your system's speed"
     },
     {
-      icon: FiShield,
-      title: "Security Features",
-      description: "Keep your system protected and running smoothly"
+      icon: FiTool,
+      title: "System Utilities",
+      description: "Essential tools for system maintenance and optimization"
     }
   ];
 
@@ -112,7 +112,7 @@ const About = () => {
             maxWidth: '600px',
             margin: '0 auto'
           }}>
-            Your all-in-one solution for system optimization and gaming enhancement
+            Your all-in-one solution for system optimization and application management
           </p>
         </motion.div>
 

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const darkTheme = {
   background: '#0A0A0A',
@@ -14,7 +14,14 @@ const darkTheme = {
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [primaryColor, setPrimaryColor] = useState('#8B5CF6');
+  const [primaryColor, setPrimaryColor] = useState(() => {
+    const savedColor = localStorage.getItem('primaryColor');
+    return savedColor || '#8B5CF6';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('primaryColor', primaryColor);
+  }, [primaryColor]);
 
   const theme = {
     ...darkTheme,
