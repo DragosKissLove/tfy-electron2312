@@ -29,9 +29,41 @@ const About = () => {
         padding: '24px',
         borderRadius: '16px',
         border: `1px solid ${theme.border}`,
-        marginBottom: '24px'
+        marginBottom: '24px',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        <h3 style={{ marginBottom: '16px' }}>Welcome to TFY Tool 2025! 🚀</h3>
+        <motion.div
+          animate={{
+            backgroundPosition: ['0% 0%', '100% 0%'],
+            opacity: [0.5, 1, 0.5]
+          }}
+          transition={{
+            duration: 3,
+            ease: "linear",
+            repeat: Infinity,
+            repeatType: "reverse"
+          }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: '16px',
+            padding: '1px',
+            background: `linear-gradient(90deg, 
+              ${primaryColor}00 0%, 
+              ${primaryColor} 50%,
+              ${primaryColor}00 100%
+            )`,
+            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+            maskComposite: 'exclude',
+          }}
+        />
+
+        <h3 style={{ 
+          marginBottom: '16px',
+          color: primaryColor,
+          filter: `drop-shadow(0 0 10px ${primaryColor}66)`
+        }}>Welcome to TFY Tool 2025! 🚀</h3>
         <p style={{ marginBottom: '16px', lineHeight: '1.6' }}>
           TFY Tool is your all-in-one Windows utility suite, designed to enhance your PC experience. 
           From system optimization to gaming tools, we've got everything you need to maximize your 
@@ -68,7 +100,7 @@ const About = () => {
             transition: 'all 0.3s ease'
           }}
         >
-          <FiMessageCircle />
+          <FiMessageCircle style={{ color: primaryColor }} />
           Join Our Discord
         </motion.button>
       </div>

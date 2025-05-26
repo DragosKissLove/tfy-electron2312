@@ -27,9 +27,7 @@ const Login = ({ onLogin }) => {
       loginTime: new Date().toISOString()
     };
     
-    // Store guest session in localStorage
     localStorage.setItem('guestSession', JSON.stringify(guestData));
-    
     onLogin(guestData);
   };
 
@@ -62,19 +60,48 @@ const Login = ({ onLogin }) => {
           border: `1px solid ${theme.border}`,
           width: '100%',
           maxWidth: '400px',
-          textAlign: 'center'
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden'
         }}
       >
+        <motion.div
+          animate={{
+            backgroundPosition: ['0% 0%', '100% 0%'],
+            opacity: [0.5, 1, 0.5]
+          }}
+          transition={{
+            duration: 3,
+            ease: "linear",
+            repeat: Infinity,
+            repeatType: "reverse"
+          }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: '20px',
+            padding: '1px',
+            background: `linear-gradient(90deg, 
+              ${primaryColor}00 0%, 
+              ${primaryColor} 50%,
+              ${primaryColor}00 100%
+            )`,
+            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+            maskComposite: 'exclude',
+          }}
+        />
+
         <motion.h1
           style={{
             fontSize: '24px',
             marginBottom: '30px',
             background: `linear-gradient(45deg, ${theme.text}, ${primaryColor})`,
             WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
+            WebkitTextFillColor: 'transparent',
+            filter: `drop-shadow(0 0 10px ${primaryColor}66)`
           }}
         >
-          Welcome to TFY Tool
+          Welcome to TFY Tool 2025
         </motion.h1>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -94,10 +121,11 @@ const Login = ({ onLogin }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '10px'
+              gap: '10px',
+              boxShadow: `0 0 20px ${primaryColor}40`
             }}
           >
-            <FiGithub size={20} />
+            <FiGithub size={20} style={{ color: primaryColor }} />
             {isLoading ? 'Connecting...' : 'Continue with GitHub'}
           </motion.button>
 
@@ -116,10 +144,11 @@ const Login = ({ onLogin }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '10px'
+              gap: '10px',
+              boxShadow: `0 0 20px ${primaryColor}40`
             }}
           >
-            <FiUser size={20} />
+            <FiUser size={20} style={{ color: primaryColor }} />
             Continue as Guest
           </motion.button>
         </div>
