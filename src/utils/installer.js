@@ -1,7 +1,11 @@
+export const isElectronAvailable = () => {
+  return window.electron !== undefined;
+};
+
 export const downloadAndRun = async (name, url) => {
   try {
-    if (!window.electron) {
-      throw new Error('Electron API not available');
+    if (!isElectronAvailable()) {
+      throw new Error('This feature is only available in the desktop application');
     }
 
     const result = await window.electron.runFunction('download-app', { name, url });
