@@ -65,11 +65,11 @@ const Login = ({ onLogin }) => {
             scale: [1, 1.5, 1],
           }}
           transition={{
-            duration: 8 + i * 2,
+            duration: 4 + i,
             repeat: Infinity,
             repeatType: 'reverse',
             ease: 'easeInOut',
-            delay: i * 1.5
+            delay: i * 0.5
           }}
         />
       ))}
@@ -106,8 +106,7 @@ const Login = ({ onLogin }) => {
             style={{ 
               fontSize: '28px', 
               marginBottom: '10px',
-              color: '#fff',
-              textShadow: `0 0 20px ${primaryColor}`
+              color: '#fff'
             }}
           >
             Hi {username}!
@@ -118,8 +117,7 @@ const Login = ({ onLogin }) => {
             transition={{ delay: 0.4 }}
             style={{ 
               fontSize: '16px', 
-              color: 'rgba(255, 255, 255, 0.9)',
-              textShadow: `0 0 15px ${primaryColor}`
+              color: 'rgba(255, 255, 255, 0.9)'
             }}
           >
             Welcome to TFY Utility Hub
