@@ -27,20 +27,17 @@ function createWindow() {
 app.whenReady().then(() => {
   createWindow();
 
-  // Handle IPC calls
   ipcMain.handle('run-function', async (event, { name, args }) => {
     try {
       switch (name) {
+        case 'download-app':
+          return await downloadApp(args.name, args.url);
         case 'check-updates':
           return await checkForUpdates();
         case 'clean-temp':
           return await cleanTemp();
         case 'run-optimization':
           return await runOptimization();
-        case 'download-app':
-          return await downloadApp(args.name, args.url);
-        case 'github-auth':
-          return await handleGithubAuth();
         default:
           throw new Error('Function not found');
       }
@@ -50,7 +47,6 @@ app.whenReady().then(() => {
     }
   });
 
-  // Handle settings storage
   ipcMain.handle('get-settings', () => {
     return store.get('settings');
   });
@@ -60,6 +56,28 @@ app.whenReady().then(() => {
     return true;
   });
 });
+
+async function downloadApp(name, url) {
+  try {
+    const downloadPath = path.join(os.homedir(), 'Downloads', `${name}.exe`);
+    
+    const response = await axios({
+      url,
+      method: 'GET',
+      responseType: 'stream',
+    });
+
+    const writer = fs.createWriteStream(downloadPath);
+    response.data.pipe(writer);
+
+    return new Promise((resolve, reject) => {
+      writer.on('finish', () => resolve({ success: true }));
+      writer.on('error', reject);
+    });
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
 
 async function checkForUpdates() {
   try {
@@ -108,33 +126,6 @@ async function runOptimization() {
   } catch (error) {
     throw new Error(`Failed to run optimization: ${error.message}`);
   }
-}
-
-async function downloadApp(name, url) {
-  try {
-    const downloadPath = path.join(os.homedir(), 'Downloads', `${name}.exe`);
-    
-    const response = await axios({
-      url,
-      method: 'GET',
-      responseType: 'stream',
-    });
-
-    const writer = fs.createWriteStream(downloadPath);
-    response.data.pipe(writer);
-
-    return new Promise((resolve, reject) => {
-      writer.on('finish', () => resolve({ success: true }));
-      writer.on('error', reject);
-    });
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-}
-
-async function handleGithubAuth() {
-  // Implementation will be added in the next update
-  throw new Error('Function not implemented yet');
 }
 
 app.on('window-all-closed', () => {

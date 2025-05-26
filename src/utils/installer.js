@@ -1,17 +1,18 @@
 export const downloadAndRun = async (name, url) => {
   try {
-    if (!window.electron?.downloadApp) {
-      throw new Error('Download functionality not available');
+    if (!window.electron) {
+      throw new Error('Electron API not available');
     }
 
-    const result = await window.electron.downloadApp(name, url);
+    const result = await window.electron.runFunction('download-app', { name, url });
     
     if (result.success) {
-      alert(`✅ ${name} has been downloaded to your Downloads folder. Please run the installer.`);
+      return { success: true, message: `${name} has been downloaded successfully!` };
     } else {
       throw new Error(result.error || 'Download failed');
     }
   } catch (error) {
-    alert(`❌ Download failed: ${error.message}`);
+    console.error('Download error:', error);
+    throw new Error(`Download failed: ${error.message}`);
   }
 };

@@ -4,9 +4,5 @@ contextBridge.exposeInMainWorld('electron', {
   runFunction: (name, args) => ipcRenderer.invoke('run-function', { name, args }),
   getSettings: () => ipcRenderer.invoke('get-settings'),
   saveSettings: (settings) => ipcRenderer.invoke('save-settings', settings),
-  platform: process.platform,
-  downloadApp: (name, url) => ipcRenderer.invoke('run-function', { 
-    name: 'download-app', 
-    args: { name, url } 
-  })
+  platform: process.platform
 });
