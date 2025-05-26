@@ -55,26 +55,62 @@ const Settings = () => {
           style={{
             padding: 20,
             borderRadius: 16,
-            background: 'rgba(255,255,255,0.05)',
+            background: 'rgba(255,255,255,0.03)',
             border: '1px solid rgba(255,255,255,0.1)',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+            position: 'relative',
+            overflow: 'hidden'
           }}
         >
+          <div 
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '2px',
+              background: `linear-gradient(90deg, ${primaryColor}00, ${primaryColor}, ${primaryColor}00)`
+            }}
+          />
           <h3 style={{ marginBottom: 16 }}>Appearance</h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <input
-              type="color"
-              value={primaryColor}
-              onChange={handleColorChange}
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 16 
+          }}>
+            <motion.div
               style={{
-                width: 40,
-                height: 40,
-                borderRadius: 8,
-                border: 'none',
-                cursor: 'pointer',
-                background: 'transparent'
+                position: 'relative',
+                width: '200px',
+                height: '40px',
+                background: 'rgba(255,255,255,0.05)',
+                borderRadius: '20px',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center'
               }}
-            />
+            >
+              <input
+                type="color"
+                value={primaryColor}
+                onChange={handleColorChange}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  border: 'none',
+                  borderRadius: '16px',
+                  cursor: 'pointer',
+                  background: 'transparent',
+                  marginRight: '10px'
+                }}
+              />
+              <span style={{ 
+                color: theme.text,
+                fontSize: '14px',
+                opacity: 0.8
+              }}>
+                Accent Color
+              </span>
+            </motion.div>
           </div>
         </motion.div>
 
@@ -83,11 +119,22 @@ const Settings = () => {
           style={{
             padding: 20,
             borderRadius: 16,
-            background: 'rgba(255,255,255,0.05)',
+            background: 'rgba(255,255,255,0.03)',
             border: '1px solid rgba(255,255,255,0.1)',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+            position: 'relative',
+            overflow: 'hidden'
           }}
         >
+          <div 
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: '2px',
+              background: `linear-gradient(90deg, ${primaryColor}00, ${primaryColor}, ${primaryColor}00)`
+            }}
+          />
           <h3 style={{ marginBottom: 16 }}>Updates</h3>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -97,17 +144,39 @@ const Settings = () => {
             style={{
               padding: '12px 24px',
               borderRadius: 12,
-              background: 'rgba(255,255,255,0.1)',
+              background: 'rgba(255,255,255,0.05)',
               border: 'none',
-              color: '#fff',
+              color: theme.text,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: 8
+              gap: 8,
+              position: 'relative',
+              overflow: 'hidden'
             }}
           >
-            <FiRefreshCw style={{ animation: isChecking ? 'spin 1s linear infinite' : 'none' }} />
+            <FiRefreshCw 
+              style={{ 
+                animation: isChecking ? 'spin 1s linear infinite' : 'none',
+                color: primaryColor
+              }} 
+            />
             Check for Updates
+            {isChecking && (
+              <motion.div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  height: '2px',
+                  background: primaryColor,
+                  width: '100%'
+                }}
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 1, repeat: Infinity }}
+              />
+            )}
           </motion.button>
 
           <AnimatePresence>
@@ -121,10 +190,26 @@ const Settings = () => {
                   padding: 12,
                   borderRadius: 8,
                   background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)'
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
               >
                 {updateStatus}
+                <motion.div
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '1px',
+                    background: primaryColor,
+                    opacity: 0.5
+                  }}
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.5 }}
+                />
               </motion.div>
             )}
           </AnimatePresence>
