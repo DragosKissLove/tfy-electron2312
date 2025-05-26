@@ -121,7 +121,6 @@ async function downloadApp(name, url) {
     });
 
     const writer = fs.createWriteStream(downloadPath);
-
     response.data.pipe(writer);
 
     return new Promise((resolve, reject) => {
