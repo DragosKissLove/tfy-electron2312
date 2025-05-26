@@ -6,10 +6,19 @@ const fs = require('fs');
 const axios = require('axios');
 const extract = require('extract-zip');
 const os = require('os');
+const { autoUpdater } = require('electron-updater');
+const log = require('electron-log');
 const store = new Store();
 
+// Configure logging
+log.transports.file.level = 'info';
+autoUpdater.logger = log;
+autoUpdater.autoDownload = false;
+
+let mainWindow;
+
 function createWindow() {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1000,
     height: 700,
     frame: false,
@@ -20,22 +29,53 @@ function createWindow() {
     },
   });
 
-  win.loadURL('http://localhost:3000');
+  mainWindow.loadURL(process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:3000' 
+    : `file://${path.join(__dirname, 'build/index.html')}`
+  );
 
   // Add window control handlers
   ipcMain.handle('minimize-window', () => {
-    win.minimize();
+    mainWindow.minimize();
   });
 
   ipcMain.handle('close-window', () => {
-    win.close();
+    mainWindow.close();
   });
 
-  // Add username handler
-  ipcMain.handle('get-username', () => {
-    return os.userInfo().username;
-  });
+  // Check for updates immediately
+  autoUpdater.checkForUpdates();
 }
+
+// Auto-updater events
+autoUpdater.on('checking-for-update', () => {
+  mainWindow.webContents.send('update-status', 'Checking for updates...');
+});
+
+autoUpdater.on('update-available', (info) => {
+  mainWindow.webContents.send('update-available', info);
+});
+
+autoUpdater.on('update-not-available', () => {
+  mainWindow.webContents.send('update-not-available');
+});
+
+autoUpdater.on('download-progress', (progressObj) => {
+  mainWindow.webContents.send('download-progress', progressObj);
+});
+
+autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('update-downloaded');
+});
+
+// Handle update installation
+ipcMain.handle('start-update', () => {
+  autoUpdater.downloadUpdate();
+});
+
+ipcMain.handle('install-update', () => {
+  autoUpdater.quitAndInstall();
+});
 
 app.whenReady().then(() => {
   createWindow();
