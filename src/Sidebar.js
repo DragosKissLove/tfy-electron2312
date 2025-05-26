@@ -36,7 +36,8 @@ const Sidebar = ({ active, onChange, user }) => {
         padding: '32px 0',
         gap: 16,
         position: 'sticky',
-        top: 0
+        top: 0,
+        overflow: 'hidden'
       }}
     >
       {/* Navigation Tabs */}
@@ -119,11 +120,12 @@ const Sidebar = ({ active, onChange, user }) => {
 
       {/* Logout Button and Version */}
       <div style={{ 
+        position: 'absolute',
+        bottom: -100,
         display: 'flex', 
         flexDirection: 'column', 
         alignItems: 'center',
-        gap: 4,
-        marginTop: '0px'
+        gap: 4
       }}>
         <motion.button
           whileHover={{ scale: 1.1 }}
@@ -149,8 +151,7 @@ const Sidebar = ({ active, onChange, user }) => {
           style={{
             fontSize: '8px',
             color: theme.text,
-            opacity: 0.2,
-            marginBottom: '8px'
+            opacity: 0.2
           }}
         >
           v3.0.0
