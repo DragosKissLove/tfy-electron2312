@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme } from './ThemeContext';
 import { motion } from 'framer-motion';
-import { FiGrid, FiTool, FiStar, FiSettings, FiInfo, FiLogOut } from 'react-icons/fi';
+import { FiGrid, FiTool, FiStar, FiSettings, FiInfo, FiLogOut, FiMinus, FiX } from 'react-icons/fi';
 
 const tabs = [
   { id: 'Apps', icon: FiGrid, tooltip: 'Install Applications' },
@@ -17,6 +17,14 @@ const Sidebar = ({ active, onChange, user }) => {
   const handleLogout = () => {
     localStorage.removeItem('guestSession');
     window.location.reload();
+  };
+
+  const handleMinimize = () => {
+    window.electron.minimize();
+  };
+
+  const handleClose = () => {
+    window.electron.close();
   };
 
   return (
@@ -40,8 +48,58 @@ const Sidebar = ({ active, onChange, user }) => {
         overflow: 'hidden'
       }}
     >
+      {/* Window Controls */}
+      <div style={{
+        position: 'absolute',
+        top: 12,
+        right: 12,
+        display: 'flex',
+        gap: 8
+      }}>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={handleMinimize}
+          style={{
+            width: 20,
+            height: 20,
+            borderRadius: '50%',
+            border: 'none',
+            background: '#FBD024',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#000',
+            fontSize: 14
+          }}
+        >
+          <FiMinus size={12} />
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={handleClose}
+          style={{
+            width: 20,
+            height: 20,
+            borderRadius: '50%',
+            border: 'none',
+            background: '#FF5F57',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#000',
+            fontSize: 14
+          }}
+        >
+          <FiX size={12} />
+        </motion.button>
+      </div>
+
       {/* Navigation Tabs */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16, marginTop: 20 }}>
         {tabs.map(({ id, icon: Icon, tooltip }) => (
           <motion.div
             key={id}
@@ -124,7 +182,8 @@ const Sidebar = ({ active, onChange, user }) => {
         flexDirection: 'column', 
         alignItems: 'center',
         gap: 4,
-        marginTop: -400
+        marginTop: 'auto',
+        marginBottom: 20
       }}>
         <motion.button
           whileHover={{ scale: 1.1 }}
