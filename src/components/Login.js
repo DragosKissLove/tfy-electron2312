@@ -8,7 +8,6 @@ const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('User');
 
   useEffect(() => {
-    // Get Windows username from environment
     if (window.electron) {
       window.electron.runFunction('get-username')
         .then(name => setUsername(name || 'User'))
@@ -108,7 +107,7 @@ const Login = ({ onLogin }) => {
             transition={{ delay: 0.2 }}
             style={{ fontSize: '28px', marginBottom: '10px' }}
           >
-            Hi {username}! 👋
+            Welcome back, {username}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -116,7 +115,7 @@ const Login = ({ onLogin }) => {
             transition={{ delay: 0.4 }}
             style={{ fontSize: '16px', opacity: 0.8 }}
           >
-            Welcome to your personal optimization toolkit
+            Your personal optimization suite awaits
           </motion.p>
         </motion.div>
 
