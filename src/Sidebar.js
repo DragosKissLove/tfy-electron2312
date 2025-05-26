@@ -34,10 +34,11 @@ const Sidebar = ({ active, onChange, user }) => {
       style={{
         width: 80,
         height: '100vh',
-        background: theme.cardBg,
+        background: `rgba(18, 18, 18, 0.7)`,
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        borderRight: `1px solid ${theme.border}`,
+        borderRight: `1px solid ${primaryColor}33`,
+        borderRadius: '12px 0 0 12px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -45,7 +46,9 @@ const Sidebar = ({ active, onChange, user }) => {
         gap: 16,
         position: 'sticky',
         top: 0,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        boxShadow: `0 0 20px ${primaryColor}33`,
+        border: `1px solid ${primaryColor}22`
       }}
     >
       {/* Navigation Tabs */}
@@ -72,7 +75,8 @@ const Sidebar = ({ active, onChange, user }) => {
                 justifyContent: 'center',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                position: 'relative'
+                position: 'relative',
+                boxShadow: id === active ? `0 0 15px ${primaryColor}66` : 'none'
               }}
             >
               <Icon size={24} />

@@ -67,7 +67,8 @@ const App = () => {
             flex: 1,
             height: '100vh',
             overflow: 'auto',
-            background: `linear-gradient(135deg, ${theme.background}00 0%, ${theme.background} 100%)`
+            background: `linear-gradient(135deg, ${theme.background}00 0%, ${theme.background} 100%)`,
+            borderRadius: '0 12px 12px 0'
           }}
         >
           <Component />
@@ -79,10 +80,13 @@ const App = () => {
   return (
     <div style={{ 
       display: 'flex',
-      background: theme.background,
+      background: 'transparent',
       color: theme.text,
       minHeight: '100vh',
-      position: 'relative'
+      position: 'relative',
+      borderRadius: '12px',
+      overflow: 'hidden',
+      boxShadow: `0 0 30px ${primaryColor}22`
     }}>
       {/* Window Controls */}
       <div style={{

@@ -16,12 +16,16 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: black;
-  /* border-radius: 16px; */  /* ← scoate linia asta */
-  overflow: hidden;
+  background-color: transparent !important;
 }
 
- glass-button {
+#root {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.glass-button {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
