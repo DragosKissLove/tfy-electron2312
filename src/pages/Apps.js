@@ -29,53 +29,37 @@ const Apps = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
     >
-      <motion.div 
-        style={{ 
-          marginBottom: '20px',
-          background: theme.cardBg,
-          padding: '20px',
-          borderRadius: '16px',
-          border: `1px solid ${primaryColor}33`,
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
+      <h2 style={{ 
+        fontSize: '28px',
+        fontWeight: '600',
+        marginBottom: '20px',
+        color: theme.text,
+        borderBottom: `2px solid ${primaryColor}`,
+        paddingBottom: '10px',
+        display: 'inline-block',
+        position: 'relative'
+      }}>
+        Install Apps
         <motion.div
+          style={{
+            position: 'absolute',
+            bottom: '-2px',
+            left: 0,
+            right: 0,
+            height: '2px',
+            background: primaryColor,
+            boxShadow: `0 0 10px ${primaryColor}`
+          }}
           animate={{
-            backgroundPosition: ['0% 0%', '100% 0%'],
             opacity: [0.5, 1, 0.5]
           }}
           transition={{
-            duration: 3,
-            ease: "linear",
+            duration: 2,
             repeat: Infinity,
-            repeatType: "reverse"
-          }}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            borderRadius: '16px',
-            padding: '1px',
-            background: `linear-gradient(90deg, 
-              ${primaryColor}00 0%, 
-              ${primaryColor} 50%,
-              ${primaryColor}00 100%
-            )`,
-            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-            maskComposite: 'exclude',
+            ease: "easeInOut"
           }}
         />
-        <h2 style={{ 
-          fontSize: '24px',
-          fontWeight: 'bold',
-          background: `linear-gradient(45deg, ${theme.text}, ${primaryColor})`,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          filter: `drop-shadow(0 0 10px ${primaryColor}66)`
-        }}>
-          Install Apps
-        </h2>
-      </motion.div>
+      </h2>
 
       <div
         style={{
