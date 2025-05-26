@@ -4,8 +4,9 @@ directories:
 files:
   - filter:
       - build/**/*
+      - main.js
 extraMetadata:
-  main: build/electron.js
+  main: main.js
 appId: com.tfy.tool
 productName: TFY Tool
 win:

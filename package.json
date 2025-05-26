@@ -45,6 +45,10 @@
     "directories": {
       "output": "dist"
     },
+    "files": [
+      "build/**/*",
+      "main.js"
+    ],
     "win": {
       "target": [
         {
