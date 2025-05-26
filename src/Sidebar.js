@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme } from './ThemeContext';
 import { motion } from 'framer-motion';
-import { FiGrid, FiTool, FiStar, FiSettings, FiInfo, FiLogOut, FiMinus, FiX } from 'react-icons/fi';
+import { FiGrid, FiTool, FiStar, FiSettings, FiInfo, FiLogOut } from 'react-icons/fi';
 
 const tabs = [
   { id: 'Apps', icon: FiGrid, tooltip: 'Install Applications' },
@@ -19,14 +19,6 @@ const Sidebar = ({ active, onChange, user }) => {
     window.location.reload();
   };
 
-  const handleMinimize = () => {
-    window.electron.minimize();
-  };
-
-  const handleClose = () => {
-    window.electron.close();
-  };
-
   return (
     <motion.div
       initial={{ x: -100, opacity: 0 }}
@@ -34,7 +26,7 @@ const Sidebar = ({ active, onChange, user }) => {
       style={{
         width: 80,
         height: '100vh',
-        background: theme.cardBg,
+        background: 'rgba(255, 255, 255, 0.03)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         borderRight: `1px solid ${theme.border}`,
@@ -45,10 +37,11 @@ const Sidebar = ({ active, onChange, user }) => {
         gap: 16,
         position: 'sticky',
         top: 0,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        borderTopLeftRadius: '12px',
+        borderBottomLeftRadius: '12px'
       }}
     >
-      {/* Navigation Tabs */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16, marginTop: 20 }}>
         {tabs.map(({ id, icon: Icon, tooltip }) => (
           <motion.div
@@ -96,7 +89,6 @@ const Sidebar = ({ active, onChange, user }) => {
               )}
             </motion.button>
             
-            {/* Tooltip */}
             <motion.div
               variants={{
                 hover: { opacity: 1, x: 60, transition: { duration: 0.2 } },
@@ -126,7 +118,6 @@ const Sidebar = ({ active, onChange, user }) => {
         ))}
       </div>
 
-      {/* Logout Button and Version */}
       <div style={{ 
         display: 'flex', 
         flexDirection: 'column', 
