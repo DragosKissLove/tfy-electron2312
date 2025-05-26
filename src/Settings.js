@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiMoon, FiSun, FiRefreshCw } from 'react-icons/fi';
 
 const Settings = () => {
-  const { darkMode, setDarkMode, primaryColor, setPrimaryColor } = useTheme();
+  const { darkMode, setDarkMode, primaryColor, setPrimaryColor, theme } = useTheme();
   const [updateStatus, setUpdateStatus] = useState('');
   const [isChecking, setIsChecking] = useState(false);
 
