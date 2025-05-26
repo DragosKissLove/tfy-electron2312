@@ -22,23 +22,71 @@ const Apps = () => {
   const { theme, primaryColor } = useTheme();
   const [hoveredApp, setHoveredApp] = useState(null);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { 
+      opacity: 0,
+      y: 20,
+      scale: 0.8
+    },
+    show: { 
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 200,
+        damping: 20
+      }
+    }
+  };
+
+  const headerVariants = {
+    hidden: { 
+      opacity: 0,
+      x: -50
+    },
+    show: { 
+      opacity: 1,
+      x: 0,
+      transition: {
+        type: "spring",
+        stiffness: 200,
+        damping: 20
+      }
+    }
+  };
+
   return (
     <motion.div
       style={{ padding: '30px' }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
+      initial="hidden"
+      animate="show"
+      variants={containerVariants}
     >
-      <h2 style={{ 
-        fontSize: '28px',
-        fontWeight: '600',
-        marginBottom: '20px',
-        color: theme.text,
-        borderBottom: `2px solid ${primaryColor}`,
-        paddingBottom: '10px',
-        display: 'inline-block',
-        position: 'relative'
-      }}>
+      <motion.h2 
+        variants={headerVariants}
+        style={{ 
+          fontSize: '28px',
+          fontWeight: '600',
+          marginBottom: '20px',
+          color: theme.text,
+          borderBottom: `2px solid ${primaryColor}`,
+          paddingBottom: '10px',
+          display: 'inline-block',
+          position: 'relative'
+        }}
+      >
         Install Apps
         <motion.div
           style={{
@@ -59,9 +107,10 @@ const Apps = () => {
             ease: "easeInOut"
           }}
         />
-      </h2>
+      </motion.h2>
 
-      <div
+      <motion.div
+        variants={containerVariants}
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
@@ -73,6 +122,7 @@ const Apps = () => {
           return (
             <motion.button
               key={app.name}
+              variants={itemVariants}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onMouseEnter={() => setHoveredApp(app.name)}
@@ -115,7 +165,7 @@ const Apps = () => {
             </motion.button>
           );
         })}
-      </div>
+      </motion.div>
     </motion.div>
   );
 };
