@@ -107,7 +107,7 @@ const Login = ({ onLogin }) => {
             transition={{ delay: 0.2 }}
             style={{ fontSize: '28px', marginBottom: '10px' }}
           >
-            Hi {username}
+            Hi {username}!
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -115,7 +115,7 @@ const Login = ({ onLogin }) => {
             transition={{ delay: 0.4 }}
             style={{ fontSize: '16px', opacity: 0.8 }}
           >
-            Welcome to TFY Utility Hub - Your all-in-one solution for system optimization, gaming tools, and essential utilities. Experience the power of streamlined performance at your fingertips.
+            Welcome to TFY Utility Hub - Enhance your system performance and gaming experience with our powerful tools and utilities.
           </motion.p>
         </motion.div>
 
