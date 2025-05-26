@@ -18,13 +18,6 @@ const Tools = () => {
   const [activeButton, setActiveButton] = useState(null);
   const [status, setStatus] = useState('');
 
-  const glowAnimation = useSpring({
-    from: { boxShadow: '0 0 10px rgba(255,255,255,0.3)' },
-    to: { boxShadow: '0 0 20px rgba(255,255,255,0.6)' },
-    config: { duration: 1000 },
-    loop: true
-  });
-
   const handleClick = async (funcName) => {
     try {
       setActiveButton(funcName);
@@ -45,19 +38,14 @@ const Tools = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
     >
-      <animated.h2 
-        style={{
-          ...glowAnimation,
-          marginBottom: '20px',
-          background: `linear-gradient(45deg, ${theme.text}, ${primaryColor})`,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          padding: '10px',
-          borderRadius: '8px'
-        }}
-      >
-        🛠️ Useful Tools
-      </animated.h2>
+      <h2 style={{
+        marginBottom: '20px',
+        color: theme.text,
+        padding: '10px',
+        borderRadius: '8px'
+      }}>
+        Useful Tools
+      </h2>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <AnimatePresence>
@@ -80,7 +68,7 @@ const Tools = () => {
                 color: activeButton === tool.function ? '#FFF' : theme.text,
                 fontSize: '15px',
                 fontWeight: 500,
-                boxShadow: `0 4px 12px ${theme.shadow}, 0 0 15px ${primaryColor}33`,
+                boxShadow: `0 4px 12px ${theme.shadow}`,
                 transition: 'all 0.3s ease',
                 cursor: 'pointer',
                 display: 'flex',
