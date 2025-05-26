@@ -15,9 +15,27 @@ const Sidebar = ({ active, onChange, user }) => {
   const { theme, primaryColor } = useTheme();
 
   const handleLogout = () => {
-    localStorage.removeItem('guestSession');
-    // Force a clean reload without any white flash
-    window.location.replace(window.location.href);
+    // Add a black overlay before logout
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = '#000';
+    overlay.style.zIndex = '9999';
+    overlay.style.transition = 'opacity 0.3s ease';
+    overlay.style.opacity = '0';
+    document.body.appendChild(overlay);
+
+    // Fade in the black overlay
+    requestAnimationFrame(() => {
+      overlay.style.opacity = '1';
+      setTimeout(() => {
+        localStorage.removeItem('guestSession');
+        window.location.replace(window.location.href);
+      }, 300);
+    });
   };
 
   const sidebarVariants = {
