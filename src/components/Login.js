@@ -113,9 +113,18 @@ const Login = ({ onLogin }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            style={{ fontSize: '16px', opacity: 0.8 }}
+            style={{ fontSize: '16px', opacity: 0.8, marginBottom: '8px' }}
           >
-            Welcome to TFY utility hub
+            Welcome to TFY Utility Hub
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            style={{ fontSize: '14px', opacity: 0.6, lineHeight: '1.4' }}
+          >
+            Your all-in-one solution for system optimization,
+            <br />gaming tools, and essential utilities
           </motion.p>
         </motion.div>
 
