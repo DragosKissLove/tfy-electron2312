@@ -27,13 +27,32 @@
     "autoprefixer": "^10.4.17",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
-    "react-spring": "^9.7.3"
+    "react-spring": "^9.7.3",
+    "electron-builder": "^24.9.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "electron": "electron main.js",
-    "dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\""
+    "dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder"
+  },
+  "build": {
+    "appId": "com.tfy.tool",
+    "productName": "TFY Tool",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "public/favicon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
   },
   "eslintConfig": {
     "extends": [
