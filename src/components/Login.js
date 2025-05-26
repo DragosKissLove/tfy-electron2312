@@ -63,12 +63,12 @@ const Login = ({ onLogin }) => {
       >
         <motion.div
           animate={{
-            backgroundPosition: ['0% 0%', '100% 0%'],
-            opacity: [0.5, 1, 0.5]
+            opacity: [0.2, 1, 0.2],
+            scale: [1, 1.05, 1],
           }}
           transition={{
-            duration: 3,
-            ease: "linear",
+            duration: 2,
+            ease: "easeInOut",
             repeat: Infinity,
             repeatType: "reverse"
           }}
@@ -103,8 +103,21 @@ const Login = ({ onLogin }) => {
         >
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            animate={{ 
+              opacity: [0, 1],
+              y: [-20, 0],
+              textShadow: [
+                `0 0 20px ${primaryColor}00`,
+                `0 0 20px ${primaryColor}ff`,
+                `0 0 20px ${primaryColor}00`
+              ]
+            }}
+            transition={{ 
+              duration: 2,
+              times: [0, 0.5, 1],
+              repeat: Infinity,
+              repeatType: "reverse"
+            }}
             style={{ fontSize: '28px', marginBottom: '10px' }}
           >
             Hi {username}!
