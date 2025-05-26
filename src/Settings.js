@@ -182,7 +182,9 @@ const Settings = () => {
               alignItems: 'center',
               gap: 8,
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              boxShadow: `0 0 20px ${primaryColor}40`,
+              transition: 'all 0.3s ease'
             }}
           >
             <FiRefreshCw 

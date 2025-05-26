@@ -4,7 +4,7 @@ import { useTheme } from '../ThemeContext';
 import { FiGithub, FiMessageCircle } from 'react-icons/fi';
 
 const About = () => {
-  const { theme } = useTheme();
+  const { theme, primaryColor } = useTheme();
 
   const handleOpenDiscord = async () => {
     try {
@@ -61,10 +61,11 @@ const About = () => {
             cursor: 'pointer',
             fontSize: '15px',
             fontWeight: 500,
-            boxShadow: theme.shadow,
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '8px',
+            boxShadow: `0 0 20px ${primaryColor}40`,
+            transition: 'all 0.3s ease'
           }}
         >
           <FiMessageCircle />
