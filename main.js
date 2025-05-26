@@ -20,6 +20,15 @@ function createWindow() {
   });
 
   win.loadURL('http://localhost:3000');
+
+  // Add window control handlers
+  ipcMain.handle('minimize-window', () => {
+    win.minimize();
+  });
+
+  ipcMain.handle('close-window', () => {
+    win.close();
+  });
 }
 
 app.whenReady().then(() => {
