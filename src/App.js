@@ -9,14 +9,14 @@ import Settings from './Settings';
 import About from './pages/About';
 import Login from './components/Login';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FiMinus, FiX } from 'react-icons/fi';
 
 const App = () => {
-  const { theme } = useTheme();
+  const { theme, primaryColor } = useTheme();
   const [activeTab, setActiveTab] = useState('Apps');
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Check for existing guest session
     const guestSession = localStorage.getItem('guestSession');
     if (guestSession) {
       setUser(JSON.parse(guestSession));
@@ -31,6 +31,14 @@ const App = () => {
 
   const handleLogin = (userData) => {
     setUser(userData);
+  };
+
+  const handleMinimize = () => {
+    window.electron.minimize();
+  };
+
+  const handleClose = () => {
+    window.electron.close();
   };
 
   if (!user) {
@@ -76,6 +84,53 @@ const App = () => {
       minHeight: '100vh',
       position: 'relative'
     }}>
+      {/* Window Controls */}
+      <div style={{
+        position: 'fixed',
+        top: 12,
+        right: 12,
+        display: 'flex',
+        gap: 8,
+        zIndex: 1000
+      }}>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={handleMinimize}
+          style={{
+            width: 24,
+            height: 24,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'transparent',
+            border: 'none',
+            color: theme.text,
+            cursor: 'pointer'
+          }}
+        >
+          <FiMinus size={18} />
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={handleClose}
+          style={{
+            width: 24,
+            height: 24,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'transparent',
+            border: 'none',
+            color: theme.text,
+            cursor: 'pointer'
+          }}
+        >
+          <FiX size={18} />
+        </motion.button>
+      </div>
+      
       <Sidebar active={activeTab} onChange={setActiveTab} user={user} />
       {renderContent()}
     </div>

@@ -48,56 +48,6 @@ const Sidebar = ({ active, onChange, user }) => {
         overflow: 'hidden'
       }}
     >
-      {/* Window Controls */}
-      <div style={{
-        position: 'absolute',
-        top: 12,
-        right: 12,
-        display: 'flex',
-        gap: 8
-      }}>
-        <motion.button
-          whileHover={{ scale: 1.1, backgroundColor: `${primaryColor}22` }}
-          whileTap={{ scale: 0.9 }}
-          onClick={handleMinimize}
-          style={{
-            width: 24,
-            height: 24,
-            borderRadius: '8px',
-            border: `1px solid ${theme.border}`,
-            background: 'transparent',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: theme.text,
-            transition: 'all 0.2s ease'
-          }}
-        >
-          <FiMinus size={14} />
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: 1.1, backgroundColor: '#ff5f5722' }}
-          whileTap={{ scale: 0.9 }}
-          onClick={handleClose}
-          style={{
-            width: 24,
-            height: 24,
-            borderRadius: '8px',
-            border: `1px solid ${theme.border}`,
-            background: 'transparent',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#FF5F57',
-            transition: 'all 0.2s ease'
-          }}
-        >
-          <FiX size={14} />
-        </motion.button>
-      </div>
-
       {/* Navigation Tabs */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16, marginTop: 20 }}>
         {tabs.map(({ id, icon: Icon, tooltip }) => (
