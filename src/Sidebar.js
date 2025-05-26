@@ -137,7 +137,7 @@ const Sidebar = ({ active, onChange, user }) => {
       }}>
         <motion.button
           whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 1 }}
+          whileTap={{ scale: 0.80 }}
           onClick={handleLogout}
           style={{
             width: 48,
