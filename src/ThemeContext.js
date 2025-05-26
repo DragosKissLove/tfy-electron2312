@@ -14,7 +14,7 @@ const darkTheme = {
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [primaryColor, setPrimaryColor] = useState('#C0392B');
+  const [primaryColor, setPrimaryColor] = useState('#8B5CF6');
 
   const theme = {
     ...darkTheme,

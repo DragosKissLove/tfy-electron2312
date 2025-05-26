@@ -82,7 +82,8 @@ const Extra = () => {
               border: `1px solid ${primaryColor}33`,
               background: theme.cardBg,
               color: theme.text,
-              boxShadow: `0 0 20px ${primaryColor}22`
+              boxShadow: `0 0 20px ${primaryColor}22`,
+              outline: 'none'
             }}
           />
           <motion.button

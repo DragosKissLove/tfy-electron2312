@@ -19,7 +19,7 @@ const apps = [
 ];
 
 const Apps = () => {
-  const { theme } = useTheme();
+  const { theme, primaryColor } = useTheme();
   const [hoveredApp, setHoveredApp] = useState(null);
 
   return (
@@ -59,7 +59,7 @@ const Apps = () => {
               onClick={() => downloadAndRun(app.name, app.url)}
               style={{
                 background: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid rgba(255, 255, 255, 0.07)',
+                border: `1px solid ${primaryColor}33`,
                 borderRadius: '16px',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
@@ -75,8 +75,8 @@ const Apps = () => {
                 textAlign: 'center',
                 transition: 'all 0.3s ease',
                 boxShadow: isHovered
-                  ? `0 4px 22px ${theme.primary}33`
-                  : `0 2px 12px ${theme.primary}22`,
+                  ? `0 4px 22px ${primaryColor}66`
+                  : `0 2px 12px ${primaryColor}33`,
                 filter: hoveredApp && hoveredApp !== app.name ? 'blur(2px) brightness(0.7)' : 'none',
                 opacity: hoveredApp && hoveredApp !== app.name ? 0.6 : 1,
               }}
@@ -88,7 +88,7 @@ const Apps = () => {
                   width: '28px',
                   height: '28px',
                   marginBottom: '10px',
-                  filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.4))',
+                  filter: `drop-shadow(0 0 4px ${primaryColor}66)`,
                 }}
               />
               {app.name}
