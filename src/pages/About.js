@@ -32,7 +32,7 @@ const About = () => {
         display: 'inline-block',
         position: 'relative'
       }}>
-        TFY Tool
+        About
       </h2>
       
       <div style={{
