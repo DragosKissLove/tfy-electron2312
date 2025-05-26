@@ -120,12 +120,11 @@ const Sidebar = ({ active, onChange, user }) => {
 
       {/* Logout Button and Version */}
       <div style={{ 
-        position: 'absolute',
-        bottom: -100,
         display: 'flex', 
         flexDirection: 'column', 
         alignItems: 'center',
-        gap: 4
+        gap: 4,
+        marginTop: -200
       }}>
         <motion.button
           whileHover={{ scale: 1.1 }}
