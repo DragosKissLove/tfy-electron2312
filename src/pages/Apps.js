@@ -91,26 +91,6 @@ const Apps = () => {
         }}
       >
         Install Apps
-        <motion.div
-          style={{
-            position: 'absolute',
-            bottom: '-2px',
-            left: 0,
-            right: 0,
-            height: '2px',
-            background: primaryColor,
-            boxShadow: `0 0 10px ${primaryColor}`
-          }}
-          animate={{
-            opacity: [0.5, 1, 0.5],
-            scaleX: [0.8, 1.2, 0.8]
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
       </motion.h2>
 
       <motion.div
