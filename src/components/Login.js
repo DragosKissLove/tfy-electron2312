@@ -75,6 +75,8 @@ const Login = ({ onLogin }) => {
             )`,
             mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
             maskComposite: 'exclude',
+            pointerEvents: 'none', // Add this to allow clicking through
+            zIndex: 0 // Add this to ensure it stays behind the content
           }}
         />
 
@@ -85,7 +87,9 @@ const Login = ({ onLogin }) => {
             background: `linear-gradient(45deg, ${theme.text}, ${primaryColor})`,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            filter: `drop-shadow(0 0 10px ${primaryColor}66)`
+            filter: `drop-shadow(0 0 10px ${primaryColor}66)`,
+            position: 'relative', // Add this
+            zIndex: 1 // Add this
           }}
         >
           Welcome to TFY Tool 2025
@@ -108,7 +112,9 @@ const Login = ({ onLogin }) => {
             justifyContent: 'center',
             gap: '10px',
             boxShadow: `0 0 20px ${primaryColor}40`,
-            width: '100%'
+            width: '100%',
+            position: 'relative', // Add this
+            zIndex: 1 // Add this
           }}
         >
           <FiUser size={20} style={{ color: primaryColor }} />
