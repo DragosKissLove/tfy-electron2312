@@ -32,14 +32,12 @@ const Apps = () => {
       <motion.h2 
         style={{ 
           marginBottom: '20px',
-          background: `linear-gradient(45deg, ${theme.text}, ${theme.primary})`,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
+          color: theme.text,
           padding: '10px',
           borderRadius: '8px'
         }}
       >
-        📦 Install Apps
+        Install Apps
       </motion.h2>
 
       <div
@@ -77,8 +75,8 @@ const Apps = () => {
                 textAlign: 'center',
                 transition: 'all 0.3s ease',
                 boxShadow: isHovered
-                  ? `0 4px 22px ${theme.primary}66, 0 0 6px ${theme.primary}aa inset`
-                  : `0 2px 12px ${theme.primary}22, 0 0 4px ${theme.primary}33 inset`,
+                  ? `0 4px 22px ${theme.primary}33`
+                  : `0 2px 12px ${theme.primary}22`,
                 filter: hoveredApp && hoveredApp !== app.name ? 'blur(2px) brightness(0.7)' : 'none',
                 opacity: hoveredApp && hoveredApp !== app.name ? 0.6 : 1,
               }}

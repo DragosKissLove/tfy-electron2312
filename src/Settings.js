@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTheme } from './ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMoon, FiSun, FiRefreshCw } from 'react-icons/fi';
@@ -10,12 +10,10 @@ const Settings = () => {
 
   const handleThemeToggle = () => {
     setDarkMode(!darkMode);
-    window.electron.saveSettings({ darkMode: !darkMode, primaryColor });
   };
 
   const handleColorChange = (e) => {
     setPrimaryColor(e.target.value);
-    window.electron.saveSettings({ darkMode, primaryColor: e.target.value });
   };
 
   const handleCheckUpdates = async () => {
@@ -36,17 +34,6 @@ const Settings = () => {
     }
   };
 
-  useEffect(() => {
-    const loadSettings = async () => {
-      const settings = await window.electron.getSettings();
-      if (settings) {
-        setDarkMode(settings.darkMode);
-        setPrimaryColor(settings.primaryColor);
-      }
-    };
-    loadSettings();
-  }, []);
-
   return (
     <motion.div
       style={{ padding: 30 }}
@@ -58,14 +45,12 @@ const Settings = () => {
       <motion.h2 
         style={{
           marginBottom: 20,
-          background: `linear-gradient(45deg, ${primaryColor}, ${darkMode ? '#fff' : '#000'})`,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
+          color: theme.text,
           padding: '10px',
           borderRadius: '8px'
         }}
       >
-        ⚙️ Settings
+        Settings
       </motion.h2>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -76,10 +61,10 @@ const Settings = () => {
             borderRadius: 16,
             background: 'rgba(255,255,255,0.05)',
             border: '1px solid rgba(255,255,255,0.1)',
-            boxShadow: `0 0 20px ${primaryColor}33`
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
           }}
         >
-          <h3 style={{ marginBottom: 16 }}>🎨 Appearance</h3>
+          <h3 style={{ marginBottom: 16 }}>Appearance</h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -94,8 +79,7 @@ const Settings = () => {
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8,
-                boxShadow: `0 0 15px ${primaryColor}33`
+                gap: 8
               }}
             >
               {darkMode ? <FiMoon /> : <FiSun />}
@@ -124,10 +108,10 @@ const Settings = () => {
             borderRadius: 16,
             background: 'rgba(255,255,255,0.05)',
             border: '1px solid rgba(255,255,255,0.1)',
-            boxShadow: `0 0 20px ${primaryColor}33`
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
           }}
         >
-          <h3 style={{ marginBottom: 16 }}>🔄 Updates</h3>
+          <h3 style={{ marginBottom: 16 }}>Updates</h3>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -142,8 +126,7 @@ const Settings = () => {
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: 8,
-              boxShadow: `0 0 15px ${primaryColor}33`
+              gap: 8
             }}
           >
             <FiRefreshCw style={{ animation: isChecking ? 'spin 1s linear infinite' : 'none' }} />
