@@ -11,7 +11,7 @@ export const downloadAndRun = async (name, url) => {
     const result = await window.electron.runFunction('download-app', { name, url });
     
     if (result.success) {
-      return { success: true, message: `${name} has been downloaded successfully!` };
+      return { success: true, message: `${name} has been downloaded to your Downloads folder` };
     } else {
       throw new Error(result.error || 'Download failed');
     }
