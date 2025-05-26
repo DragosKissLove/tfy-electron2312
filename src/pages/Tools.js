@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { useTheme } from '../ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSpring, animated } from 'react-spring';
 
 const tools = [
   { name: 'WinRAR Crack', function: 'winrar_crack' },
   { name: 'Atlas Tools', function: 'install_atlas_tools' },
   { name: 'WiFi Passwords', function: 'wifi_passwords' },
   { name: 'Activate Windows', function: 'activate_windows' },
-  { name: 'Spotify Modded', function: 'install_spicetify_from_github' },
-  { name: 'Run Optimization', function: 'run-optimization' },
-  { name: 'Clean Temp Files', function: 'clean-temp' }
+  { name: 'Spotify Modded', function: 'install_spicetify_from_github' }
 ];
 
 const Tools = () => {
@@ -52,7 +49,7 @@ const Tools = () => {
           {tools.map((tool) => (
             <motion.button
               key={tool.function}
-              whileHover={{ scale: 1.02, backgroundColor: theme.hover }}
+              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => handleClick(tool.function)}
               initial={{ opacity: 0, x: -20 }}
@@ -62,21 +59,18 @@ const Tools = () => {
                 height: '48px',
                 border: `1px solid ${theme.border}`,
                 borderRadius: '12px',
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                color: activeButton === tool.function ? '#FFF' : theme.text,
+                background: theme.cardBg,
+                color: theme.text,
                 fontSize: '15px',
                 fontWeight: 500,
-                boxShadow: `0 4px 12px ${theme.shadow}`,
-                transition: 'all 0.3s ease',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
                 position: 'relative',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                boxShadow: `0 4px 12px ${primaryColor}33`
               }}
             >
               {activeButton === tool.function && (

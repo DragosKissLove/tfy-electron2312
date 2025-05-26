@@ -7,30 +7,6 @@ const Extra = () => {
   const [status, setStatus] = useState('');
   const [robloxVersion, setRobloxVersion] = useState('');
 
-  const handleOptimization = async () => {
-    try {
-      if (window.api) {
-        setStatus('Running optimization...');
-        await window.api.runPythonFunction('run_optimization');
-        setStatus('Optimization completed!');
-      }
-    } catch (error) {
-      setStatus(`Error: ${error.message}`);
-    }
-  };
-
-  const handleCleanTemp = async () => {
-    try {
-      if (window.api) {
-        setStatus('Cleaning temporary files...');
-        await window.api.runPythonFunction('clean_temp');
-        setStatus('Temporary files cleaned!');
-      }
-    } catch (error) {
-      setStatus(`Error: ${error.message}`);
-    }
-  };
-
   const handleRobloxDowngrade = async () => {
     try {
       if (window.api && robloxVersion) {
@@ -51,49 +27,11 @@ const Extra = () => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
     >
-      <h2 style={{ marginBottom: 20 }}>🎮 Extra Features</h2>
+      <h2 style={{ marginBottom: 20 }}>Extra Features</h2>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleOptimization}
-          style={{
-            padding: '12px 24px',
-            background: theme.cardBg,
-            border: `1px solid ${theme.border}`,
-            borderRadius: '12px',
-            color: theme.text,
-            cursor: 'pointer',
-            fontSize: '15px',
-            fontWeight: 500,
-            boxShadow: theme.shadow
-          }}
-        >
-          🚀 Run Optimization
-        </motion.button>
-
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleCleanTemp}
-          style={{
-            padding: '12px 24px',
-            background: theme.cardBg,
-            border: `1px solid ${theme.border}`,
-            borderRadius: '12px',
-            color: theme.text,
-            cursor: 'pointer',
-            fontSize: '15px',
-            fontWeight: 500,
-            boxShadow: theme.shadow
-          }}
-        >
-          🧹 Clean Temp Files
-        </motion.button>
-
         <div style={{ marginTop: 20 }}>
-          <h3 style={{ marginBottom: 10 }}>🎮 Roblox Downgrade</h3>
+          <h3 style={{ marginBottom: 10 }}>Roblox Downgrade</h3>
           <input
             type="text"
             value={robloxVersion}
@@ -123,7 +61,6 @@ const Extra = () => {
               cursor: robloxVersion ? 'pointer' : 'not-allowed',
               fontSize: '15px',
               fontWeight: 500,
-              boxShadow: theme.shadow,
               opacity: robloxVersion ? 1 : 0.7
             }}
           >
