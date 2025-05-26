@@ -28,7 +28,6 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "react-spring": "^9.7.3",
-    "electron-builder": "^24.9.1",
     "electron-log": "^5.0.1"
   },
   "scripts": {
@@ -93,6 +92,7 @@
     "concurrently": "^8.2.2",
     "electron": "^26.2.1",
     "wait-on": "^7.2.0",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "electron-builder": "^24.9.1"
   }
 }
