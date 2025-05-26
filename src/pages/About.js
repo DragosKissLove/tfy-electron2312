@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../ThemeContext';
-import { FiGithub, FiMessageCircle } from 'react-icons/fi';
+import { FiGithub, FiMessageCircle, FiCpu, FiZap, FiShield } from 'react-icons/fi';
 
 const About = () => {
   const { theme, primaryColor } = useTheme();
@@ -13,6 +13,24 @@ const About = () => {
       console.error('Error opening Discord:', error);
     }
   };
+
+  const features = [
+    {
+      icon: FiCpu,
+      title: "System Optimization",
+      description: "Advanced tools to enhance your PC's performance"
+    },
+    {
+      icon: FiZap,
+      title: "Gaming Tools",
+      description: "Specialized utilities for the ultimate gaming experience"
+    },
+    {
+      icon: FiShield,
+      title: "Security Features",
+      description: "Keep your system protected and running smoothly"
+    }
+  ];
 
   return (
     <motion.div
@@ -70,51 +88,116 @@ const About = () => {
           }}
         />
 
-        <h3 style={{ 
-          marginBottom: '16px',
-          color: primaryColor,
-          filter: `drop-shadow(0 0 10px ${primaryColor}66)`
-        }}>Welcome to TFY Tool 2025</h3>
-        <p style={{ marginBottom: '16px', lineHeight: '1.6' }}>
-          TFY Tool is your all-in-one Windows utility suite, designed to enhance your PC experience. 
-          From system optimization to gaming tools, we've got everything you need to maximize your 
-          Windows performance and customize your setup.
-        </p>
-        <p style={{ marginBottom: '16px', lineHeight: '1.6' }}>
-          Features include:
-          • System optimization
-          • Gaming tools and tweaks
-          • Windows activation
-          • Popular software installation
-          • And much more!
-        </p>
-      </div>
-
-      <div style={{ display: 'flex', gap: '16px' }}>
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleOpenDiscord}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
           style={{
-            padding: '12px 24px',
-            background: theme.cardBg,
-            border: `1px solid ${theme.border}`,
-            borderRadius: '12px',
-            color: theme.text,
-            cursor: 'pointer',
-            fontSize: '15px',
-            fontWeight: 500,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            boxShadow: `0 0 20px ${primaryColor}40`,
-            transition: 'all 0.3s ease'
+            textAlign: 'center',
+            marginBottom: '30px'
           }}
         >
-          <FiMessageCircle style={{ color: primaryColor }} />
-          Join Our Discord
-        </motion.button>
+          <h3 style={{ 
+            fontSize: '24px',
+            marginBottom: '16px',
+            color: primaryColor,
+            filter: `drop-shadow(0 0 10px ${primaryColor}66)`
+          }}>
+            Welcome to TFY Tool 2025
+          </h3>
+          <p style={{ 
+            fontSize: '16px',
+            lineHeight: '1.6',
+            color: theme.text,
+            maxWidth: '600px',
+            margin: '0 auto'
+          }}>
+            Your all-in-one solution for system optimization and gaming enhancement
+          </p>
+        </motion.div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '20px',
+          marginTop: '30px'
+        }}>
+          {features.map((feature, index) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.2 }}
+              style={{
+                padding: '20px',
+                background: `linear-gradient(145deg, ${theme.cardBg}, ${primaryColor}11)`,
+                borderRadius: '12px',
+                border: `1px solid ${primaryColor}22`,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '12px',
+                textAlign: 'center'
+              }}
+            >
+              <motion.div
+                whileHover={{ scale: 1.1, rotate: 360 }}
+                transition={{ duration: 0.5 }}
+                style={{
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  background: `linear-gradient(135deg, ${primaryColor}22, ${primaryColor}44)`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: `0 0 20px ${primaryColor}33`
+                }}
+              >
+                <feature.icon size={24} color={primaryColor} />
+              </motion.div>
+              <h4 style={{ 
+                fontSize: '18px',
+                color: theme.text,
+                marginBottom: '8px'
+              }}>
+                {feature.title}
+              </h4>
+              <p style={{ 
+                fontSize: '14px',
+                color: `${theme.text}cc`,
+                lineHeight: '1.4'
+              }}>
+                {feature.description}
+              </p>
+            </motion.div>
+          ))}
+        </div>
       </div>
+
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={handleOpenDiscord}
+        style={{
+          padding: '12px 24px',
+          background: theme.cardBg,
+          border: `1px solid ${theme.border}`,
+          borderRadius: '12px',
+          color: theme.text,
+          cursor: 'pointer',
+          fontSize: '15px',
+          fontWeight: 500,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          boxShadow: `0 0 20px ${primaryColor}40`,
+          transition: 'all 0.3s ease'
+        }}
+      >
+        <FiMessageCircle style={{ color: primaryColor }} />
+        Join Our Discord
+      </motion.button>
     </motion.div>
   );
 };

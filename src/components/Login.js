@@ -47,30 +47,30 @@ const Login = ({ onLogin }) => {
       }}
     >
       {/* Animated background particles */}
-      {[...Array(3)].map((_, i) => (
+      {[...Array(5)].map((_, i) => (
         <motion.div
           key={i}
           style={{
             position: 'absolute',
-            width: '300px',
-            height: '300px',
+            width: '400px',
+            height: '400px',
             borderRadius: '50%',
-            background: `radial-gradient(circle, ${primaryColor}22 0%, transparent 70%)`,
-            filter: 'blur(80px)',
-            opacity: 0.4,
+            background: `radial-gradient(circle, ${primaryColor}44 0%, transparent 70%)`,
+            filter: 'blur(60px)',
+            opacity: 0.6,
             pointerEvents: 'none'
           }}
           animate={{
             x: ['-50%', '50%'],
             y: ['-50%', '50%'],
-            scale: [1, 1.2, 1],
+            scale: [1, 1.5, 1],
           }}
           transition={{
             duration: 8 + i * 2,
             repeat: Infinity,
             repeatType: 'reverse',
             ease: 'easeInOut',
-            delay: i * 2
+            delay: i * 1.5
           }}
         />
       ))}
@@ -79,11 +79,11 @@ const Login = ({ onLogin }) => {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         style={{
-          background: 'rgba(255, 255, 255, 0.03)',
+          background: 'rgba(255, 255, 255, 0.05)',
           padding: '40px',
           borderRadius: '20px',
-          boxShadow: `0 0 30px ${primaryColor}33`,
-          border: `1px solid ${primaryColor}22`,
+          boxShadow: `0 0 40px ${primaryColor}44`,
+          border: `1px solid ${primaryColor}33`,
           width: '100%',
           maxWidth: '400px',
           textAlign: 'center',
@@ -108,7 +108,7 @@ const Login = ({ onLogin }) => {
               fontSize: '28px', 
               marginBottom: '10px',
               color: '#fff',
-              textShadow: `0 0 20px ${primaryColor}66`
+              textShadow: `0 0 20px ${primaryColor}`
             }}
           >
             Hi {username}!
@@ -119,16 +119,16 @@ const Login = ({ onLogin }) => {
             transition={{ delay: 0.4 }}
             style={{ 
               fontSize: '16px', 
-              color: 'rgba(255, 255, 255, 0.7)',
-              textShadow: `0 0 10px ${primaryColor}44`
+              color: 'rgba(255, 255, 255, 0.9)',
+              textShadow: `0 0 15px ${primaryColor}`
             }}
           >
-            Welcome to TFY Utility Hub - Enhance your system performance and gaming experience.
+            Welcome to TFY Utility Hub
           </motion.p>
         </motion.div>
 
         <motion.button
-          whileHover={{ scale: 1.05, backgroundColor: `${primaryColor}22` }}
+          whileHover={{ scale: 1.05, backgroundColor: `${primaryColor}33` }}
           whileTap={{ scale: 0.95 }}
           onClick={handleGuestLogin}
           style={{
@@ -143,7 +143,7 @@ const Login = ({ onLogin }) => {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '10px',
-            boxShadow: `0 0 20px ${primaryColor}22`,
+            boxShadow: `0 0 30px ${primaryColor}33`,
             width: '100%',
             position: 'relative',
             zIndex: 1,
