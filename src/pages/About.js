@@ -22,7 +22,7 @@ const About = () => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
     >
-      <h2 style={{ marginBottom: 20 }}>📘 About TFY Tool</h2>
+      <h2 style={{ marginBottom: 20 }}>About TFY Tool</h2>
       
       <div style={{
         background: theme.cardBg,
@@ -63,7 +63,7 @@ const About = () => {
           marginBottom: '16px',
           color: primaryColor,
           filter: `drop-shadow(0 0 10px ${primaryColor}66)`
-        }}>Welcome to TFY Tool 2025! 🚀</h3>
+        }}>Welcome to TFY Tool 2025</h3>
         <p style={{ marginBottom: '16px', lineHeight: '1.6' }}>
           TFY Tool is your all-in-one Windows utility suite, designed to enhance your PC experience. 
           From system optimization to gaming tools, we've got everything you need to maximize your 
