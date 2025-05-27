@@ -4,7 +4,6 @@ directories:
 files:
   - filter:
       - build/**/*
-      - build/**/*
       - main.js
       - preload.js
       - functions.js
@@ -32,5 +31,4 @@ nsis:
   license: LICENSE
   installerSidebar: public/favicon.ico
   uninstallerSidebar: public/favicon.ico
-extends: react-cra
 electronVersion: 26.6.10
