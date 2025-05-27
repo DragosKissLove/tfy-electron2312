@@ -2,7 +2,7 @@
   "name": "tfy-tool",
   "version": "0.1.0",
   "private": true,
-  "main": "main-electron.js",
+  "main": "main.js",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -48,12 +48,12 @@
     },
     "files": [
       "build/**/*",
-      "main-electron.js",
+      "main.js",
       "preload.js",
       "functions.js"
     ],
     "extraMetadata": {
-      "main": "main-electron.js"
+      "main": "main.js"
     },
     "win": {
       "target": [
