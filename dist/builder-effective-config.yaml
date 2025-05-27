@@ -5,11 +5,11 @@ files:
   - filter:
       - build/**/*
       - build/**/*
-      - main-electron.js
+      - public/electron.js
       - preload.js
       - functions.js
 extraMetadata:
-  main: main-electron.js
+  main: public/electron.js
 appId: com.tfy.tool
 productName: TFY Tool
 win:
