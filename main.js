@@ -103,6 +103,11 @@ ipcMain.handle('save-settings', (event, settings) => {
   store.set('settings', settings);
 });
 
+// Clear login data on app quit
+app.on('before-quit', () => {
+  store.delete('guestSession');
+});
+
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
