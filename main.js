@@ -77,6 +77,30 @@ ipcMain.handle('install-update', () => {
   autoUpdater.quitAndInstall();
 });
 
+// Handle function calls from renderer
+ipcMain.handle('run-function', async (event, { name, args }) => {
+  const functions = require('./functions');
+  if (typeof functions[name] === 'function') {
+    try {
+      return await functions[name](args);
+    } catch (error) {
+      console.error(`Error running function ${name}:`, error);
+      throw error;
+    }
+  } else {
+    throw new Error(`Function ${name} not found`);
+  }
+});
+
+// Handle settings
+ipcMain.handle('get-settings', () => {
+  return store.get('settings');
+});
+
+ipcMain.handle('save-settings', (event, settings) => {
+  store.set('settings', settings);
+});
+
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {

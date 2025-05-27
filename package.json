@@ -33,7 +33,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "electron": "electron main.js",
+    "electron": "electron .",
     "dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "pack": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder",
@@ -43,11 +43,14 @@
     "appId": "com.tfy.tool",
     "productName": "TFY Tool",
     "directories": {
-      "output": "dist"
+      "output": "dist",
+      "buildResources": "assets"
     },
     "files": [
       "build/**/*",
-      "main.js"
+      "main.js",
+      "preload.js",
+      "functions.js"
     ],
     "win": {
       "target": [
