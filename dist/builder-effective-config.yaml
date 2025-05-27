@@ -6,6 +6,8 @@ files:
       - build/**/*
       - build/**/*
       - main.js
+      - preload.js
+      - functions.js
 extraMetadata:
   main: build/electron.js
 appId: com.tfy.tool
