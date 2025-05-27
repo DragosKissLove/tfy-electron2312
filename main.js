@@ -29,10 +29,12 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadURL(process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:3000' 
-    : `file://${path.join(__dirname, 'build/index.html')}`
-  );
+  // Load the app
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.loadURL('http://localhost:3000');
+  } else {
+    mainWindow.loadFile(path.join(__dirname, 'build', 'index.html'));
+  }
 
   // Add window control handlers
   ipcMain.handle('minimize-window', () => {
