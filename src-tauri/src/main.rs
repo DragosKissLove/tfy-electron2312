@@ -3,8 +3,27 @@
     windows_subsystem = "windows"
 )]
 
+use tauri::Manager;
+use std::process::Command;
+
 #[tauri::command]
-async fn run_function(name: String, _args: Option<String>) -> Result<String, String> {
+async fn download_file(url: String, path: String) -> Result<(), String> {
+    let response = reqwest::get(&url)
+        .await
+        .map_err(|e| e.to_string())?;
+    
+    let bytes = response.bytes()
+        .await
+        .map_err(|e| e.to_string())?;
+    
+    std::fs::write(&path, bytes)
+        .map_err(|e| e.to_string())?;
+    
+    Ok(())
+}
+
+#[tauri::command]
+fn run_function(name: String, args: Option<String>) -> Result<String, String> {
     match name.as_str() {
         "winrar_crack" => {
             // Implementation for winrar_crack
@@ -29,7 +48,7 @@ async fn run_function(name: String, _args: Option<String>) -> Result<String, Str
 fn main() {
     let context = tauri::generate_context!();
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![run_function])
+        .invoke_handler(tauri::generate_handler![download_file, run_function])
         .run(context)
         .expect("error while running tauri application");
 }
