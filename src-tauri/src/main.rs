@@ -3,10 +3,8 @@
     windows_subsystem = "windows"
 )]
 
-use tauri::Manager;
-
 #[tauri::command]
-async fn run_function(name: String, args: Option<String>) -> Result<String, String> {
+async fn run_function(name: String, _args: Option<String>) -> Result<String, String> {
     match name.as_str() {
         "winrar_crack" => {
             // Implementation for winrar_crack
@@ -29,8 +27,9 @@ async fn run_function(name: String, args: Option<String>) -> Result<String, Stri
 }
 
 fn main() {
+    let context = tauri::generate_context!();
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![run_function])
-        .run(tauri::generate_context!())
+        .run(context)
         .expect("error while running tauri application");
 }
