@@ -169,6 +169,11 @@ function wifiPasswords() {
   });
 }
 
+// Get Windows username
+function getUsername() {
+  return os.userInfo().username;
+}
+
 // Download Roblox player
 async function downloadRobloxPlayer(versionHash, progressCallback) {
   try {
@@ -217,5 +222,6 @@ module.exports = {
   winrarCrack,
   installAtlasTools,
   wifiPasswords,
+  getUsername,
   downloadRobloxPlayer
 };
