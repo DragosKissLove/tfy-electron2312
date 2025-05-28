@@ -26,8 +26,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true,
-      webSecurity: false
+      enableRemoteModule: true
     },
   });
 
@@ -46,31 +45,6 @@ function createWindow() {
 
   ipcMain.handle('close-window', () => {
     mainWindow.close();
-  });
-
-  // Handle download and run
-  ipcMain.handle('download-and-run', async (event, { name, url }) => {
-    try {
-      const response = await axios({
-        url,
-        method: 'GET',
-        responseType: 'arraybuffer'
-      });
-
-      const downloadPath = path.join(os.tmpdir(), `${name}.exe`);
-      fs.writeFileSync(downloadPath, response.data);
-      
-      exec(downloadPath, (error) => {
-        if (error) {
-          console.error(`Error running ${name}: ${error}`);
-        }
-      });
-
-      return `Successfully downloaded and launched ${name}`;
-    } catch (error) {
-      console.error(`Error downloading ${name}: ${error}`);
-      throw error;
-    }
   });
 
   // Handle function calls from renderer
