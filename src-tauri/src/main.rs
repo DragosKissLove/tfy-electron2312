@@ -5,6 +5,8 @@
 
 use tauri::Manager;
 use std::process::Command;
+use std::fs;
+use reqwest;
 
 #[tauri::command]
 async fn download_file(url: String, path: String) -> Result<(), String> {
@@ -16,14 +18,14 @@ async fn download_file(url: String, path: String) -> Result<(), String> {
         .await
         .map_err(|e| e.to_string())?;
     
-    std::fs::write(&path, bytes)
+    fs::write(&path, bytes)
         .map_err(|e| e.to_string())?;
     
     Ok(())
 }
 
 #[tauri::command]
-fn run_function(name: String, args: Option<String>) -> Result<String, String> {
+fn run_function(name: String) -> Result<String, String> {
     match name.as_str() {
         "winrar_crack" => {
             // Implementation for winrar_crack
@@ -46,9 +48,13 @@ fn run_function(name: String, args: Option<String>) -> Result<String, String> {
 }
 
 fn main() {
-    let context = tauri::generate_context!();
     tauri::Builder::default()
+        .setup(|app| {
+            let window = app.get_window("main").unwrap();
+            window.set_decorations(false).unwrap();
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![download_file, run_function])
-        .run(context)
+        .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
