@@ -1,0 +1,1 @@
+start "" "https://data-cdn.mbamupdates.com/web/mb4-setup-consumer/offline/MBSetup.exe"

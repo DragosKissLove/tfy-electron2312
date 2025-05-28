@@ -1,0 +1,1 @@
+start "" "https://download.scdn.co/SpotifySetup.exe"
