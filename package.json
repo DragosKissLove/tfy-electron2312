@@ -40,7 +40,8 @@
     "electron-dev": "electron .",
     "electron-build": "electron-builder",
     "release": "npm run build && electron-builder --publish=always",
-    "build-installer": "electron-builder"
+    "build-installer": "electron-builder",
+    "tauri": "tauri"
   },
   "build": {
     "appId": "com.tfy.tool",
