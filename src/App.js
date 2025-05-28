@@ -10,12 +10,12 @@ import About from './pages/About';
 import Login from './components/Login';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMinus, FiX } from 'react-icons/fi';
-import { appWindow } from '@tauri-apps/api/window';
 
 const App = () => {
   const { theme, primaryColor } = useTheme();
   const [activeTab, setActiveTab] = useState('Apps');
   const [user, setUser] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const guestSession = localStorage.getItem('guestSession');
@@ -35,11 +35,15 @@ const App = () => {
   };
 
   const handleMinimize = () => {
-    appWindow.minimize();
+    if (window.electron) {
+      window.electron.minimize();
+    }
   };
 
   const handleClose = () => {
-    appWindow.close();
+    if (window.electron) {
+      window.electron.close();
+    }
   };
 
   if (!user) {
@@ -69,8 +73,6 @@ const App = () => {
             height: '100vh',
             overflow: 'auto',
             background: `linear-gradient(135deg, ${theme.background}00 0%, ${theme.background} 100%)`,
-            borderTopRightRadius: '12px',
-            borderBottomRightRadius: '12px'
           }}
         >
           <Component />
@@ -86,9 +88,19 @@ const App = () => {
       color: theme.text,
       minHeight: '100vh',
       position: 'relative',
-      borderRadius: '12px',
       overflow: 'hidden'
     }}>
+      <div 
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '32px',
+          WebkitAppRegion: 'drag',
+          zIndex: 1000
+        }}
+      />
       <div style={{
         position: 'fixed',
         top: 12,
@@ -96,7 +108,8 @@ const App = () => {
         display: 'flex',
         alignItems: 'center',
         gap: 12,
-        zIndex: 1000
+        zIndex: 1000,
+        WebkitAppRegion: 'no-drag'
       }}>
         <span style={{
           fontSize: '10px',

@@ -30,18 +30,6 @@ const Tools = () => {
     }
   };
 
-  const buttonVariants = {
-    initial: { scale: 0.95, opacity: 0 },
-    animate: { scale: 1, opacity: 1 },
-    hover: { 
-      scale: 1.02,
-      boxShadow: `0 8px 20px ${primaryColor}40`,
-      transition: { duration: 0.2 }
-    },
-    tap: { scale: 0.98 },
-    exit: { scale: 0.95, opacity: 0 }
-  };
-
   return (
     <motion.div
       style={{ padding: '30px' }}
@@ -56,29 +44,9 @@ const Tools = () => {
         color: theme.text,
         borderBottom: `2px solid ${primaryColor}`,
         paddingBottom: '10px',
-        display: 'inline-block',
-        position: 'relative'
+        display: 'inline-block'
       }}>
         Useful Tools
-        <motion.div
-          style={{
-            position: 'absolute',
-            bottom: '-2px',
-            left: 0,
-            right: 0,
-            height: '2px',
-            background: primaryColor,
-            boxShadow: `0 0 10px ${primaryColor}`
-          }}
-          animate={{
-            opacity: [0.5, 1, 0.5]
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
       </h2>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -86,24 +54,17 @@ const Tools = () => {
           {tools.map((tool, index) => (
             <motion.button
               key={tool.function}
-              variants={buttonVariants}
-              initial="initial"
-              animate="animate"
-              whileHover="hover"
-              whileTap="tap"
-              exit="exit"
-              onClick={() => handleClick(tool.function)}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
               transition={{ 
                 duration: 0.3,
-                delay: index * 0.1,
-                type: "spring",
-                stiffness: 500,
-                damping: 25
+                delay: index * 0.1
               }}
+              onClick={() => handleClick(tool.function)}
               style={{
                 height: '48px',
                 border: `1px solid ${theme.border}`,
-                borderRadius: '12px',
                 background: theme.cardBg,
                 color: theme.text,
                 fontSize: '15px',
@@ -141,21 +102,6 @@ const Tools = () => {
                 />
               )}
               {tool.name}
-              <motion.div
-                initial={{ scaleX: 0 }}
-                animate={{ 
-                  scaleX: activeButton === tool.function ? 1 : 0 
-                }}
-                style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: 2,
-                  background: primaryColor,
-                  transformOrigin: 'left'
-                }}
-              />
             </motion.button>
           ))}
         </AnimatePresence>
@@ -170,7 +116,6 @@ const Tools = () => {
             style={{
               marginTop: '20px',
               padding: '12px',
-              borderRadius: '8px',
               background: theme.cardBg,
               border: `1px solid ${theme.border}`,
               color: theme.text
