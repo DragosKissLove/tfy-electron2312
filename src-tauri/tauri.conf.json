@@ -61,9 +61,10 @@
         "fullscreen": false,
         "resizable": true,
         "title": "TFY Tool",
-        "width": 1000,
-        "height": 700,
-        "decorations": false
+        "width": 1200,
+        "height": 800,
+        "decorations": false,
+        "transparent": true
       }
     ]
   }
