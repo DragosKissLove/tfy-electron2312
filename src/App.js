@@ -10,6 +10,8 @@ import About from './pages/About';
 import Login from './components/Login';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMinus, FiX } from 'react-icons/fi';
+import { invoke } from '@tauri-apps/api/tauri';
+import { appWindow } from '@tauri-apps/api/window';
 
 const App = () => {
   const { theme, primaryColor } = useTheme();
@@ -34,11 +36,11 @@ const App = () => {
   };
 
   const handleMinimize = () => {
-    window.electron.minimize();
+    appWindow.minimize();
   };
 
   const handleClose = () => {
-    window.electron.close();
+    appWindow.close();
   };
 
   if (!user) {
@@ -88,7 +90,6 @@ const App = () => {
       borderRadius: '12px',
       overflow: 'hidden'
     }}>
-      {/* Window Controls */}
       <div style={{
         position: 'fixed',
         top: 12,
