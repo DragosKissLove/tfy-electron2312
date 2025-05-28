@@ -8,7 +8,6 @@ const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
 
   useEffect(() => {
-    // Get Windows username using Node's OS module
     const os = window.require('os');
     const windowsUsername = os.userInfo().username;
     setUsername(windowsUsername);

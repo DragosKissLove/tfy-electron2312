@@ -22,16 +22,19 @@ function createWindow() {
     width: 1200,
     height: 800,
     frame: false,
+    transparent: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true
+      enableRemoteModule: true,
+      webSecurity: false
     },
   });
 
   // Load the app
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:3000');
+    mainWindow.webContents.openDevTools();
   } else {
     mainWindow.loadFile(path.join(__dirname, 'build', 'index.html'));
   }
@@ -70,6 +73,21 @@ function createWindow() {
     }
   });
 
+  // Handle function calls from renderer
+  ipcMain.handle('run-function', async (event, { name, args }) => {
+    const functions = require('./functions');
+    if (typeof functions[name] === 'function') {
+      try {
+        return await functions[name](args);
+      } catch (error) {
+        console.error(`Error running function ${name}:`, error);
+        throw error;
+      }
+    } else {
+      throw new Error(`Function ${name} not found`);
+    }
+  });
+
   // Check for updates immediately
   autoUpdater.checkForUpdates();
 }
@@ -102,21 +120,6 @@ ipcMain.handle('start-update', () => {
 
 ipcMain.handle('install-update', () => {
   autoUpdater.quitAndInstall();
-});
-
-// Handle function calls from renderer
-ipcMain.handle('run-function', async (event, { name, args }) => {
-  const functions = require('./functions');
-  if (typeof functions[name] === 'function') {
-    try {
-      return await functions[name](args);
-    } catch (error) {
-      console.error(`Error running function ${name}:`, error);
-      throw error;
-    }
-  } else {
-    throw new Error(`Function ${name} not found`);
-  }
 });
 
 app.whenReady().then(createWindow);
