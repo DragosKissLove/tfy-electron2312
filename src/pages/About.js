@@ -6,12 +6,8 @@ import { FiMessageCircle, FiDownload, FiZap, FiTool } from 'react-icons/fi';
 const About = () => {
   const { theme, primaryColor } = useTheme();
 
-  const handleOpenDiscord = async () => {
-    try {
-      await window.api.runPythonFunction('open_discord');
-    } catch (error) {
-      console.error('Error opening Discord:', error);
-    }
+  const handleOpenDiscord = () => {
+    window.open('https://discord.gg/tfyexe', '_blank');
   };
 
   const features = [

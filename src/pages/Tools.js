@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useTheme } from '../ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { invoke } from '@tauri-apps/api/tauri';
 
 const tools = [
   { name: 'WinRAR Crack', function: 'winrar_crack' },
@@ -22,13 +21,10 @@ const Tools = () => {
     try {
       setActiveButton(funcName);
       setStatus('Processing...');
-      const result = await invoke('run_function', { 
-        name: funcName,
-        args: null
-      });
+      const result = await window.electron.runFunction(funcName);
       setStatus(result || 'Operation completed successfully!');
     } catch (error) {
-      setStatus(`Error: ${error}`);
+      setStatus(`Error: ${error.message}`);
     } finally {
       setActiveButton(null);
     }

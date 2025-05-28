@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: transparent !important;
 }
 
 code {
@@ -16,7 +17,7 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: transparent;
+  background: transparent !important;
   border-radius: 12px;
   overflow: hidden;
 }
@@ -32,4 +33,12 @@ html, body, #root {
   box-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
   transition: 0.2s;
   cursor: pointer;
+}
+
+#root {
+  background: transparent !important;
+}
+
+* {
+  border-radius: inherit;
 }
