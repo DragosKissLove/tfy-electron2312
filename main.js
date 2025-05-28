@@ -19,21 +19,19 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1000,
+    height: 700,
     frame: false,
-    transparent: true,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true
+      contextIsolation: true,
+      nodeIntegration: false,
+      preload: path.join(__dirname, 'preload.js')
     },
   });
 
   // Load the app
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:3000');
-    mainWindow.webContents.openDevTools();
   } else {
     mainWindow.loadFile(path.join(__dirname, 'build', 'index.html'));
   }
@@ -45,21 +43,6 @@ function createWindow() {
 
   ipcMain.handle('close-window', () => {
     mainWindow.close();
-  });
-
-  // Handle function calls from renderer
-  ipcMain.handle('run-function', async (event, { name, args }) => {
-    const functions = require('./functions');
-    if (typeof functions[name] === 'function') {
-      try {
-        return await functions[name](args);
-      } catch (error) {
-        console.error(`Error running function ${name}:`, error);
-        throw error;
-      }
-    } else {
-      throw new Error(`Function ${name} not found`);
-    }
   });
 
   // Check for updates immediately
@@ -94,6 +77,35 @@ ipcMain.handle('start-update', () => {
 
 ipcMain.handle('install-update', () => {
   autoUpdater.quitAndInstall();
+});
+
+// Handle function calls from renderer
+ipcMain.handle('run-function', async (event, { name, args }) => {
+  const functions = require('./functions');
+  if (typeof functions[name] === 'function') {
+    try {
+      return await functions[name](args);
+    } catch (error) {
+      console.error(`Error running function ${name}:`, error);
+      throw error;
+    }
+  } else {
+    throw new Error(`Function ${name} not found`);
+  }
+});
+
+// Handle settings
+ipcMain.handle('get-settings', () => {
+  return store.get('settings');
+});
+
+ipcMain.handle('save-settings', (event, settings) => {
+  store.set('settings', settings);
+});
+
+// Clear login data on app quit
+app.on('before-quit', () => {
+  store.delete('guestSession');
 });
 
 app.whenReady().then(createWindow);

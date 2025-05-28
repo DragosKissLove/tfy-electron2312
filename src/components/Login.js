@@ -5,12 +5,14 @@ import { FiUser } from 'react-icons/fi';
 
 const Login = ({ onLogin }) => {
   const { primaryColor } = useTheme();
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState('User');
 
   useEffect(() => {
-    const os = window.require('os');
-    const windowsUsername = os.userInfo().username;
-    setUsername(windowsUsername);
+    if (window.electron) {
+      window.electron.runFunction('get-username')
+        .then(name => setUsername(name || 'User'))
+        .catch(() => setUsername('User'));
+    }
   }, []);
 
   const handleGuestLogin = () => {
