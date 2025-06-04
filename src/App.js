@@ -8,9 +8,9 @@ import Extra from './pages/Extra';
 import Settings from './Settings';
 import About from './pages/About';
 import Login from './components/Login';
-import Aurora from './Aurora';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMinus, FiX } from 'react-icons/fi';
+import ShinyText from './ShinyText';
 
 const App = () => {
   const { theme, primaryColor } = useTheme();
@@ -48,17 +48,7 @@ const App = () => {
   };
 
   if (!user) {
-    return (
-      <>
-        <Aurora
-          colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
-          blend={0.5}
-          amplitude={1.0}
-          speed={0.5}
-        />
-        <Login onLogin={handleLogin} />
-      </>
-    );
+    return <Login onLogin={handleLogin} />;
   }
 
   const renderContent = () => {
@@ -101,12 +91,6 @@ const App = () => {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      <Aurora
-        colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
-        blend={0.5}
-        amplitude={1.0}
-        speed={0.5}
-      />
       <div 
         style={{
           position: 'fixed',
@@ -128,14 +112,17 @@ const App = () => {
         zIndex: 1000,
         WebkitAppRegion: 'no-drag'
       }}>
-        <span style={{
-          fontSize: '10px',
-          color: theme.text,
-          opacity: 0.3,
-          marginRight: 8
-        }}>
-          v3.0.0
-        </span>
+        <ShinyText 
+          text="v3.0.0" 
+          speed={3} 
+          className="version-text" 
+          style={{
+            fontSize: '10px',
+            color: theme.text,
+            opacity: 0.3,
+            marginRight: 8
+          }}
+        />
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
