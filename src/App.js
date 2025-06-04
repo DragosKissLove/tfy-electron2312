@@ -8,6 +8,7 @@ import Extra from './pages/Extra';
 import Settings from './Settings';
 import About from './pages/About';
 import Login from './components/Login';
+import Aurora from './Aurora';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMinus, FiX } from 'react-icons/fi';
 
@@ -47,7 +48,17 @@ const App = () => {
   };
 
   if (!user) {
-    return <Login onLogin={handleLogin} />;
+    return (
+      <>
+        <Aurora
+          colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
+          blend={0.5}
+          amplitude={1.0}
+          speed={0.5}
+        />
+        <Login onLogin={handleLogin} />
+      </>
+    );
   }
 
   const renderContent = () => {
@@ -90,6 +101,12 @@ const App = () => {
       position: 'relative',
       overflow: 'hidden'
     }}>
+      <Aurora
+        colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
+        blend={0.5}
+        amplitude={1.0}
+        speed={0.5}
+      />
       <div 
         style={{
           position: 'fixed',
