@@ -177,40 +177,80 @@ function getUsername() {
 // Download Roblox player
 async function downloadRobloxPlayer(versionHash, progressCallback) {
   try {
-    const baseUrl = "https://setup.rbxcdn.com";
+    const baseUrl = "https://setup-cfly.rbxcdn.com";
     versionHash = versionHash.trim().toLowerCase();
     if (!versionHash.startsWith("version-")) {
       versionHash = `version-${versionHash}`;
     }
 
     const manifestUrl = `${baseUrl}/${versionHash}-rbxPkgManifest.txt`;
-    const manifestResponse = await axios.get(manifestUrl);
-    const lines = manifestResponse.data.split('\n').filter(line => line.trim().endsWith('.zip'));
+    progressCallback(`Fetching manifest: ${manifestUrl}`);
+    
+    const response = await axios.get(manifestUrl);
+    const lines = response.data.split('\n').filter(line => line.trim().endsWith('.zip'));
 
     const targetRoot = path.join('C:', 'Program Files (x86)', 'Roblox', 'Versions', versionHash);
     fs.mkdirSync(targetRoot, { recursive: true });
+    progressCallback(`Created folder: ${targetRoot}`);
 
     const xml = '<?xml version="1.0" encoding="UTF-8"?><Settings><ContentFolder>content</ContentFolder><BaseUrl>http://www.roblox.com</BaseUrl></Settings>';
     fs.writeFileSync(path.join(targetRoot, 'AppSettings.xml'), xml);
 
+    const extractRoots = {
+      "RobloxApp.zip": "",
+      "redist.zip": "",
+      "shaders.zip": "shaders/",
+      "ssl.zip": "ssl/",
+      "WebView2.zip": "",
+      "WebView2RuntimeInstaller.zip": "WebView2RuntimeInstaller/",
+      "content-avatar.zip": "content/avatar/",
+      "content-configs.zip": "content/configs/",
+      "content-fonts.zip": "content/fonts/",
+      "content-sky.zip": "content/sky/",
+      "content-sounds.zip": "content/sounds/",
+      "content-textures2.zip": "content/textures/",
+      "content-models.zip": "content/models/",
+      "content-platform-fonts.zip": "PlatformContent/pc/fonts/",
+      "content-platform-dictionaries.zip": "PlatformContent/pc/shared_compression_dictionaries/",
+      "content-terrain.zip": "PlatformContent/pc/terrain/",
+      "content-textures3.zip": "PlatformContent/pc/textures/",
+      "extracontent-luapackages.zip": "ExtraContent/LuaPackages/",
+      "extracontent-translations.zip": "ExtraContent/translations/",
+      "extracontent-models.zip": "ExtraContent/models/",
+      "extracontent-textures.zip": "ExtraContent/textures/",
+      "extracontent-places.zip": "ExtraContent/places/"
+    };
+
     for (const name of lines) {
       const blobUrl = `${baseUrl}/${versionHash}-${name}`;
+      progressCallback(`Downloading ${name}`);
+      
       const response = await axios({
         url: blobUrl,
+        method: 'GET',
         responseType: 'arraybuffer',
         onDownloadProgress: (progressEvent) => {
-          if (progressCallback) {
-            progressCallback(Math.round((progressEvent.loaded * 100) / progressEvent.total));
-          }
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          progressCallback(`Downloading ${name}: ${percentCompleted}%`);
         }
       });
 
-      await extract(response.data, { dir: targetRoot });
+      progressCallback(`Extracting ${name}`);
+      const root = extractRoots[name] || "";
+      const extractPath = path.join(targetRoot, root);
+      
+      const tempZipPath = path.join(os.tmpdir(), `${name}_temp.zip`);
+      fs.writeFileSync(tempZipPath, response.data);
+      
+      await extract(tempZipPath, { dir: extractPath });
+      fs.unlinkSync(tempZipPath);
+
+      progressCallback(`${name} done`);
     }
 
-    return 'Roblox player downloaded and installed successfully';
+    return "✅ All files extracted successfully!";
   } catch (error) {
-    throw new Error(`Roblox download failed: ${error.message}`);
+    throw new Error(`❌ Error: ${error.message}`);
   }
 }
 
