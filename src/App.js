@@ -11,13 +11,11 @@ import Login from './components/Login';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMinus, FiX } from 'react-icons/fi';
 import ShinyText from './ShinyText';
-import StarBorder from './StarBorder';
 
 const App = () => {
   const { theme, primaryColor } = useTheme();
   const [activeTab, setActiveTab] = useState('Apps');
   const [user, setUser] = useState(null);
-  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const guestSession = localStorage.getItem('guestSession');
@@ -116,7 +114,6 @@ const App = () => {
         <ShinyText 
           text="v3.0.0" 
           speed={3} 
-          className="version-text" 
           style={{
             fontSize: '10px',
             color: theme.text,
@@ -124,32 +121,44 @@ const App = () => {
             marginRight: 8
           }}
         />
-        <StarBorder
-          color={primaryColor}
-          speed="3s"
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
           onClick={handleMinimize}
           style={{
-            padding: '8px',
+            width: 28,
+            height: 28,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            background: 'transparent',
+            border: 'none',
+            color: primaryColor,
+            cursor: 'pointer',
+            filter: `drop-shadow(0 0 8px ${primaryColor}66)`
           }}
         >
-          <FiMinus size={20} style={{ color: primaryColor }} />
-        </StarBorder>
-        <StarBorder
-          color={primaryColor}
-          speed="3s"
+          <FiMinus size={20} />
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
           onClick={handleClose}
           style={{
-            padding: '8px',
+            width: 28,
+            height: 28,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            background: 'transparent',
+            border: 'none',
+            color: primaryColor,
+            cursor: 'pointer',
+            filter: `drop-shadow(0 0 8px ${primaryColor}66)`
           }}
         >
-          <FiX size={20} style={{ color: primaryColor }} />
-        </StarBorder>
+          <FiX size={20} />
+        </motion.button>
       </div>
       
       <Sidebar active={activeTab} onChange={setActiveTab} user={user} />

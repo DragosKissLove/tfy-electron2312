@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../ThemeContext';
 import { FiUser } from 'react-icons/fi';
+import StarBorder from '../StarBorder';
+import ShinyText from '../ShinyText';
 
 const Login = ({ onLogin }) => {
   const { primaryColor } = useTheme();
@@ -74,9 +76,9 @@ const Login = ({ onLogin }) => {
         />
       ))}
 
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+      <StarBorder
+        color={primaryColor}
+        speed="5s"
         style={{
           background: 'rgba(255, 255, 255, 0.05)',
           padding: '40px',
@@ -103,24 +105,30 @@ const Login = ({ onLogin }) => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            style={{ 
-              fontSize: '28px', 
-              marginBottom: '10px',
-              color: '#fff'
-            }}
           >
-            Hi {username}!
+            <ShinyText 
+              text={`Hi ${username}!`}
+              speed={3}
+              style={{ 
+                fontSize: '28px', 
+                marginBottom: '10px',
+                color: '#fff'
+              }}
+            />
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            style={{ 
-              fontSize: '16px', 
-              color: 'rgba(255, 255, 255, 0.9)'
-            }}
           >
-            Welcome to TFY Utility Hub
+            <ShinyText 
+              text="Welcome to TFY Utility Hub"
+              speed={3}
+              style={{ 
+                fontSize: '16px', 
+                color: 'rgba(255, 255, 255, 0.9)'
+              }}
+            />
           </motion.p>
         </motion.div>
 
@@ -149,9 +157,9 @@ const Login = ({ onLogin }) => {
           }}
         >
           <FiUser size={20} style={{ color: primaryColor }} />
-          Continue as Guest
+          <ShinyText text="Continue as Guest" speed={3} />
         </motion.button>
-      </motion.div>
+      </StarBorder>
     </motion.div>
   );
 };
