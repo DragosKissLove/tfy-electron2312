@@ -11,6 +11,7 @@ import Login from './components/Login';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMinus, FiX } from 'react-icons/fi';
 import ShinyText from './ShinyText';
+import StarBorder from './StarBorder';
 
 const App = () => {
   const { theme, primaryColor } = useTheme();
@@ -123,44 +124,32 @@ const App = () => {
             marginRight: 8
           }}
         />
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+        <StarBorder
+          color={primaryColor}
+          speed="3s"
           onClick={handleMinimize}
           style={{
-            width: 28,
-            height: 28,
+            padding: '8px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'transparent',
-            border: 'none',
-            color: primaryColor,
-            cursor: 'pointer',
-            filter: `drop-shadow(0 0 8px ${primaryColor}66)`
           }}
         >
-          <FiMinus size={20} />
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+          <FiMinus size={20} style={{ color: primaryColor }} />
+        </StarBorder>
+        <StarBorder
+          color={primaryColor}
+          speed="3s"
           onClick={handleClose}
           style={{
-            width: 28,
-            height: 28,
+            padding: '8px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'transparent',
-            border: 'none',
-            color: primaryColor,
-            cursor: 'pointer',
-            filter: `drop-shadow(0 0 8px ${primaryColor}66)`
           }}
         >
-          <FiX size={20} />
-        </motion.button>
+          <FiX size={20} style={{ color: primaryColor }} />
+        </StarBorder>
       </div>
       
       <Sidebar active={activeTab} onChange={setActiveTab} user={user} />
