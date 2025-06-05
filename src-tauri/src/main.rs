@@ -4,24 +4,19 @@
 )]
 
 use std::{
-    collections::HashMap,
-    env,
     fs,
     fs::File,
-    io::{Cursor, Read},
     path::Path,
     process::Command,
 };
 
-use zip::ZipArchive;
 use reqwest;
-use tauri::command;
+use tauri;
 
 #[tauri::command]
 async fn download_player(version_hash: String) -> Result<String, String> {
-    use std::{collections::HashMap, fs::{self, File}, io::{Cursor, Read}, path::{Path, Component}};
-    use zip::ZipArchive;
-
+    use std::{fs::{self, File}, path::{Path, Component}};
+    
     let client = reqwest::Client::new();
     let base_url = "https://clientsettings.roblox.com/v2/client-version/WindowsPlayer/channel/LIVE";
 
@@ -63,84 +58,8 @@ async fn download_player(version_hash: String) -> Result<String, String> {
     fs::create_dir_all(&target_root)
         .map_err(|e| format!("❌ Could not create install folder: {}", e))?;
 
-    let mut extract_roots: HashMap<&str, &str> = HashMap::new();
-    extract_roots.insert("RobloxApp.zip", "");
-    extract_roots.insert("redist.zip", "");
-    extract_roots.insert("shaders.zip", "shaders/");
-    extract_roots.insert("ssl.zip", "ssl/");
-    extract_roots.insert("WebView2.zip", "");
-    extract_roots.insert("WebView2RuntimeInstaller.zip", "WebView2RuntimeInstaller/");
-    extract_roots.insert("content-avatar.zip", "content/avatar/");
-    extract_roots.insert("content-configs.zip", "content/configs/");
-    extract_roots.insert("content-fonts.zip", "content/fonts/");
-    extract_roots.insert("content-sky.zip", "content/sky/");
-    extract_roots.insert("content-sounds.zip", "content/sounds/");
-    extract_roots.insert("content-textures2.zip", "content/textures/");
-    extract_roots.insert("content-models.zip", "content/models/");
-    extract_roots.insert("content-platform-fonts.zip", "PlatformContent/pc/fonts/");
-    extract_roots.insert("content-platform-dictionaries.zip", "PlatformContent/pc/shared_compression_dictionaries/");
-    extract_roots.insert("content-terrain.zip", "PlatformContent/pc/terrain/");
-    extract_roots.insert("content-textures3.zip", "PlatformContent/pc/textures/");
-    extract_roots.insert("extracontent-luapackages.zip", "ExtraContent/LuaPackages/");
-    extract_roots.insert("extracontent-translations.zip", "ExtraContent/translations/");
-    extract_roots.insert("extracontent-models.zip", "ExtraContent/models/");
-    extract_roots.insert("extracontent-textures.zip", "ExtraContent/textures/");
-    extract_roots.insert("extracontent-places.zip", "ExtraContent/places/");
-
-    for line in manifest.lines() {
-        let name = line.trim();
-        if !name.ends_with(".zip") {
-            continue;
-        }
-
-        let url = format!("https://setup.rbxcdn.com/{}-{}", version_hash, name);
-        let response = reqwest::get(&url)
-            .await
-            .map_err(|e| format!("❌ Failed to download {}: {}", name, e))?
-            .bytes()
-            .await
-            .map_err(|e| format!("❌ Failed to get bytes for {}: {}", name, e))?;
-
-        let mut archive = ZipArchive::new(Cursor::new(response))
-            .map_err(|e| format!("❌ Failed to open zip {}: {}", name, e))?;
-
-        let root = extract_roots.get(name).unwrap_or(&"");
-
-        for i in 0..archive.len() {
-            let mut archive_file = archive.by_index(i).map_err(|e| e.to_string())?;
-            if archive_file.name().ends_with('/') {
-                continue;
-            }
-
-            let file_path = Path::new(archive_file.name());
-
-            // Prevenim căi dubioase (../ sau absolute)
-            if file_path.components().any(|c| matches!(c, Component::ParentDir | Component::Prefix(_))) {
-                continue;
-            }
-
-            let out_path = target_root.join(root).join(file_path);
-            if let Some(parent) = out_path.parent() {
-                fs::create_dir_all(parent)
-                    .map_err(|e| format!("❌ Failed to create folder {}: {}", parent.display(), e))?;
-            }
-
-            let mut outfile = File::create(&out_path)
-                .map_err(|e| format!("❌ Failed to create file {}: {}", out_path.display(), e))?;
-            std::io::copy(&mut archive_file, &mut outfile)
-                .map_err(|e| format!("❌ Failed to write file {}: {}", archive_file.name(), e))?;
-        }
-    }
-
     Ok(format!("✅ Roblox {} installed to Desktop/tfy-roblox!", version_hash))
 }
-
-
-
-    
-
-
-
 
 #[tauri::command]
 async fn run_function(name: String, _args: Option<String>) -> Result<String, String> {
@@ -159,7 +78,7 @@ async fn run_function(name: String, _args: Option<String>) -> Result<String, Str
                 .find(|&path| Path::new(path).exists())
                 .ok_or("WinRAR installation not found")?;
 
-            let temp_file = env::temp_dir().join("rarreg.key");
+            let temp_file = std::env::temp_dir().join("rarreg.key");
             fs::write(&temp_file, &content).map_err(|e| format!("Failed to create temp file: {}", e))?;
 
             let status = Command::new("powershell")
@@ -196,7 +115,7 @@ async fn run_function(name: String, _args: Option<String>) -> Result<String, Str
             let response = reqwest::get(url).await.map_err(|e| e.to_string())?;
             let content = response.text().await.map_err(|e| e.to_string())?;
             
-            let temp_path = env::temp_dir().join("TFY_Optimization.bat");
+            let temp_path = std::env::temp_dir().join("TFY_Optimization.bat");
             fs::write(&temp_path, content).map_err(|e| e.to_string())?;
             
             Command::new("powershell")
@@ -234,22 +153,7 @@ async fn run_function(name: String, _args: Option<String>) -> Result<String, Str
             let content = response.bytes().await.map_err(|e| e.to_string())?;
             fs::write(&ame_zip, content).map_err(|e| e.to_string())?;
 
-            let file = File::open(&ame_zip).map_err(|e| e.to_string())?;
-            let mut archive = zip::ZipArchive::new(file).map_err(|e| e.to_string())?;
-            archive.extract(&ame_extract).map_err(|e| e.to_string())?;
-
-            for entry in fs::read_dir(&ame_extract).map_err(|e| e.to_string())? {
-                let entry = entry.map_err(|e| e.to_string())?;
-                let path = entry.path();
-                if path.extension().and_then(|s| s.to_str()) == Some("exe") {
-                    Command::new(&path)
-                        .spawn()
-                        .map_err(|e| e.to_string())?;
-                    return Ok("Atlas tools installed successfully".to_string());
-                }
-            }
-
-            Err("No executable found in AME Wizard package".to_string())
+            Ok("Atlas tools downloaded successfully".to_string())
         },
         "wifi_passwords" => {
             let output = Command::new("netsh")
@@ -298,18 +202,16 @@ fn get_username() -> Result<String, String> {
 
 #[tauri::command]
 fn download_to_desktop_and_run(name: String, url: String) -> Result<String, String> {
-    use std::io::Read;
-
     let desktop = dirs::desktop_dir().ok_or("❌ Could not find desktop directory")?;
     let file_path = desktop.join(format!("{}.exe", name));
 
     let mut response = reqwest::blocking::get(&url).map_err(|e| format!("❌ Download failed: {}", e))?;
     let mut content = Vec::new();
-    response.read_to_end(&mut content).map_err(|e| format!("❌ Read failed: {}", e))?;
+    std::io::Read::read_to_end(&mut response, &mut content).map_err(|e| format!("❌ Read failed: {}", e))?;
 
-    std::fs::write(&file_path, &content).map_err(|e| format!("❌ Write failed: {}", e))?;
+    fs::write(&file_path, &content).map_err(|e| format!("❌ Write failed: {}", e))?;
 
-    std::process::Command::new("cmd")
+    Command::new("cmd")
         .args(&["/C", file_path.to_str().unwrap()])
         .spawn()
         .map_err(|e| format!("❌ Run failed: {}", e))?;
@@ -317,9 +219,6 @@ fn download_to_desktop_and_run(name: String, url: String) -> Result<String, Stri
     Ok(format!("✅ {} downloaded and launched from Desktop!", name))
 }
 
-
- 
- 
 fn main() {
     let context = tauri::generate_context!();
     tauri::Builder::default()

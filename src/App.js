@@ -10,7 +10,6 @@ import About from './pages/About';
 import Login from './components/Login';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMinus, FiX } from 'react-icons/fi';
-import ShinyText from './ShinyText';
 
 const App = () => {
   const { theme, primaryColor } = useTheme();
@@ -111,16 +110,14 @@ const App = () => {
         zIndex: 1000,
         WebkitAppRegion: 'no-drag'
       }}>
-        <ShinyText 
-          text="v3.0.0" 
-          speed={3} 
-          style={{
-            fontSize: '10px',
-            color: theme.text,
-            opacity: 0.3,
-            marginRight: 8
-          }}
-        />
+        <span style={{
+          fontSize: '8px',
+          color: theme.text,
+          opacity: 0.3,
+          marginRight: 8
+        }}>
+          v3.0.0
+        </span>
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
