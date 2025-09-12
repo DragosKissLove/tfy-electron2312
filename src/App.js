@@ -1,165 +1,96 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { useTheme } from './ThemeContext';
-import Sidebar from './Sidebar';
+import { invoke } from '@tauri-apps/api/tauri';
+import { FiMinus, FiX, FiMaximize2 } from 'react-icons/fi';
+import { appWindow } from '@tauri-apps/api/window';
+import Sidebar from './components/Sidebar';
+import Dashboard from './pages/Dashboard';
 import Apps from './pages/Apps';
 import Tools from './pages/Tools';
-import Extra from './pages/Extra';
-import Settings from './Settings';
-import About from './pages/About';
-import Login from './components/Login';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiMinus, FiX } from 'react-icons/fi';
+import Gaming from './pages/Gaming';
+import Updates from './pages/Updates';
+import Settings from './pages/Settings';
 
 const App = () => {
-  const { theme, primaryColor } = useTheme();
-  const [activeTab, setActiveTab] = useState('Apps');
-  const [user, setUser] = useState(null);
+  const [activeTab, setActiveTab] = useState('Dashboard');
+  const [username, setUsername] = useState('User');
 
   useEffect(() => {
-    const guestSession = localStorage.getItem('guestSession');
-    if (guestSession) {
-      setUser(JSON.parse(guestSession));
-    }
+    const getUsername = async () => {
+      try {
+        const name = await invoke('get_username');
+        setUsername(name);
+      } catch (error) {
+        console.error('Failed to get username:', error);
+      }
+    };
+    getUsername();
   }, []);
 
-  const pageVariants = {
-    initial: { opacity: 0, x: 20 },
-    animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -20 }
-  };
-
-  const handleLogin = (userData) => {
-    setUser(userData);
-  };
-
   const handleMinimize = () => {
-    if (window.electron) {
-      window.electron.minimize();
-    }
+    appWindow.minimize();
+  };
+
+  const handleMaximize = () => {
+    appWindow.toggleMaximize();
   };
 
   const handleClose = () => {
-    if (window.electron) {
-      window.electron.close();
+    appWindow.close();
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'Dashboard':
+        return <Dashboard />;
+      case 'Apps':
+        return <Apps />;
+      case 'Tools':
+        return <Tools />;
+      case 'Gaming':
+        return <Gaming />;
+      case 'Updates':
+        return <Updates />;
+      case 'Settings':
+        return <Settings />;
+      default:
+        return <Dashboard />;
     }
   };
 
-  if (!user) {
-    return <Login onLogin={handleLogin} />;
-  }
-
-  const renderContent = () => {
-    const Component = {
-      Apps,
-      Tools,
-      Extra,
-      Settings,
-      About
-    }[activeTab];
-
-    return (
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          variants={pageVariants}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          style={{ 
-            flex: 1,
-            height: '100vh',
-            overflow: 'auto',
-            background: `linear-gradient(135deg, ${theme.background}00 0%, ${theme.background} 100%)`,
-          }}
-        >
-          <Component />
-        </motion.div>
-      </AnimatePresence>
-    );
-  };
-
   return (
-    <div style={{ 
-      display: 'flex',
-      background: theme.background,
-      color: theme.text,
-      minHeight: '100vh',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
-      <div 
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '32px',
-          WebkitAppRegion: 'drag',
-          zIndex: 1000
-        }}
-      />
-      <div style={{
-        position: 'fixed',
-        top: 12,
-        right: 12,
-        display: 'flex',
-        alignItems: 'center',
-        gap: 12,
-        zIndex: 1000,
-        WebkitAppRegion: 'no-drag'
-      }}>
-        <span style={{
-          fontSize: '8px',
-          color: theme.text,
-          opacity: 0.3,
-          marginRight: 8
-        }}>
-          v3.0.0
-        </span>
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={handleMinimize}
-          style={{
-            width: 28,
-            height: 28,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'transparent',
-            border: 'none',
-            color: primaryColor,
-            cursor: 'pointer',
-            filter: `drop-shadow(0 0 8px ${primaryColor}66)`
-          }}
-        >
-          <FiMinus size={20} />
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={handleClose}
-          style={{
-            width: 28,
-            height: 28,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'transparent',
-            border: 'none',
-            color: primaryColor,
-            cursor: 'pointer',
-            filter: `drop-shadow(0 0 8px ${primaryColor}66)`
-          }}
-        >
-          <FiX size={20} />
-        </motion.button>
+    <div className="app">
+      {/* Custom Title Bar */}
+      <div className="titlebar" data-tauri-drag-region>
+        <div className="titlebar-left">
+          <div className="app-icon">
+            <div className="icon-circle"></div>
+          </div>
+          <span className="app-title">TFY Tool</span>
+        </div>
+        <div className="titlebar-right">
+          <button className="titlebar-button" onClick={handleMinimize}>
+            <FiMinus size={14} />
+          </button>
+          <button className="titlebar-button" onClick={handleMaximize}>
+            <FiMaximize2 size={14} />
+          </button>
+          <button className="titlebar-button close" onClick={handleClose}>
+            <FiX size={14} />
+          </button>
+        </div>
       </div>
-      
-      <Sidebar active={activeTab} onChange={setActiveTab} user={user} />
-      {renderContent()}
+
+      <div className="app-content">
+        <Sidebar 
+          activeTab={activeTab} 
+          setActiveTab={setActiveTab}
+          username={username}
+        />
+        <main className="main-content">
+          {renderContent()}
+        </main>
+      </div>
     </div>
   );
 };

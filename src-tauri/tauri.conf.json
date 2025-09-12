@@ -8,16 +8,25 @@
   },
   "package": {
     "productName": "TFY Tool",
-    "version": "0.1.0"
+    "version": "3.0.0"
   },
   "tauri": {
     "allowlist": {
-      "all": true,
+      "all": false,
       "shell": {
-        "all": true,
-        "execute": true,
-        "sidecar": true,
+        "all": false,
         "open": true
+      },
+      "window": {
+        "all": false,
+        "close": true,
+        "hide": true,
+        "show": true,
+        "maximize": true,
+        "minimize": true,
+        "unmaximize": true,
+        "unminimize": true,
+        "startDragging": true
       },
       "fs": {
         "all": true,
@@ -35,10 +44,19 @@
         "all": true
       },
       "dialog": {
-        "all": true
+        "all": false,
+        "ask": true,
+        "confirm": true,
+        "message": true,
+        "open": true,
+        "save": true
       },
       "notification": {
         "all": true
+      },
+      "http": {
+        "all": true,
+        "request": true
       }
     },
     "bundle": {
@@ -63,8 +81,12 @@
         "title": "TFY Tool",
         "width": 1200,
         "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
         "decorations": false,
-        "transparent": true
+        "transparent": false,
+        "alwaysOnTop": false,
+        "center": true
       }
     ]
   }

@@ -1,139 +1,169 @@
 import React, { useState } from 'react';
-import { useTheme } from '../ThemeContext';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiZap, FiTool, FiDownload, FiShield, FiTrash2, FiBox } from 'react-icons/fi';
 import { invoke } from '@tauri-apps/api/tauri';
-
-const tools = [
-  { name: 'WinRAR Crack', function: 'winrar_crack', icon: FiDownload },
-  { name: 'WiFi Passwords', function: 'wifi_passwords', icon: FiShield },
-  { name: 'Activate Windows', function: 'activate_windows', icon: FiBox },
-  { name: 'TFY Optimizations', function: 'run_optimization', icon: FiZap },
-  { name: 'Clean Temp Files', function: 'clean_temp', icon: FiTrash2 },
-  { name: 'Atlas Tools', function: 'install_atlas_tools', icon: FiTool }
-];
+import { FiTool, FiTrash2, FiZap, FiShield, FiKey, FiDownload } from 'react-icons/fi';
 
 const Tools = () => {
-  const { theme, primaryColor } = useTheme();
-  const [activeButton, setActiveButton] = useState(null);
   const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(null);
 
-  const handleClick = async (funcName) => {
+  const tools = [
+    {
+      name: 'Clean Temp Files',
+      description: 'Remove temporary files to free up disk space',
+      function: 'clean_temp',
+      icon: FiTrash2,
+      color: '#10b981'
+    },
+    {
+      name: 'System Optimization',
+      description: 'Apply system tweaks for better performance',
+      function: 'run_optimization',
+      icon: FiZap,
+      color: '#3b82f6'
+    },
+    {
+      name: 'Activate Windows',
+      description: 'Activate Windows using official methods',
+      function: 'activate_windows',
+      icon: FiKey,
+      color: '#f59e0b'
+    },
+    {
+      name: 'WinRAR Crack',
+      description: 'Apply WinRAR license key',
+      function: 'winrar_crack',
+      icon: FiTool,
+      color: '#8b5cf6'
+    },
+    {
+      name: 'WiFi Passwords',
+      description: 'Show saved WiFi passwords',
+      function: 'wifi_passwords',
+      icon: FiShield,
+      color: '#06b6d4'
+    },
+    {
+      name: 'Atlas Tools',
+      description: 'Download and install Atlas OS tools',
+      function: 'install_atlas_tools',
+      icon: FiDownload,
+      color: '#ef4444'
+    }
+  ];
+
+  const handleRunTool = async (tool) => {
     try {
-      setActiveButton(funcName);
-      setStatus('Processing...');
-      const result = await invoke('run_function', { 
-        name: funcName,
-        args: null
-      });
-      setStatus(result || 'Operation completed successfully!');
+      setLoading(tool.function);
+      setStatus(`Running ${tool.name}...`);
+      const result = await invoke('run_function', { name: tool.function });
+      setStatus(result);
     } catch (error) {
-      setStatus(`Error: ${error}`);
+      setStatus(`Error running ${tool.name}: ${error}`);
     } finally {
-      setActiveButton(null);
+      setLoading(null);
     }
   };
 
   return (
-    <motion.div
-      style={{ padding: '30px' }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
-    >
-      <h2 style={{ 
-        fontSize: '28px',
-        fontWeight: '600',
-        marginBottom: '20px',
-        color: theme.text,
-        borderBottom: `2px solid ${primaryColor}`,
-        paddingBottom: '10px',
-        display: 'inline-block'
-      }}>
-        Useful Tools
-      </h2>
-
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-        gap: '16px',
-        padding: '20px 0'
-      }}>
-        <AnimatePresence mode="popLayout">
-          {tools.map((tool, index) => (
-            <motion.button
-              key={tool.function}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2, delay: index * 0.05 }}
-              onClick={() => handleClick(tool.function)}
-              style={{
-                height: '60px',
-                borderRadius: '12px',
-                border: `1px solid ${primaryColor}33`,
-                background: `linear-gradient(135deg, ${theme.cardBg} 0%, ${primaryColor}11 100%)`,
-                color: theme.text,
-                fontSize: '15px',
-                fontWeight: 500,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '0 20px',
-                position: 'relative',
-                overflow: 'hidden',
-                boxShadow: `0 8px 32px ${primaryColor}22`
-              }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <tool.icon size={20} color={primaryColor} style={{
-                filter: `drop-shadow(0 0 8px ${primaryColor}66)`
-              }} />
-              {tool.name}
-              {activeButton === tool.function && (
-                <motion.div
-                  initial={{ scale: 0.8 }}
-                  animate={{ scale: 1, rotate: 360 }}
-                  transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-                  style={{
-                    position: 'absolute',
-                    right: '20px',
-                    width: '20px',
-                    height: '20px',
-                    border: `2px solid ${primaryColor}`,
-                    borderTopColor: 'transparent',
-                    borderRadius: '50%'
-                  }}
-                />
-              )}
-            </motion.button>
-          ))}
-        </AnimatePresence>
+    <div className="tools-page">
+      <div className="page-header">
+        <h1 className="page-title">Tweaks</h1>
+        <p className="page-subtitle">System optimization and utility tools</p>
       </div>
 
-      <AnimatePresence>
-        {status && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            style={{
-              marginTop: '20px',
-              padding: '16px',
-              borderRadius: '12px',
-              background: theme.cardBg,
-              border: `1px solid ${theme.border}`,
-              color: theme.text
-            }}
-          >
-            {status}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+      <div className="tools-grid grid grid-3">
+        {tools.map((tool, index) => (
+          <div key={index} className="tool-card card">
+            <div className="tool-header">
+              <div className="tool-icon" style={{ color: tool.color }}>
+                <tool.icon size={24} />
+              </div>
+              <h3 className="tool-name">{tool.name}</h3>
+            </div>
+            <p className="tool-description">{tool.description}</p>
+            <button
+              className={`button ${loading === tool.function ? 'loading' : ''}`}
+              onClick={() => handleRunTool(tool)}
+              disabled={loading === tool.function}
+            >
+              {loading === tool.function ? (
+                <>
+                  <div className="loading"></div>
+                  Running...
+                </>
+              ) : (
+                'Run Tool'
+              )}
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {status && (
+        <div className={`status-message ${status.includes('Error') ? 'error' : 'success'}`}>
+          {status}
+        </div>
+      )}
+
+      <style jsx>{`
+        .tools-grid {
+          margin-bottom: 24px;
+        }
+
+        .tool-card {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          transition: all 0.2s;
+        }
+
+        .tool-card:hover {
+          transform: translateY(-2px);
+        }
+
+        .tool-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .tool-icon {
+          width: 40px;
+          height: 40px;
+          background: rgba(139, 92, 246, 0.1);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .tool-name {
+          font-size: 18px;
+          font-weight: 600;
+          color: #ffffff;
+        }
+
+        .tool-description {
+          font-size: 14px;
+          color: #a0a0a0;
+          line-height: 1.5;
+          flex: 1;
+        }
+
+        .tool-card .button {
+          width: 100%;
+          justify-content: center;
+          margin-top: auto;
+        }
+
+        .button.loading {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+      `}</style>
+    </div>
   );
-}
+};
 
 export default Tools;

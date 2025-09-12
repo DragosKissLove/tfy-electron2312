@@ -1,156 +1,110 @@
 import React, { useState } from 'react';
-import { useTheme } from '../ThemeContext';
-import { motion } from 'framer-motion';
-import { downloadAndRun } from '../utils/installer';
-
-const apps = [
-  { name: 'Spotify', icon: 'spotify.png', url: 'https://download.scdn.co/SpotifySetup.exe' },
-  { name: 'Steam', icon: 'steam.png', url: 'https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe' },
-  { name: 'Discord', icon: 'discord.png', url: 'https://dl.discordapp.net/distro/app/stable/win/x86/1.0.9014/DiscordSetup.exe' },
-  { name: 'Brave', icon: 'brave.png', url: 'https://laptop-updates.brave.com/latest/winx64' },
-  { name: 'Faceit AC', icon: 'faceit.png', url: 'https://cdn.faceit.com/faceit/anticheat/FaceitAC_1.0.17.36.exe' },
-  { name: 'VLC', icon: 'vlc.png', url: 'https://get.videolan.org/vlc/3.0.20/win64/vlc-3.0.20-win64.exe' },
-  { name: 'Malwarebytes', icon: 'malwarebytes.png', url: 'https://data-cdn.mbamupdates.com/web/mb4-setup-consumer/offline/MBSetup.exe' },
-  { name: 'WinRAR', icon: 'winrar.png', url: 'https://www.rarlab.com/rar/winrar-x64-621.exe' },
-  { name: 'Epic Games', icon: 'epic.png', url: 'https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi' },
-  { name: 'Stremio', icon: 'stremio.png', url: 'https://dl.strem.io/stremio-shell-ng/v5.0.5/StremioSetup-v5.0.5.exe' },
-  { name: 'TuxlerVPN', icon: 'tuxler.png', url: 'https://dl.strem.io/stremio-shell-ng/v5.0.5/StremioSetup-v5.0.5.exe' },
-  { name: 'Visual Studio Code', icon: 'visual.png', url: 'https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user' },
-];
+import { invoke } from '@tauri-apps/api/tauri';
 
 const Apps = () => {
-  const { theme, primaryColor } = useTheme();
-  const [hoveredApp, setHoveredApp] = useState(null);
+  const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(null);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.03,
-        delayChildren: 0.1
-      }
-    }
-  };
+  const apps = [
+    { name: 'Discord', url: 'https://dl.discordapp.net/distro/app/stable/win/x86/1.0.9014/DiscordSetup.exe', icon: '💬' },
+    { name: 'Steam', url: 'https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe', icon: '🎮' },
+    { name: 'Spotify', url: 'https://download.scdn.co/SpotifySetup.exe', icon: '🎵' },
+    { name: 'Brave Browser', url: 'https://laptop-updates.brave.com/latest/winx64', icon: '🦁' },
+    { name: 'VLC Player', url: 'https://get.videolan.org/vlc/3.0.20/win64/vlc-3.0.20-win64.exe', icon: '🎬' },
+    { name: 'WinRAR', url: 'https://www.rarlab.com/rar/winrar-x64-621.exe', icon: '📦' },
+    { name: 'Epic Games', url: 'https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi', icon: '🎯' },
+    { name: 'Visual Studio Code', url: 'https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user', icon: '💻' },
+    { name: 'Malwarebytes', url: 'https://data-cdn.mbamupdates.com/web/mb4-setup-consumer/offline/MBSetup.exe', icon: '🛡️' },
+    { name: 'Faceit AC', url: 'https://cdn.faceit.com/faceit/anticheat/FaceitAC_1.0.17.36.exe', icon: '⚡' }
+  ];
 
-  const itemVariants = {
-    hidden: { 
-      opacity: 0,
-      y: 20,
-      scale: 0.9
-    },
-    show: { 
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 15
-      }
-    }
-  };
-
-  const headerVariants = {
-    hidden: { 
-      opacity: 0,
-      x: -20,
-      scale: 0.95
-    },
-    show: { 
-      opacity: 1,
-      x: 0,
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 20,
-        duration: 0.2
-      }
+  const handleDownload = async (app) => {
+    try {
+      setLoading(app.name);
+      setStatus(`Downloading ${app.name}...`);
+      const result = await invoke('download_and_run', { name: app.name, url: app.url });
+      setStatus(result);
+    } catch (error) {
+      setStatus(`Error downloading ${app.name}: ${error}`);
+    } finally {
+      setLoading(null);
     }
   };
 
   return (
-    <motion.div
-      style={{ padding: '30px' }}
-      initial="hidden"
-      animate="show"
-      variants={containerVariants}
-    >
-      <motion.h2 
-        variants={headerVariants}
-        style={{ 
-          fontSize: '28px',
-          fontWeight: '600',
-          marginBottom: '20px',
-          color: theme.text,
-          borderBottom: `2px solid ${primaryColor}`,
-          paddingBottom: '10px',
-          display: 'inline-block',
-          position: 'relative'
-        }}
-      >
-        Install Apps
-      </motion.h2>
+    <div className="apps-page">
+      <div className="page-header">
+        <h1 className="page-title">Downloads</h1>
+        <p className="page-subtitle">Download and install popular applications</p>
+      </div>
 
-      <motion.div
-        variants={containerVariants}
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
-          gap: '20px',
-        }}
-      >
-        {apps.map((app) => {
-          const isHovered = hoveredApp === app.name;
-          return (
-            <motion.button
-              key={app.name}
-              variants={itemVariants}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onMouseEnter={() => setHoveredApp(app.name)}
-              onMouseLeave={() => setHoveredApp(null)}
-              onClick={() => downloadAndRun(app.name, app.url)}
-              style={{
-                background: 'rgba(255, 255, 255, 0.03)',
-                border: `1px solid ${primaryColor}33`,
-                borderRadius: '16px',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                color: theme.text,
-                padding: '16px 12px',
-                fontSize: '14px',
-                fontWeight: 500,
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                transition: 'all 0.3s ease',
-                boxShadow: isHovered
-                  ? `0 4px 22px ${primaryColor}66`
-                  : `0 2px 12px ${primaryColor}33`,
-                filter: hoveredApp && hoveredApp !== app.name ? 'blur(2px) brightness(0.7)' : 'none',
-                opacity: hoveredApp && hoveredApp !== app.name ? 0.6 : 1,
-              }}
+      <div className="apps-grid grid grid-4">
+        {apps.map((app, index) => (
+          <div key={index} className="app-card card">
+            <div className="app-icon">{app.icon}</div>
+            <h3 className="app-name">{app.name}</h3>
+            <button
+              className={`button ${loading === app.name ? 'loading' : ''}`}
+              onClick={() => handleDownload(app)}
+              disabled={loading === app.name}
             >
-              <img
-                src={`icons/${app.icon}`}
-                alt={app.name}
-                style={{
-                  width: '28px',
-                  height: '28px',
-                  marginBottom: '10px',
-                }}
-              />
-              {app.name}
-            </motion.button>
-          );
-        })}
-      </motion.div>
-    </motion.div>
+              {loading === app.name ? (
+                <>
+                  <div className="loading"></div>
+                  Downloading...
+                </>
+              ) : (
+                'Download'
+              )}
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {status && (
+        <div className={`status-message ${status.includes('Error') ? 'error' : 'success'}`}>
+          {status}
+        </div>
+      )}
+
+      <style jsx>{`
+        .apps-grid {
+          margin-bottom: 24px;
+        }
+
+        .app-card {
+          text-align: center;
+          padding: 24px;
+          transition: all 0.2s;
+        }
+
+        .app-card:hover {
+          transform: translateY(-4px);
+        }
+
+        .app-icon {
+          font-size: 48px;
+          margin-bottom: 16px;
+        }
+
+        .app-name {
+          font-size: 16px;
+          font-weight: 600;
+          color: #ffffff;
+          margin-bottom: 16px;
+        }
+
+        .app-card .button {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .button.loading {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+      `}</style>
+    </div>
   );
 };
 
