@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FiPalette, FiInfo, FiMessageCircle } from 'react-icons/fi';
+import { FiInfo, FiMessageCircle } from 'react-icons/fi';
+import { FaPalette } from 'react-icons/fa';
 
 const Settings = () => {
   const [accentColor, setAccentColor] = useState('#8b5cf6');
@@ -35,7 +36,7 @@ const Settings = () => {
         {/* Appearance Section */}
         <div className="section card">
           <div className="section-header">
-            <FiPalette size={20} />
+            <FaPalette size={20} />
             <h3>Appearance</h3>
           </div>
           
