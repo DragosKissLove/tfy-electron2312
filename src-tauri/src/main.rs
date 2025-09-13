@@ -7,17 +7,11 @@ use tauri::Manager;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
-struct AppInfo {
-    name: String,
-    url: String,
-    icon: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct ToolInfo {
-    name: String,
-    function: String,
-    description: String,
+struct SystemInfo {
+    os: String,
+    ram: String,
+    cpu: String,
+    gpu: String,
 }
 
 #[tauri::command]
@@ -189,6 +183,77 @@ fn get_username() -> String {
 }
 
 #[tauri::command]
+fn get_system_info() -> SystemInfo {
+    let os = format!("{} {}", whoami::distro(), whoami::arch());
+    
+    // Get RAM info
+    let ram = if let Ok(output) = Command::new("wmic")
+        .args(&["computersystem", "get", "TotalPhysicalMemory", "/value"])
+        .output() {
+        let output_str = String::from_utf8_lossy(&output.stdout);
+        if let Some(line) = output_str.lines().find(|line| line.contains("TotalPhysicalMemory=")) {
+            if let Some(value) = line.split('=').nth(1) {
+                if let Ok(bytes) = value.trim().parse::<u64>() {
+                    let gb = bytes / (1024 * 1024 * 1024);
+                    format!("{}GB", gb)
+                } else {
+                    "Unknown".to_string()
+                }
+            } else {
+                "Unknown".to_string()
+            }
+        } else {
+            "Unknown".to_string()
+        }
+    } else {
+        "Unknown".to_string()
+    };
+    
+    // Get CPU info
+    let cpu = if let Ok(output) = Command::new("wmic")
+        .args(&["cpu", "get", "name", "/value"])
+        .output() {
+        let output_str = String::from_utf8_lossy(&output.stdout);
+        if let Some(line) = output_str.lines().find(|line| line.contains("Name=")) {
+            if let Some(value) = line.split('=').nth(1) {
+                value.trim().to_string()
+            } else {
+                "Unknown CPU".to_string()
+            }
+        } else {
+            "Unknown CPU".to_string()
+        }
+    } else {
+        "Unknown CPU".to_string()
+    };
+    
+    // Get GPU info
+    let gpu = if let Ok(output) = Command::new("wmic")
+        .args(&["path", "win32_VideoController", "get", "name", "/value"])
+        .output() {
+        let output_str = String::from_utf8_lossy(&output.stdout);
+        if let Some(line) = output_str.lines().find(|line| line.contains("Name=") && !line.trim_end().ends_with("Name=")) {
+            if let Some(value) = line.split('=').nth(1) {
+                value.trim().to_string()
+            } else {
+                "Unknown GPU".to_string()
+            }
+        } else {
+            "Unknown GPU".to_string()
+        }
+    } else {
+        "Unknown GPU".to_string()
+    };
+
+    SystemInfo {
+        os,
+        ram,
+        cpu,
+        gpu,
+    }
+}
+
+#[tauri::command]
 async fn download_roblox_player(version_hash: String) -> Result<String, String> {
     let base_url = "https://setup.rbxcdn.com";
     let version = if version_hash.starts_with("version-") {
@@ -243,6 +308,7 @@ fn main() {
             download_and_run,
             run_function,
             get_username,
+            get_system_info,
             download_roblox_player
         ])
         .run(tauri::generate_context!())

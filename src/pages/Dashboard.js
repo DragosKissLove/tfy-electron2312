@@ -1,13 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { FiDownload, FiTool, FiActivity } from 'react-icons/fi';
 import { FaGamepad } from 'react-icons/fa';
+import { invoke } from '@tauri-apps/api/tauri';
 
 const Dashboard = () => {
   const [systemInfo, setSystemInfo] = useState({
-    os: 'Windows 11',
-    ram: '16GB',
-    cpu: 'Intel Core i7',
+    os: 'Loading...',
+    ram: 'Loading...',
+    cpu: 'Loading...',
+    gpu: 'Loading...'
   });
+
+  useEffect(() => {
+    const getSystemInfo = async () => {
+      try {
+        const info = await invoke('get_system_info');
+        setSystemInfo(info);
+      } catch (error) {
+        console.error('Failed to get system info:', error);
+        setSystemInfo({
+          os: 'Windows 11',
+          ram: '16GB',
+          cpu: 'Intel Core i7',
+          gpu: 'NVIDIA GeForce RTX'
+        });
+      }
+    };
+    getSystemInfo();
+  }, []);
 
   const quickActions = [
     {
@@ -41,42 +61,143 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="dashboard">
-      <div className="page-header">
-        <h1 className="page-title">Dashboard</h1>
-        <p className="page-subtitle">Welcome to TFY Tool - Your system optimization hub</p>
+    <div style={{ padding: '24px', height: '100vh', overflow: 'auto' }}>
+      <div style={{ marginBottom: '32px' }}>
+        <h1 style={{ 
+          fontSize: '28px', 
+          fontWeight: '600', 
+          color: '#ffffff', 
+          marginBottom: '8px' 
+        }}>
+          Dashboard
+        </h1>
+        <p style={{ 
+          fontSize: '16px', 
+          color: '#a0a0a0' 
+        }}>
+          Welcome to TFY Tool - Your system optimization hub
+        </p>
       </div>
 
-      <div className="dashboard-grid">
-        <div className="system-info-card card">
-          <h3>System Information</h3>
-          <div className="system-stats">
-            <div className="stat">
-              <span className="stat-label">Operating System</span>
-              <span className="stat-value">{systemInfo.os}</span>
-            </div>
-            <div className="stat">
-              <span className="stat-label">Memory</span>
-              <span className="stat-value">{systemInfo.ram}</span>
-            </div>
-            <div className="stat">
-              <span className="stat-label">Processor</span>
-              <span className="stat-value">{systemInfo.cpu}</span>
-            </div>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 2fr',
+        gap: '24px',
+        marginBottom: '24px'
+      }}>
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.03)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          borderRadius: '12px',
+          padding: '24px'
+        }}>
+          <h3 style={{
+            fontSize: '18px',
+            fontWeight: '600',
+            marginBottom: '16px',
+            color: '#ffffff'
+          }}>
+            System Information
+          </h3>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          }}>
+            {[
+              { label: 'Operating System', value: systemInfo.os },
+              { label: 'Memory', value: systemInfo.ram },
+              { label: 'Processor', value: systemInfo.cpu },
+              { label: 'Graphics Card', value: systemInfo.gpu }
+            ].map((stat, index) => (
+              <div key={index} style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '8px 0',
+                borderBottom: index < 3 ? '1px solid rgba(255, 255, 255, 0.1)' : 'none'
+              }}>
+                <span style={{
+                  fontSize: '14px',
+                  color: '#a0a0a0'
+                }}>
+                  {stat.label}
+                </span>
+                <span style={{
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  color: '#ffffff'
+                }}>
+                  {stat.value}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="quick-actions">
-          <h3>Quick Actions</h3>
-          <div className="grid grid-2">
+        <div>
+          <h3 style={{
+            fontSize: '18px',
+            fontWeight: '600',
+            marginBottom: '16px',
+            color: '#ffffff'
+          }}>
+            Quick Actions
+          </h3>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '16px'
+          }}>
             {quickActions.map((action, index) => (
-              <div key={index} className="action-card card">
-                <div className="action-icon" style={{ color: action.color }}>
-                  <action.icon size={24} />
+              <div key={index} style={{
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                padding: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+              }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  background: `${action.color}20`,
+                  borderRadius: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  <action.icon size={24} color={action.color} />
                 </div>
-                <div className="action-content">
-                  <h4>{action.title}</h4>
-                  <p>{action.description}</p>
+                <div>
+                  <h4 style={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: '#ffffff',
+                    marginBottom: '4px'
+                  }}>
+                    {action.title}
+                  </h4>
+                  <p style={{
+                    fontSize: '14px',
+                    color: '#a0a0a0',
+                    lineHeight: '1.4',
+                    margin: 0
+                  }}>
+                    {action.description}
+                  </p>
                 </div>
               </div>
             ))}
@@ -84,93 +205,15 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        .dashboard-grid {
-          display: grid;
-          grid-template-columns: 1fr 2fr;
-          gap: 24px;
-          margin-bottom: 24px;
-        }
-
-        .system-info-card h3,
-        .quick-actions h3 {
-          font-size: 18px;
-          font-weight: 600;
-          margin-bottom: 16px;
-          color: #ffffff;
-        }
-
-        .system-stats {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-
-        .stat {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 8px 0;
-          border-bottom: 1px solid #3d3d3d;
-        }
-
-        .stat:last-child {
-          border-bottom: none;
-        }
-
-        .stat-label {
-          font-size: 14px;
-          color: #a0a0a0;
-        }
-
-        .stat-value {
-          font-size: 14px;
-          font-weight: 500;
-          color: #ffffff;
-        }
-
-        .action-card {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-
-        .action-card:hover {
-          transform: translateY(-2px);
-        }
-
-        .action-icon {
-          width: 48px;
-          height: 48px;
-          background: rgba(139, 92, 246, 0.1);
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-
-        .action-content h4 {
-          font-size: 16px;
-          font-weight: 600;
-          color: #ffffff;
-          margin-bottom: 4px;
-        }
-
-        .action-content p {
-          font-size: 14px;
-          color: #a0a0a0;
-          line-height: 1.4;
-        }
-
-        @media (max-width: 768px) {
-          .dashboard-grid {
-            grid-template-columns: 1fr;
+      <style>
+        {`
+          @media (max-width: 768px) {
+            .dashboard-grid {
+              grid-template-columns: 1fr !important;
+            }
           }
-        }
-      `}</style>
+        `}
+      </style>
     </div>
   );
 };
