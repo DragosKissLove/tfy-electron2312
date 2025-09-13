@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiDownload, FiTool, FiActivity } from 'react-icons/fi';
+import { FaGamepad } from 'react-icons/fa';
 
 const Dashboard = () => {
   const [systemInfo, setSystemInfo] = useState({
