@@ -3,7 +3,7 @@ import {
   FiHome, 
   FiDownload, 
   FiTool, 
-  FiGamepad2, 
+  FiGamepad, 
   FiRefreshCw, 
   FiSettings,
   FiUser
@@ -15,7 +15,7 @@ const Sidebar = ({ activeTab, setActiveTab, username }) => {
     { id: 'Dashboard', icon: FiHome, label: 'Dashboard' },
     { id: 'Apps', icon: FiDownload, label: 'Downloads' },
     { id: 'Tools', icon: FiTool, label: 'Tweaks' },
-    { id: 'Gaming', icon: FiGamepad2, label: 'Gaming Tweaks' },
+    { id: 'Gaming', icon: FiGamepad, label: 'Gaming Tweaks' },
     { id: 'Updates', icon: FiRefreshCw, label: 'Updates' },
     { id: 'Settings', icon: FiSettings, label: 'Settings' },
   ];

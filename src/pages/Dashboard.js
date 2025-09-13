@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiDownload, FiTool, FiGamepad2, FiActivity } from 'react-icons/fi';
+import { FiDownload, FiTool, FiGamepad, FiActivity } from 'react-icons/fi';
 
 const Dashboard = () => {
   const [systemInfo, setSystemInfo] = useState({
@@ -26,7 +26,7 @@ const Dashboard = () => {
     {
       title: 'Gaming Tweaks',
       description: 'Apply gaming optimizations',
-      icon: FiGamepad2,
+      icon: FiGamepad,
       action: 'gaming_tweaks',
       color: '#8b5cf6'
     },

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
-import { FiDownload, FiRefreshCw } from 'react-icons/fi';
+import { FiDownload } from 'react-icons/fi';
 
 const Gaming = () => {
   const [status, setStatus] = useState('');
