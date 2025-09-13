@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiRefreshCw, FiDownload, FiCheck } from 'react-icons/fi';
+import { FiRefreshCw, FiCheck } from 'react-icons/fi';
 
 const Updates = () => {
   const [updateStatus, setUpdateStatus] = useState('');
