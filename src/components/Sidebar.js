@@ -3,11 +3,11 @@ import {
   FiHome, 
   FiDownload, 
   FiTool, 
-  FiGamepad, 
   FiRefreshCw, 
   FiSettings,
   FiUser
 } from 'react-icons/fi';
+import { FaGamepad } from 'react-icons/fa';
 import './Sidebar.css';
 
 const Sidebar = ({ activeTab, setActiveTab, username }) => {
@@ -15,7 +15,7 @@ const Sidebar = ({ activeTab, setActiveTab, username }) => {
     { id: 'Dashboard', icon: FiHome, label: 'Dashboard' },
     { id: 'Apps', icon: FiDownload, label: 'Downloads' },
     { id: 'Tools', icon: FiTool, label: 'Tweaks' },
-    { id: 'Gaming', icon: FiGamepad, label: 'Gaming Tweaks' },
+    { id: 'Gaming', icon: FaGamepad, label: 'Gaming Tweaks' },
     { id: 'Updates', icon: FiRefreshCw, label: 'Updates' },
     { id: 'Settings', icon: FiSettings, label: 'Settings' },
   ];
