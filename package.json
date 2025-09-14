@@ -15,7 +15,7 @@
     "autoprefixer": "^10.4.17",
     "axios": "^1.6.2",
     "extract-zip": "^2.0.1",
-    "framer-motion": "^10.16.4",
+    "framer-motion": "^10.18.0",
     "node-fetch": "^3.3.2",
     "ogl": "^0.0.117",
     "postcss": "^8.4.33",

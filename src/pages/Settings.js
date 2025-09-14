@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FiInfo, FiMessageCircle } from 'react-icons/fi';
 import { FaPalette } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { invoke } from '@tauri-apps/api/tauri';
 
 const Settings = () => {
   const [accentColor, setAccentColor] = useState('#8b5cf6');
@@ -17,13 +19,25 @@ const Settings = () => {
   }, []);
 
   const applyAccentColor = (color) => {
+    // Apply to CSS custom property
     document.documentElement.style.setProperty('--accent-color', color);
-    // Apply to all buttons and accent elements
-    const buttons = document.querySelectorAll('button');
+    
+    // Apply to all elements with accent color
+    const elements = document.querySelectorAll('[data-accent]');
+    elements.forEach(el => {
+      el.style.setProperty('--accent-color', color);
+    });
+
+    // Update button colors
+    const buttons = document.querySelectorAll('.accent-button');
     buttons.forEach(button => {
-      if (button.style.background === '#8b5cf6' || button.style.background.includes('139, 92, 246')) {
-        button.style.background = color;
-      }
+      button.style.backgroundColor = color;
+    });
+
+    // Update border colors
+    const borders = document.querySelectorAll('.accent-border');
+    borders.forEach(border => {
+      border.style.borderColor = color;
     });
   };
 
@@ -31,6 +45,9 @@ const Settings = () => {
     setAccentColor(color);
     localStorage.setItem('accentColor', color);
     applyAccentColor(color);
+    
+    // Force re-render of components
+    window.dispatchEvent(new CustomEvent('accentColorChange', { detail: color }));
   };
 
   const openDiscord = () => {
@@ -49,36 +66,58 @@ const Settings = () => {
     { name: 'Orange', color: '#f59e0b' },
     { name: 'Pink', color: '#ec4899' },
     { name: 'Cyan', color: '#06b6d4' },
-    { name: 'Indigo', color: '#6366f1' }
+    { name: 'Indigo', color: '#6366f1' },
+    { name: 'Emerald', color: '#059669' },
+    { name: 'Rose', color: '#f43f5e' },
+    { name: 'Amber', color: '#d97706' },
+    { name: 'Teal', color: '#0d9488' }
   ];
 
   return (
-    <div style={{ padding: '24px', height: '100vh', overflow: 'auto' }}>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      style={{ padding: '24px', height: '100vh', overflow: 'auto' }}
+    >
       <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ 
-          fontSize: '28px', 
-          fontWeight: '600', 
-          color: '#ffffff', 
-          marginBottom: '8px' 
-        }}>
+        <motion.h1 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          style={{ 
+            fontSize: '28px', 
+            fontWeight: '600', 
+            color: '#ffffff', 
+            marginBottom: '8px' 
+          }}
+        >
           Settings
-        </h1>
-        <p style={{ 
-          fontSize: '16px', 
-          color: '#a0a0a0' 
-        }}>
+        </motion.h1>
+        <motion.p 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+          style={{ 
+            fontSize: '16px', 
+            color: '#a0a0a0' 
+          }}
+        >
           Customize your TFY Tool experience
-        </p>
+        </motion.p>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {/* Appearance Section */}
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          borderRadius: '12px',
-          padding: '24px'
-        }}>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          style={{
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '12px',
+            padding: '24px'
+          }}
+        >
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -100,7 +139,7 @@ const Settings = () => {
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             paddingBottom: '16px'
           }}>
             <div>
@@ -122,44 +161,64 @@ const Settings = () => {
               </p>
             </div>
             <div style={{
-              display: 'flex',
-              gap: '8px',
-              flexWrap: 'wrap'
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              gap: '12px',
+              maxWidth: '200px'
             }}>
               {colorPresets.map((preset, index) => (
-                <button
+                <motion.button
                   key={index}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={() => handleColorChange(preset.color)}
                   style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    border: accentColor === preset.color ? '2px solid #ffffff' : '2px solid transparent',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '8px',
+                    border: accentColor === preset.color ? `3px solid ${preset.color}` : '2px solid rgba(255,255,255,0.2)',
                     backgroundColor: preset.color,
                     cursor: 'pointer',
                     transition: 'all 0.2s',
-                    boxShadow: accentColor === preset.color ? '0 0 0 2px rgba(255, 255, 255, 0.3)' : 'none'
+                    position: 'relative',
+                    boxShadow: accentColor === preset.color ? `0 0 20px ${preset.color}66` : 'none'
                   }}
                   title={preset.name}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = 'scale(1.1)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = 'scale(1)';
-                  }}
-                />
+                >
+                  {accentColor === preset.color && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '12px',
+                        height: '12px',
+                        backgroundColor: 'white',
+                        borderRadius: '50%'
+                      }}
+                    />
+                  )}
+                </motion.button>
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* General Section */}
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          borderRadius: '12px',
-          padding: '24px'
-        }}>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          style={{
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '12px',
+            padding: '24px'
+          }}
+        >
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -203,12 +262,16 @@ const Settings = () => {
                 Launch TFY Tool when Windows starts
               </p>
             </div>
-            <label style={{
-              position: 'relative',
-              display: 'inline-block',
-              width: '44px',
-              height: '24px'
-            }}>
+            <motion.label 
+              whileHover={{ scale: 1.05 }}
+              style={{
+                position: 'relative',
+                display: 'inline-block',
+                width: '50px',
+                height: '28px',
+                cursor: 'pointer'
+              }}
+            >
               <input
                 type="checkbox"
                 checked={autoStart}
@@ -219,30 +282,39 @@ const Settings = () => {
                   height: 0
                 }}
               />
-              <span style={{
-                position: 'absolute',
-                cursor: 'pointer',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: autoStart ? accentColor : 'rgba(255, 255, 255, 0.2)',
-                transition: '0.2s',
-                borderRadius: '24px'
-              }}>
-                <span style={{
+              <motion.span 
+                animate={{
+                  backgroundColor: autoStart ? accentColor : 'rgba(255, 255, 255, 0.2)'
+                }}
+                style={{
                   position: 'absolute',
-                  content: '""',
-                  height: '18px',
-                  width: '18px',
-                  left: autoStart ? '23px' : '3px',
-                  bottom: '3px',
-                  backgroundColor: 'white',
-                  transition: '0.2s',
-                  borderRadius: '50%'
-                }}></span>
-              </span>
-            </label>
+                  cursor: 'pointer',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  transition: '0.3s',
+                  borderRadius: '28px'
+                }}
+              >
+                <motion.span 
+                  animate={{
+                    left: autoStart ? '24px' : '2px'
+                  }}
+                  style={{
+                    position: 'absolute',
+                    content: '""',
+                    height: '24px',
+                    width: '24px',
+                    bottom: '2px',
+                    backgroundColor: 'white',
+                    transition: '0.3s',
+                    borderRadius: '50%',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                  }}
+                />
+              </motion.span>
+            </motion.label>
           </div>
 
           <div style={{
@@ -269,12 +341,16 @@ const Settings = () => {
                 Show notifications for completed tasks
               </p>
             </div>
-            <label style={{
-              position: 'relative',
-              display: 'inline-block',
-              width: '44px',
-              height: '24px'
-            }}>
+            <motion.label 
+              whileHover={{ scale: 1.05 }}
+              style={{
+                position: 'relative',
+                display: 'inline-block',
+                width: '50px',
+                height: '28px',
+                cursor: 'pointer'
+              }}
+            >
               <input
                 type="checkbox"
                 checked={notifications}
@@ -285,40 +361,54 @@ const Settings = () => {
                   height: 0
                 }}
               />
-              <span style={{
-                position: 'absolute',
-                cursor: 'pointer',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: notifications ? accentColor : 'rgba(255, 255, 255, 0.2)',
-                transition: '0.2s',
-                borderRadius: '24px'
-              }}>
-                <span style={{
+              <motion.span 
+                animate={{
+                  backgroundColor: notifications ? accentColor : 'rgba(255, 255, 255, 0.2)'
+                }}
+                style={{
                   position: 'absolute',
-                  content: '""',
-                  height: '18px',
-                  width: '18px',
-                  left: notifications ? '23px' : '3px',
-                  bottom: '3px',
-                  backgroundColor: 'white',
-                  transition: '0.2s',
-                  borderRadius: '50%'
-                }}></span>
-              </span>
-            </label>
+                  cursor: 'pointer',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  transition: '0.3s',
+                  borderRadius: '28px'
+                }}
+              >
+                <motion.span 
+                  animate={{
+                    left: notifications ? '24px' : '2px'
+                  }}
+                  style={{
+                    position: 'absolute',
+                    content: '""',
+                    height: '24px',
+                    width: '24px',
+                    bottom: '2px',
+                    backgroundColor: 'white',
+                    transition: '0.3s',
+                    borderRadius: '50%',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                  }}
+                />
+              </motion.span>
+            </motion.label>
           </div>
-        </div>
+        </motion.div>
 
         {/* About Section */}
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          borderRadius: '12px',
-          padding: '24px'
-        }}>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          style={{
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '12px',
+            padding: '24px'
+          }}
+        >
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -367,7 +457,9 @@ const Settings = () => {
               </p>
             </div>
             
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={openDiscord}
               style={{
                 padding: '12px 24px',
@@ -394,11 +486,11 @@ const Settings = () => {
             >
               <FiMessageCircle size={16} style={{ color: accentColor }} />
               Join Discord
-            </button>
+            </motion.button>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

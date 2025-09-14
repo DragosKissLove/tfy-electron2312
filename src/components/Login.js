@@ -1,29 +1,95 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { useTheme } from '../ThemeContext';
-import { FiUser } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+import { invoke } from '@tauri-apps/api/tauri';
 
 const Login = ({ onLogin }) => {
-  const { primaryColor } = useTheme();
-  const [username, setUsername] = useState('User');
+  const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [accentColor, setAccentColor] = useState('#8b5cf6');
+  const [systemUsername, setSystemUsername] = useState('User');
 
   useEffect(() => {
-    if (window.electron) {
-      window.electron.runFunction('get-username')
-        .then(name => setUsername(name || 'User'))
-        .catch(() => setUsername('User'));
+    // Load accent color
+    const savedColor = localStorage.getItem('accentColor');
+    if (savedColor) {
+      setAccentColor(savedColor);
     }
+
+    // Get system username
+    const getSystemUsername = async () => {
+      try {
+        const username = await invoke('get_username');
+        setSystemUsername(username);
+        setFormData(prev => ({ ...prev, username }));
+      } catch (error) {
+        console.error('Failed to get system username:', error);
+      }
+    };
+
+    getSystemUsername();
   }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      // Simulate API call to GitHub database
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      if (isLogin) {
+        // Login logic
+        if (formData.username && formData.password) {
+          const userData = {
+            id: Date.now(),
+            username: formData.username,
+            email: formData.email || `${formData.username}@tfytool.com`,
+            loginTime: new Date().toISOString(),
+            type: 'registered'
+          };
+          onLogin(userData);
+        } else {
+          setError('Please fill in all required fields');
+        }
+      } else {
+        // Register logic
+        if (formData.username && formData.email && formData.password) {
+          const userData = {
+            id: Date.now(),
+            username: formData.username,
+            email: formData.email,
+            loginTime: new Date().toISOString(),
+            type: 'registered'
+          };
+          onLogin(userData);
+        } else {
+          setError('Please fill in all required fields');
+        }
+      }
+    } catch (error) {
+      setError('Authentication failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGuestLogin = () => {
     const guestData = {
       id: `guest-${Date.now()}`,
-      name: username,
+      username: systemUsername,
+      email: `${systemUsername}@guest.local`,
       type: 'guest',
       loginTime: new Date().toISOString()
     };
-    
-    localStorage.setItem('guestSession', JSON.stringify(guestData));
     onLogin(guestData);
   };
 
@@ -46,26 +112,26 @@ const Login = ({ onLogin }) => {
         overflow: 'hidden'
       }}
     >
-      {[...Array(5)].map((_, i) => (
+      {/* Animated Background */}
+      {[...Array(6)].map((_, i) => (
         <motion.div
           key={i}
           style={{
             position: 'absolute',
-            width: '400px',
-            height: '400px',
+            width: `${300 + i * 100}px`,
+            height: `${300 + i * 100}px`,
             borderRadius: '50%',
-            background: `radial-gradient(circle, ${primaryColor}22 0%, transparent 70%)`,
+            background: `radial-gradient(circle, ${accentColor}${Math.floor(20 - i * 2).toString(16).padStart(2, '0')} 0%, transparent 70%)`,
             filter: 'blur(60px)',
-            opacity: 0.3,
             pointerEvents: 'none'
           }}
           animate={{
-            x: ['-50%', '50%'],
-            y: ['-50%', '50%'],
-            scale: [1, 1.5, 1],
+            x: ['-50%', '50%', '-50%'],
+            y: ['-50%', '50%', '-50%'],
+            scale: [1, 1.2, 1],
           }}
           transition={{
-            duration: 4 + i,
+            duration: 8 + i * 2,
             repeat: Infinity,
             repeatType: 'reverse',
             ease: 'easeInOut',
@@ -75,82 +141,321 @@ const Login = ({ onLogin }) => {
       ))}
 
       <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        initial={{ y: 50, opacity: 0, scale: 0.9 }}
+        animate={{ y: 0, opacity: 1, scale: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
         style={{
           background: 'rgba(255, 255, 255, 0.05)',
           padding: '40px',
-          borderRadius: '20px',
-          boxShadow: `0 0 40px ${primaryColor}22`,
-          border: `1px solid ${primaryColor}33`,
+          borderRadius: '24px',
+          boxShadow: `0 0 60px ${accentColor}33`,
+          border: `1px solid ${accentColor}44`,
           width: '100%',
-          maxWidth: '400px',
-          textAlign: 'center',
+          maxWidth: '420px',
           position: 'relative',
           overflow: 'hidden',
-          backdropFilter: 'blur(10px)'
+          backdropFilter: 'blur(20px)'
         }}
       >
+        {/* Header */}
         <motion.div
-          style={{
-            fontSize: '24px',
-            marginBottom: '30px',
-            position: 'relative',
-            zIndex: 1
-          }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          style={{ textAlign: 'center', marginBottom: '32px' }}
         >
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            style={{ 
-              fontSize: '28px', 
-              marginBottom: '10px',
-              color: '#fff'
+          <motion.div
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            style={{
+              width: '60px',
+              height: '60px',
+              background: `linear-gradient(135deg, ${accentColor}, ${accentColor}aa)`,
+              borderRadius: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px',
+              fontSize: '24px',
+              fontWeight: 'bold',
+              color: 'white',
+              boxShadow: `0 8px 32px ${accentColor}66`
             }}
           >
-            Hi {username}!
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            style={{ 
-              fontSize: '16px', 
-              color: 'rgba(255, 255, 255, 0.9)'
-            }}
-          >
-            Welcome to TFY Utility Hub
-          </motion.p>
+            TFY
+          </motion.div>
+          <h1 style={{ 
+            fontSize: '28px', 
+            marginBottom: '8px',
+            color: '#fff',
+            fontWeight: '700'
+          }}>
+            {isLogin ? 'Welcome Back!' : 'Join TFY Tool'}
+          </h1>
+          <p style={{ 
+            fontSize: '16px', 
+            color: 'rgba(255, 255, 255, 0.7)'
+          }}>
+            {isLogin ? 'Sign in to continue' : 'Create your account'}
+          </p>
         </motion.div>
 
-        <motion.button
-          whileHover={{ scale: 1.05, backgroundColor: `${primaryColor}33` }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleGuestLogin}
-          style={{
-            padding: '12px',
-            background: 'transparent',
-            border: `1px solid ${primaryColor}44`,
-            borderRadius: '12px',
-            color: '#fff',
-            fontSize: '16px',
-            cursor: 'pointer',
+        {/* Form */}
+        <form onSubmit={handleSubmit} style={{ marginBottom: '24px' }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={isLogin ? 'login' : 'register'}
+              initial={{ opacity: 0, x: isLogin ? -20 : 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: isLogin ? 20 : -20 }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+            >
+              {/* Username */}
+              <div style={{ position: 'relative' }}>
+                <FiUser 
+                  size={18} 
+                  style={{
+                    position: 'absolute',
+                    left: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: accentColor,
+                    zIndex: 1
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Username"
+                  value={formData.username}
+                  onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
+                  style={{
+                    width: '100%',
+                    padding: '16px 16px 16px 48px',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: `1px solid ${formData.username ? accentColor : 'rgba(255, 255, 255, 0.2)'}`,
+                    borderRadius: '12px',
+                    color: '#fff',
+                    fontSize: '16px',
+                    outline: 'none',
+                    transition: 'all 0.2s',
+                    boxSizing: 'border-box'
+                  }}
+                  required
+                />
+              </div>
+
+              {/* Email (Register only) */}
+              {!isLogin && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  style={{ position: 'relative' }}
+                >
+                  <FiMail 
+                    size={18} 
+                    style={{
+                      position: 'absolute',
+                      left: '16px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: accentColor,
+                      zIndex: 1
+                    }}
+                  />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                    style={{
+                      width: '100%',
+                      padding: '16px 16px 16px 48px',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: `1px solid ${formData.email ? accentColor : 'rgba(255, 255, 255, 0.2)'}`,
+                      borderRadius: '12px',
+                      color: '#fff',
+                      fontSize: '16px',
+                      outline: 'none',
+                      transition: 'all 0.2s',
+                      boxSizing: 'border-box'
+                    }}
+                    required={!isLogin}
+                  />
+                </motion.div>
+              )}
+
+              {/* Password */}
+              <div style={{ position: 'relative' }}>
+                <FiLock 
+                  size={18} 
+                  style={{
+                    position: 'absolute',
+                    left: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: accentColor,
+                    zIndex: 1
+                  }}
+                />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+                  style={{
+                    width: '100%',
+                    padding: '16px 48px 16px 48px',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: `1px solid ${formData.password ? accentColor : 'rgba(255, 255, 255, 0.2)'}`,
+                    borderRadius: '12px',
+                    color: '#fff',
+                    fontSize: '16px',
+                    outline: 'none',
+                    transition: 'all 0.2s',
+                    boxSizing: 'border-box'
+                  }}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    color: accentColor,
+                    cursor: 'pointer',
+                    padding: '4px'
+                  }}
+                >
+                  {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{
+                color: '#ef4444',
+                fontSize: '14px',
+                textAlign: 'center',
+                marginTop: '16px',
+                padding: '8px',
+                background: 'rgba(239, 68, 68, 0.1)',
+                borderRadius: '8px',
+                border: '1px solid rgba(239, 68, 68, 0.3)'
+              }}
+            >
+              {error}
+            </motion.div>
+          )}
+
+          {/* Submit Button */}
+          <motion.button
+            type="submit"
+            disabled={loading}
+            whileHover={{ scale: loading ? 1 : 1.02 }}
+            whileTap={{ scale: loading ? 1 : 0.98 }}
+            style={{
+              width: '100%',
+              padding: '16px',
+              background: loading ? 'rgba(139, 92, 246, 0.5)' : accentColor,
+              color: 'white',
+              border: 'none',
+              borderRadius: '12px',
+              fontSize: '16px',
+              fontWeight: '600',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              marginTop: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              boxShadow: loading ? 'none' : `0 8px 32px ${accentColor}66`,
+              transition: 'all 0.2s'
+            }}
+          >
+            {loading ? (
+              <>
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  style={{
+                    width: '18px',
+                    height: '18px',
+                    border: '2px solid transparent',
+                    borderTop: '2px solid white',
+                    borderRadius: '50%'
+                  }}
+                />
+                Processing...
+              </>
+            ) : (
+              isLogin ? 'Sign In' : 'Create Account'
+            )}
+          </motion.button>
+        </form>
+
+        {/* Toggle & Guest Login */}
+        <div style={{ textAlign: 'center' }}>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsLogin(!isLogin)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: accentColor,
+              fontSize: '14px',
+              cursor: 'pointer',
+              marginBottom: '16px',
+              textDecoration: 'underline'
+            }}
+          >
+            {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+          </motion.button>
+
+          <div style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            gap: '10px',
-            boxShadow: `0 0 30px ${primaryColor}33`,
-            width: '100%',
-            position: 'relative',
-            zIndex: 1,
-            backdropFilter: 'blur(5px)',
-            transition: 'all 0.3s ease'
-          }}
-        >
-          <FiUser size={20} style={{ color: primaryColor }} />
-          Continue as Guest
-        </motion.button>
+            gap: '16px',
+            marginBottom: '16px'
+          }}>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.2)' }} />
+            <span style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '14px' }}>or</span>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.2)' }} />
+          </div>
+
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleGuestLogin}
+            style={{
+              width: '100%',
+              padding: '12px',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: '12px',
+              color: '#fff',
+              fontSize: '14px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              transition: 'all 0.2s'
+            }}
+          >
+            <FiUser size={16} />
+            Continue as Guest ({systemUsername})
+          </motion.button>
+        </div>
       </motion.div>
     </motion.div>
   );
