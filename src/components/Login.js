@@ -15,6 +15,7 @@ const Login = ({ onLogin }) => {
   const [error, setError] = useState('');
   const [accentColor, setAccentColor] = useState('#8b5cf6');
   const [systemUsername, setSystemUsername] = useState('User');
+  const [saveLogin, setSaveLogin] = useState(false);
 
   useEffect(() => {
     // Load accent color
@@ -23,12 +24,22 @@ const Login = ({ onLogin }) => {
       setAccentColor(savedColor);
     }
 
+    // Load saved login if exists
+    const savedLogin = localStorage.getItem('savedLogin');
+    if (savedLogin) {
+      const loginData = JSON.parse(savedLogin);
+      setFormData(loginData);
+      setSaveLogin(true);
+    }
+
     // Get system username
     const getSystemUsername = async () => {
       try {
-        const username = await invoke('get_username');
+        const username = await invoke('get_system_username');
         setSystemUsername(username);
-        setFormData(prev => ({ ...prev, username }));
+        if (!formData.username) {
+          setFormData(prev => ({ ...prev, username }));
+        }
       } catch (error) {
         console.error('Failed to get system username:', error);
       }
@@ -37,43 +48,92 @@ const Login = ({ onLogin }) => {
     getSystemUsername();
   }, []);
 
+  const validateCredentials = async (username, password) => {
+    // GitHub API simulation for user validation
+    try {
+      const response = await fetch(`https://api.github.com/users/${username}`);
+      if (response.ok) {
+        // For demo purposes, accept any password for existing GitHub users
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
-      // Simulate API call to GitHub database
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
       if (isLogin) {
-        // Login logic
-        if (formData.username && formData.password) {
-          const userData = {
-            id: Date.now(),
-            username: formData.username,
-            email: formData.email || `${formData.username}@tfytool.com`,
-            loginTime: new Date().toISOString(),
-            type: 'registered'
-          };
-          onLogin(userData);
-        } else {
+        // Login validation
+        if (!formData.username || !formData.password) {
           setError('Please fill in all required fields');
+          return;
         }
+
+        const isValid = await validateCredentials(formData.username, formData.password);
+        if (!isValid) {
+          setError('Invalid username or password. Please check your credentials.');
+          return;
+        }
+
+        const userData = {
+          id: Date.now(),
+          username: formData.username,
+          email: formData.email || `${formData.username}@github.com`,
+          loginTime: new Date().toISOString(),
+          type: 'registered'
+        };
+
+        if (saveLogin) {
+          localStorage.setItem('savedLogin', JSON.stringify({
+            username: formData.username,
+            password: formData.password,
+            email: formData.email
+          }));
+        }
+
+        onLogin(userData);
       } else {
-        // Register logic
-        if (formData.username && formData.email && formData.password) {
-          const userData = {
-            id: Date.now(),
-            username: formData.username,
-            email: formData.email,
-            loginTime: new Date().toISOString(),
-            type: 'registered'
-          };
-          onLogin(userData);
-        } else {
+        // Register validation
+        if (!formData.username || !formData.email || !formData.password) {
           setError('Please fill in all required fields');
+          return;
         }
+
+        if (formData.password.length < 6) {
+          setError('Password must be at least 6 characters long');
+          return;
+        }
+
+        // Check if user already exists
+        const userExists = await validateCredentials(formData.username, '');
+        if (userExists) {
+          setError('Username already exists. Please choose a different one.');
+          return;
+        }
+
+        const userData = {
+          id: Date.now(),
+          username: formData.username,
+          email: formData.email,
+          loginTime: new Date().toISOString(),
+          type: 'registered'
+        };
+
+        if (saveLogin) {
+          localStorage.setItem('savedLogin', JSON.stringify({
+            username: formData.username,
+            password: formData.password,
+            email: formData.email
+          }));
+        }
+
+        onLogin(userData);
       }
     } catch (error) {
       setError('Authentication failed. Please try again.');
@@ -333,6 +393,33 @@ const Login = ({ onLogin }) => {
                 >
                   {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
                 </button>
+              </div>
+
+              {/* Save Login Checkbox */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginTop: '8px'
+              }}>
+                <input
+                  type="checkbox"
+                  id="saveLogin"
+                  checked={saveLogin}
+                  onChange={(e) => setSaveLogin(e.target.checked)}
+                  style={{
+                    width: '16px',
+                    height: '16px',
+                    accentColor: accentColor
+                  }}
+                />
+                <label htmlFor="saveLogin" style={{
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  fontSize: '14px',
+                  cursor: 'pointer'
+                }}>
+                  Save login credentials
+                </label>
               </div>
             </motion.div>
           </AnimatePresence>

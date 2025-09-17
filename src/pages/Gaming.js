@@ -109,6 +109,27 @@ const Gaming = () => {
     }
   };
 
+  const handleCreamInstallerDownload = async () => {
+    try {
+      setLoading('CreamInstaller');
+      setStatus('🔄 Downloading CreamInstaller...');
+      showNotification('Info', 'Downloading CreamInstaller...');
+      
+      const result = await invoke('download_and_run', { 
+        name: 'CreamInstaller', 
+        url: 'https://github.com/pointfeev/CreamInstaller/releases/latest/download/CreamInstaller.zip'
+      });
+      setStatus(`✅ ${result}`);
+      showNotification('Success', 'CreamInstaller downloaded and launched successfully!');
+    } catch (error) {
+      const errorMsg = `❌ Error downloading CreamInstaller: ${error}`;
+      setStatus(errorMsg);
+      showNotification('Error', `Failed to download CreamInstaller: ${error}`);
+    } finally {
+      setLoading(null);
+    }
+  };
+
   const showNotification = (type, message) => {
     const notification = document.createElement('div');
     const colors = {
@@ -493,6 +514,143 @@ const Gaming = () => {
                 </motion.button>
               </motion.div>
             ))}
+          </div>
+        </motion.div>
+
+        {/* Steam DLC Unlocker Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          style={{
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '16px',
+            padding: '24px',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '3px',
+            background: `linear-gradient(90deg, ${accentColor}, transparent)`
+          }} />
+          
+          <h3 style={{ 
+            fontSize: '20px',
+            fontWeight: '600',
+            color: '#ffffff',
+            marginBottom: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            🎮 Steam DLC Unlocker
+          </h3>
+          <p style={{ 
+            fontSize: '14px',
+            color: '#a0a0a0',
+            marginBottom: '20px'
+          }}>
+            Unlock DLC content for your Steam games using CreamInstaller
+          </p>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr',
+            gap: '16px'
+          }}>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                borderRadius: '12px',
+                padding: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+            >
+              <div style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                background: '#10b981',
+                color: 'white',
+                padding: '4px 8px',
+                borderRadius: '12px',
+                fontSize: '10px',
+                fontWeight: '600'
+              }}>
+                ✓ AVAILABLE
+              </div>
+              
+              <h4 style={{
+                fontSize: '18px',
+                fontWeight: '600',
+                color: '#ffffff',
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                🔓 CreamInstaller
+              </h4>
+              <p style={{
+                fontSize: '14px',
+                color: '#a0a0a0',
+                flex: 1,
+                margin: 0,
+                lineHeight: '1.4'
+              }}>
+                Automatically unlock DLC for Steam games. Supports most Steam games with DLC content.
+              </p>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleCreamInstallerDownload()}
+                disabled={loading === 'CreamInstaller'}
+                style={{
+                  width: '100%',
+                  padding: '12px 20px',
+                  background: loading === 'CreamInstaller' 
+                    ? 'rgba(139, 92, 246, 0.5)' 
+                    : accentColor,
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: loading === 'CreamInstaller' ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px'
+                }}
+              >
+                {loading === 'CreamInstaller' ? (
+                  <>
+                    <FiRefreshCw size={16} style={{ animation: 'spin 1s linear infinite' }} />
+                    Downloading...
+                  </>
+                ) : (
+                  <>
+                    <FiDownload size={16} />
+                    Download CreamInstaller
+                  </>
+                )}
+              </motion.button>
+            </motion.div>
           </div>
         </motion.div>
       </div>
