@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
-import { invoke } from '@tauri-apps/api/tauri';
 import { FiMinus, FiX, FiMaximize2, FiUser } from 'react-icons/fi';
 import { appWindow } from '@tauri-apps/api/window';
 import { motion, AnimatePresence } from 'framer-motion';
+import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/tauri';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Apps from './pages/Apps';
@@ -12,6 +12,8 @@ import Gaming from './pages/Gaming';
 import Updates from './pages/Updates';
 import Settings from './pages/Settings';
 import Login from './components/Login';
+import StarBorder from './StarBorder';
+import StarBorder from './StarBorder';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('Dashboard');
@@ -19,23 +21,47 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [accentColor, setAccentColor] = useState('#8b5cf6');
+  const [userProfilePic, setUserProfilePic] = useState(null);
+  const [userProfilePic, setUserProfilePic] = useState(null);
 
   useEffect(() => {
     // Load accent color
     const savedColor = localStorage.getItem('accentColor');
     if (savedColor) {
       setAccentColor(savedColor);
+      // Apply accent color to CSS custom properties
+      document.documentElement.style.setProperty('--accent-color', savedColor);
+      // Apply accent color to CSS custom properties
+      document.documentElement.style.setProperty('--accent-color', savedColor);
     }
 
     // Listen for accent color changes
     const handleColorChange = (event) => {
       setAccentColor(event.detail);
+      document.documentElement.style.setProperty('--accent-color', event.detail);
+      document.documentElement.style.setProperty('--accent-color', event.detail);
     };
     window.addEventListener('accentColorChange', handleColorChange);
 
     // Check for existing session
     const checkSession = async () => {
       try {
+        // Get user profile picture
+        try {
+          const profilePic = await invoke('get_user_profile_picture');
+          setUserProfilePic(profilePic);
+        } catch (error) {
+          console.log('Could not get profile picture:', error);
+        }
+        
+        // Get user profile picture
+        try {
+          const profilePic = await invoke('get_user_profile_picture');
+          setUserProfilePic(profilePic);
+        } catch (error) {
+          console.log('Could not get profile picture:', error);
+        }
+        
         const savedSession = localStorage.getItem('userSession');
         if (savedSession) {
           const sessionData = JSON.parse(savedSession);
@@ -44,7 +70,7 @@ const App = () => {
         }
         
         // Get system username
-        const systemUsername = await invoke('get_username');
+        const systemUsername = await invoke('get_system_username');
         if (!savedSession) {
           setUsername(systemUsername);
         }
@@ -62,6 +88,16 @@ const App = () => {
     };
   }, []);
 
+  // Apply accent color globally
+  useEffect(() => {
+    document.documentElement.style.setProperty('--accent-color', accentColor);
+  }, [accentColor]);
+
+  // Apply accent color globally
+  useEffect(() => {
+    document.documentElement.style.setProperty('--accent-color', accentColor);
+  }, [accentColor]);
+
   const handleLogin = (userData) => {
     setUser(userData);
     setUsername(userData.username || userData.name);
@@ -78,6 +114,98 @@ const App = () => {
 
   const handleClose = () => {
     appWindow.close();
+  };
+
+  const renderContent = () => {
+    const pageVariants = {
+      initial: { opacity: 0, y: 20 },
+      in: { opacity: 1, y: 0 },
+      out: { opacity: 0, y: -20 }
+    };
+
+    const pageTransition = {
+      type: 'tween',
+      ease: 'anticipate',
+      duration: 0.4
+    };
+
+    const content = (() => {
+      switch (activeTab) {
+        case 'Dashboard':
+          return <Dashboard />;
+        case 'Apps':
+          return <Apps />;
+        case 'Tools':
+          return <Tools />;
+        case 'Gaming':
+          return <Gaming />;
+        case 'Updates':
+          return <Updates />;
+        case 'Settings':
+          return <Settings />;
+        default:
+          return <Dashboard />;
+      }
+    })();
+
+    return (
+      <motion.div
+        key={activeTab}
+        initial="initial"
+        animate="in"
+        exit="out"
+        variants={pageVariants}
+        transition={pageTransition}
+      >
+        {content}
+      </motion.div>
+    );
+  };
+
+  const renderContent = () => {
+    const pageVariants = {
+      initial: { opacity: 0, y: 20 },
+      in: { opacity: 1, y: 0 },
+      out: { opacity: 0, y: -20 }
+    };
+
+    const pageTransition = {
+      type: 'tween',
+      ease: 'anticipate',
+      duration: 0.4
+    };
+
+    const content = (() => {
+      switch (activeTab) {
+        case 'Dashboard':
+          return <Dashboard />;
+        case 'Apps':
+          return <Apps />;
+        case 'Tools':
+          return <Tools />;
+        case 'Gaming':
+          return <Gaming />;
+        case 'Updates':
+          return <Updates />;
+        case 'Settings':
+          return <Settings />;
+        default:
+          return <Dashboard />;
+      }
+    })();
+
+    return (
+      <motion.div
+        key={activeTab}
+        initial="initial"
+        animate="in"
+        exit="out"
+        variants={pageVariants}
+        transition={pageTransition}
+      >
+        {content}
+      </motion.div>
+    );
   };
 
   const renderContent = () => {
@@ -109,17 +237,19 @@ const App = () => {
         background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
         color: 'white'
       }}>
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          style={{
-            width: '40px',
-            height: '40px',
-            border: `3px solid ${accentColor}33`,
-            borderTop: `3px solid ${accentColor}`,
-            borderRadius: '50%'
-          }}
-        />
+        <StarBorder color={accentColor}>
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            style={{
+              width: '40px',
+              height: '40px',
+              border: `3px solid ${accentColor}33`,
+              borderTop: `3px solid ${accentColor}`,
+              borderRadius: '50%'
+            }}
+          />
+        </StarBorder>
       </div>
     );
   }
@@ -129,91 +259,245 @@ const App = () => {
   }
 
   return (
-    <div className="app">
+    <div className="app" style={{ '--accent-color': accentColor }}>
       {/* Custom Title Bar */}
-      <motion.div 
-        className="titlebar" 
-        data-tauri-drag-region
+      <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         style={{
-          background: 'rgba(0, 0, 0, 0.8)',
+          height: '60px',
+          background: `linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 100%)`,
+          background: `linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 100%)`,
           backdropFilter: 'blur(20px)',
-          borderBottom: `1px solid ${accentColor}33`
-        }}
-      >
-        <div className="titlebar-left">
-          <motion.div 
-            className="app-icon"
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            style={{
-              background: `linear-gradient(135deg, ${accentColor}, ${accentColor}aa)`,
-              borderRadius: '8px',
-              padding: '6px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <span style={{ fontSize: '14px', fontWeight: 'bold' }}>TFY</span>
-          </motion.div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span className="app-title" style={{ fontSize: '14px', fontWeight: '600' }}>
-              TFY Tool
-            </span>
-            <span style={{ fontSize: '11px', opacity: 0.7, color: accentColor }}>
-              v3.0.0
-            </span>
-          </div>
-        </div>
-        
-        <div style={{
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: `2px solid ${accentColor}`,
+          borderRadius: '0 0 20px 20px',
           display: 'flex',
           alignItems: 'center',
-          gap: '12px'
-        }}>
-          <motion.div 
-            whileHover={{ scale: 1.05 }}
+          justifyContent: 'space-between',
+          padding: '0 20px',
+          position: 'relative',
+          overflow: 'hidden'
+          borderBottom: `2px solid ${accentColor}`,
+          borderRadius: '0 0 20px 20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 20px',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Animated Background */}
+        <motion.div
+          animate={{
+            background: [
+              `linear-gradient(45deg, ${accentColor}20, transparent, ${accentColor}10)`,
+              `linear-gradient(45deg, transparent, ${accentColor}20, transparent)`,
+              `linear-gradient(45deg, ${accentColor}10, transparent, ${accentColor}20)`
+            ]
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 0
+          }}
+        />
+        
+        {/* Animated Background */}
+        <motion.div
+          animate={{
+            background: [
+              `linear-gradient(45deg, ${accentColor}20, transparent, ${accentColor}10)`,
+              `linear-gradient(45deg, transparent, ${accentColor}20, transparent)`,
+              `linear-gradient(45deg, ${accentColor}10, transparent, ${accentColor}20)`
+            ]
+        <StarBorder color={accentColor}>
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
             style={{
+              width: '40px',
+              height: '40px',
+              border: `3px solid ${accentColor}33`,
+              borderTop: `3px solid ${accentColor}`,
+              borderRadius: '50%'
+            }}
+          />
+        </StarBorder>
+        
+        <div className="titlebar-left">
+          {/* TFY Logo */}
+          <motion.div
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            style={{
+              width: '45px',
+              height: '45px',
+              background: `linear-gradient(135deg, ${accentColor}, ${accentColor}cc)`,
+              borderRadius: '15px',
+              borderRadius: '15px',
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
-              padding: '6px 12px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '20px',
-              border: `1px solid ${accentColor}33`
+              justifyContent: 'center',
+              boxShadow: `0 8px 32px ${accentColor}66`,
+              border: `2px solid ${accentColor}44`,
+              position: 'relative',
+              zIndex: 1
+              boxShadow: `0 8px 32px ${accentColor}66`,
+              border: `2px solid ${accentColor}44`,
+              position: 'relative',
+              zIndex: 1
             }}
-          >
-            <FiUser size={14} style={{ color: accentColor }} />
-            <span style={{ fontSize: '12px', color: '#ffffff' }}>{username}</span>
-          </motion.div>
-          
-          <div className="titlebar-right">
+        {/* Window Controls */}
+        <div className="titlebar-right" style={{ zIndex: 1 }}>
+          <StarBorder color={accentColor} speed="3s">
             <motion.button 
               className="titlebar-button" 
               onClick={handleMinimize}
-              whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              style={{
+                width: '35px',
+                height: '35px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: 'none',
+                borderRadius: '10px',
+                color: '#ffffff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: '8px'
+              }}
             >
-              <FiMinus size={14} />
+              <FiMinus size={16} />
             </motion.button>
+          </StarBorder>
+          
+          <StarBorder color={accentColor} speed="3s">
             <motion.button 
               className="titlebar-button" 
               onClick={handleMaximize}
-              whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              style={{
+                width: '35px',
+                height: '35px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: 'none',
+                borderRadius: '10px',
+                color: '#ffffff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: '8px'
+              }}
             >
-              <FiMaximize2 size={14} />
+              <FiMaximize2 size={16} />
             </motion.button>
+          </StarBorder>
+          
+          <StarBorder color="#e53e3e" speed="3s">
             <motion.button 
               className="titlebar-button close" 
               onClick={handleClose}
-              whileHover={{ backgroundColor: '#e53e3e' }}
+              whileHover={{ scale: 1.1, backgroundColor: '#e53e3e' }}
               whileTap={{ scale: 0.9 }}
+              style={{
+                width: '35px',
+                height: '35px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: 'none',
+                borderRadius: '10px',
+                color: '#ffffff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
             >
-              <FiX size={14} />
+              <FiX size={16} />
             </motion.button>
-          </div>
+          </StarBorder>
+        </div>
+        
+        {/* Window Controls */}
+        <div className="titlebar-right" style={{ zIndex: 1 }}>
+          <StarBorder color={accentColor} speed="3s">
+            <motion.button 
+              className="titlebar-button" 
+              onClick={handleMinimize}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              style={{
+                width: '35px',
+                height: '35px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: 'none',
+                borderRadius: '10px',
+                color: '#ffffff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: '8px'
+              }}
+            >
+              <FiMinus size={16} />
+            </motion.button>
+          </StarBorder>
+          
+          <StarBorder color={accentColor} speed="3s">
+            <motion.button 
+              className="titlebar-button" 
+              onClick={handleMaximize}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              style={{
+                width: '35px',
+                height: '35px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: 'none',
+                borderRadius: '10px',
+                color: '#ffffff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: '8px'
+              }}
+            >
+              <FiMaximize2 size={16} />
+            </motion.button>
+          </StarBorder>
+          
+          <StarBorder color="#e53e3e" speed="3s">
+            <motion.button 
+              className="titlebar-button close" 
+              onClick={handleClose}
+              whileHover={{ scale: 1.1, backgroundColor: '#e53e3e' }}
+              whileTap={{ scale: 0.9 }}
+              style={{
+                width: '35px',
+                height: '35px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: 'none',
+                borderRadius: '10px',
+                color: '#ffffff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <FiX size={16} />
+            </motion.button>
+          </StarBorder>
         </div>
       </motion.div>
 
@@ -222,18 +506,26 @@ const App = () => {
           activeTab={activeTab} 
           setActiveTab={setActiveTab}
           username={username}
+          userProfilePic={userProfilePic}
+          userProfilePic={userProfilePic}
         />
-        <main className="main-content">
+        <main className="main-content" style={{ 
+          overflow: 'hidden auto',
+          scrollbarWidth: 'none',
+        <main className="main-content" style={{ 
+          overflow: 'hidden auto',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
+        }}>
+          <style>
+            {`
+              .main-content::-webkit-scrollbar {
+                display: none;
+              }
+            `}
+          </style>
           <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              {renderContent()}
-            </motion.div>
+            {renderContent()}
           </AnimatePresence>
         </main>
       </div>

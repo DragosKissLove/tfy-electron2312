@@ -1,7 +1,7 @@
 import "./StarBorder.css";
 
 const StarBorder = ({
-  as: Component = "button",
+  as: Component = "div",
   className = "",
   color = "white",
   speed = "6s",

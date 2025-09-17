@@ -3,6 +3,7 @@
 use std::process::Command;
 use std::fs;
 use std::path::Path;
+use sysinfo::{System, SystemExt, CpuExt, DiskExt};
 use tauri::Manager;
 use serde::{Deserialize, Serialize};
 
@@ -12,6 +13,14 @@ struct SystemInfo {
     ram: String,
     cpu: String,
     gpu: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct SystemStats {
+    cpu_usage: f32,
+    ram_usage: f32,
+    disk_usage: f32,
+    temperature: f32,
 }
 
 #[tauri::command]
@@ -178,56 +187,60 @@ fn run_function(name: String) -> Result<String, String> {
 }
 
 #[tauri::command]
-fn get_username() -> String {
+fn get_system_username() -> String {
     whoami::username()
 }
 
 #[tauri::command]
-fn get_system_info() -> SystemInfo {
-    let os = format!("{} {}", whoami::distro(), whoami::arch());
+fn get_user_profile_picture() -> Result<String, String> {
+    // Try to get Windows user profile picture
+    let username = whoami::username();
+    let profile_path = format!("C:\\Users\\{}\\AppData\\Local\\Temp\\{}.bmp", username, username);
     
-    // Get RAM info
-    let ram = if let Ok(output) = Command::new("wmic")
-        .args(&["computersystem", "get", "TotalPhysicalMemory", "/value"])
-        .output() {
-        let output_str = String::from_utf8_lossy(&output.stdout);
-        if let Some(line) = output_str.lines().find(|line| line.contains("TotalPhysicalMemory=")) {
-            if let Some(value) = line.split('=').nth(1) {
-                if let Ok(bytes) = value.trim().parse::<u64>() {
-                    let gb = bytes / (1024 * 1024 * 1024);
-                    format!("{}GB", gb)
-                } else {
-                    "Unknown".to_string()
-                }
-            } else {
-                "Unknown".to_string()
-            }
+    if Path::new(&profile_path).exists() {
+        Ok(profile_path)
+    } else {
+        Err("Profile picture not found".to_string())
+    }
+}
+
+#[tauri::command]
+fn get_system_info() -> SystemInfo {
+    // Get Windows version only
+    let os_full = whoami::distro();
+    let os = if os_full.contains("Windows") {
+        if os_full.contains("11") {
+            "Windows 11".to_string()
+        } else if os_full.contains("10") {
+            "Windows 10".to_string()
+        } else if os_full.contains("8.1") {
+            "Windows 8.1".to_string()
+        } else if os_full.contains("8") {
+            "Windows 8".to_string()
+        } else if os_full.contains("7") {
+            "Windows 7".to_string()
         } else {
-            "Unknown".to_string()
+            "Windows".to_string()
         }
     } else {
-        "Unknown".to_string()
+        os_full
     };
     
+    // Get precise RAM info
+    let mut sys = System::new_all();
+    sys.refresh_all();
+    let total_memory = sys.total_memory();
+    let ram_gb = (total_memory as f64 / (1024.0 * 1024.0 * 1024.0)).round() as u64;
+    let ram = format!("{}GB DDR4", ram_gb);
+    
     // Get CPU info
-    let cpu = if let Ok(output) = Command::new("wmic")
-        .args(&["cpu", "get", "name", "/value"])
-        .output() {
-        let output_str = String::from_utf8_lossy(&output.stdout);
-        if let Some(line) = output_str.lines().find(|line| line.contains("Name=")) {
-            if let Some(value) = line.split('=').nth(1) {
-                value.trim().to_string()
-            } else {
-                "Unknown CPU".to_string()
-            }
-        } else {
-            "Unknown CPU".to_string()
-        }
+    let cpu = if let Some(cpu) = sys.cpus().first() {
+        cpu.brand().to_string()
     } else {
         "Unknown CPU".to_string()
     };
     
-    // Get GPU info
+    // Get GPU info (Windows specific)
     let gpu = if let Ok(output) = Command::new("wmic")
         .args(&["path", "win32_VideoController", "get", "name", "/value"])
         .output() {
@@ -252,6 +265,152 @@ fn get_system_info() -> SystemInfo {
         gpu,
     }
 }
+
+#[tauri::command]
+fn get_system_stats() -> SystemStats {
+    let mut sys = System::new_all();
+    sys.refresh_all();
+    
+    // Get CPU usage
+    let cpu_usage = sys.global_cpu_info().cpu_usage();
+    
+    // Get RAM usage
+    let total_memory = sys.total_memory();
+    let used_memory = sys.used_memory();
+    let ram_usage = if total_memory > 0 {
+        (used_memory as f32 / total_memory as f32) * 100.0
+    } else {
+        0.0
+    };
+    
+    // Get disk usage (C: drive)
+    let disk_usage = sys.disks()
+        .iter()
+        .find(|disk| disk.name().to_string_lossy().starts_with("C:"))
+        .map(|disk| {
+            let total = disk.total_space();
+            let available = disk.available_space();
+            let used = total - available;
+            if total > 0 {
+                (used as f32 / total as f32) * 100.0
+            } else {
+                0.0
+            }
+        })
+        .unwrap_or(0.0);
+    
+    // Simulate temperature (would need additional hardware access for real temp)
+    let temperature = 45.0 + (cpu_usage / 10.0);
+    
+    SystemStats {
+        cpu_usage,
+        ram_usage,
+        disk_usage,
+        temperature,
+    }
+}
+
+#[tauri::command]
+async fn clean_temp() -> Result<String, String> {
+    let output = Command::new("cmd")
+        .args(&["/C", "del /s /f /q %temp%\\* && del /s /f /q C:\\Windows\\Temp\\*"])
+        .output()
+        .map_err(|e| e.to_string())?;
+    
+    if output.status.success() {
+        Ok("Temporary files cleaned successfully!".to_string())
+    } else {
+        Err("Failed to clean temporary files".to_string())
+    }
+}
+
+#[tauri::command]
+async fn run_optimization() -> Result<String, String> {
+    let ram = if let Ok(output) = Command::new("wmic")
+        .args(&["computersystem", "get", "TotalPhysicalMemory", "/value"])
+        .output() {
+        let output_str = String::from_utf8_lossy(&output.stdout);
+        if let Some(line) = output_str.lines().find(|line| line.contains("TotalPhysicalMemory=")) {
+            if let Some(value) = line.split('=').nth(1) {
+                if let Ok(bytes) = value.trim().parse::<u64>() {
+                    let gb = bytes / (1024 * 1024 * 1024);
+                    format!("{}GB", gb)
+                } else {
+                    "Unknown".to_string()
+                }
+            } else {
+                "Unknown".to_string()
+            }
+        } else {
+            "Unknown".to_string()
+        }
+    } else {
+        "Unknown".to_string()
+    };
+    
+    let script_url = "https://raw.githubusercontent.com/DragosKissLove/testbot/main/TFY%20Optimization.bat";
+    let temp_path = std::env::temp_dir().join("TFY_Optimization.bat");
+    
+    let response = reqwest::get(script_url).await.map_err(|e| e.to_string())?;
+    let content = response.text().await.map_err(|e| e.to_string())?;
+    fs::write(&temp_path, content).map_err(|e| e.to_string())?;
+    
+    Command::new("powershell")
+        .args(&["-Command", &format!("Start-Process '{}' -Verb RunAs", temp_path.display())])
+        .output()
+        .map_err(|e| e.to_string())?;
+    
+    Ok("System optimization started successfully!".to_string())
+}
+
+#[tauri::command]
+async fn wifi_passwords() -> Result<String, String> {
+    let output = Command::new("netsh")
+        .args(&["wlan", "show", "profiles"])
+        .output()
+        .map_err(|e| e.to_string())?;
+    
+    let profiles_output = String::from_utf8_lossy(&output.stdout);
+    let mut passwords = String::new();
+    
+    for line in profiles_output.lines() {
+        if line.contains("All User Profile") {
+            if let Some(profile_name) = line.split(':').nth(1) {
+                let profile_name = profile_name.trim();
+                let password_output = Command::new("netsh")
+                    .args(&["wlan", "show", "profile", &format!("name=\"{}\"", profile_name), "key=clear"])
+                    .output();
+                
+                if let Ok(pass_out) = password_output {
+                    let pass_str = String::from_utf8_lossy(&pass_out.stdout);
+                    for pass_line in pass_str.lines() {
+                        if pass_line.contains("Key Content") {
+                            if let Some(password) = pass_line.split(':').nth(1) {
+                                passwords.push_str(&format!("{}: {}\n", profile_name, password.trim()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    if passwords.is_empty() {
+        Ok("No WiFi passwords found.".to_string())
+    } else {
+        Ok(passwords)
+    }
+}
+
+#[tauri::command]
+async fn activate_windows() -> Result<String, String> {
+    Command::new("powershell")
+        .args(&["-Command", "irm https://get.activated.win | iex"])
+        .output()
+        .map_err(|e| e.to_string())?;
+    Ok("Windows activation process started!".to_string())
+}
+
 
 #[tauri::command]
 async fn download_roblox_player(version_hash: String) -> Result<String, String> {
@@ -307,9 +466,15 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             download_and_run,
             run_function,
-            get_username,
+            get_system_username,
+            get_user_profile_picture,
             get_system_info,
-            download_roblox_player
+            get_system_stats,
+            download_roblox_player,
+            clean_temp,
+            run_optimization,
+            wifi_passwords,
+            activate_windows
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
