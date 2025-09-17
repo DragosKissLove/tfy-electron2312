@@ -316,6 +316,8 @@ const App = () => {
               `linear-gradient(45deg, transparent, ${accentColor}20, transparent)`,
               `linear-gradient(45deg, ${accentColor}10, transparent, ${accentColor}20)`
             ]
+          }
+          }
         <StarBorder color={accentColor}>
           <motion.div
             animate={{ rotate: 360 }}
@@ -512,6 +514,8 @@ const App = () => {
         <main className="main-content" style={{ 
           overflow: 'hidden auto',
           scrollbarWidth: 'none',
+        }
+        }
         <main className="main-content" style={{ 
           overflow: 'hidden auto',
           scrollbarWidth: 'none',
