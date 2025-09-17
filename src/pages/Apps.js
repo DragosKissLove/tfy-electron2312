@@ -30,7 +30,7 @@ const Apps = () => {
     { 
       name: 'Discord', 
       url: 'https://dl.discordapp.net/distro/app/stable/win/x86/1.0.9014/DiscordSetup.exe', 
-      icon: '💬',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/discord/discord-original.svg',
       description: 'Voice, video and text communication service for gamers',
       category: 'Communication',
       size: '~85MB'
@@ -38,7 +38,7 @@ const Apps = () => {
     { 
       name: 'Steam', 
       url: 'https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe', 
-      icon: '🎮',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/steam/steam-original.svg',
       description: 'Digital distribution platform for PC gaming',
       category: 'Gaming',
       size: '~2MB'
@@ -46,7 +46,7 @@ const Apps = () => {
     { 
       name: 'Spotify', 
       url: 'https://download.scdn.co/SpotifySetup.exe', 
-      icon: '🎵',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spotify/spotify-original.svg',
       description: 'Music streaming service with millions of songs',
       category: 'Entertainment',
       size: '~1MB'
@@ -54,7 +54,7 @@ const Apps = () => {
     { 
       name: 'Brave Browser', 
       url: 'https://laptop-updates.brave.com/latest/winx64', 
-      icon: '🦁',
+      icon: 'https://brave.com/static-assets/images/brave-logo-sans-text.svg',
       description: 'Privacy-focused web browser with built-in ad blocker',
       category: 'Browser',
       size: '~120MB'
@@ -62,7 +62,7 @@ const Apps = () => {
     { 
       name: 'VLC Player', 
       url: 'https://get.videolan.org/vlc/3.0.20/win64/vlc-3.0.20-win64.exe', 
-      icon: '🎬',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vlc/vlc-original.svg',
       description: 'Free and open source cross-platform multimedia player',
       category: 'Media',
       size: '~40MB'
@@ -70,7 +70,7 @@ const Apps = () => {
     { 
       name: 'WinRAR', 
       url: 'https://www.rarlab.com/rar/winrar-x64-621.exe', 
-      icon: '📦',
+      icon: 'https://www.winrar.com/favicon.ico',
       description: 'Powerful archiver and archive manager utility',
       category: 'Utility',
       size: '~3MB'
@@ -78,7 +78,7 @@ const Apps = () => {
     { 
       name: 'Epic Games', 
       url: 'https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi', 
-      icon: '🎯',
+      icon: 'https://cdn2.unrealengine.com/Epic+Games+Node%2Fxlarge_whitetext_blackback_epiclogo_504x512_1529964470588-503x512-ac795e81c54b27aaa2e196456dd307bfe4ca3ca4.jpg',
       description: 'Digital video game storefront and launcher',
       category: 'Gaming',
       size: '~65MB'
@@ -86,7 +86,7 @@ const Apps = () => {
     { 
       name: 'Visual Studio Code', 
       url: 'https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user', 
-      icon: '💻',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg',
       description: 'Lightweight but powerful source code editor',
       category: 'Development',
       size: '~90MB'
@@ -94,7 +94,7 @@ const Apps = () => {
     { 
       name: 'OBS Studio', 
       url: 'https://cdn-fastly.obsproject.com/downloads/OBS-Studio-30.0.2-Full-Installer-x64.exe', 
-      icon: '📹',
+      icon: 'https://obsproject.com/assets/images/new_icon_small-r.png',
       description: 'Free and open source streaming and recording software',
       category: 'Media',
       size: '~110MB'
@@ -102,7 +102,7 @@ const Apps = () => {
     { 
       name: 'Chrome', 
       url: 'https://dl.google.com/chrome/install/latest/chrome_installer.exe', 
-      icon: '🌐',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/chrome/chrome-original.svg',
       description: 'Fast, secure, and free web browser built for the modern web',
       category: 'Browser',
       size: '~1MB'
@@ -110,7 +110,7 @@ const Apps = () => {
     { 
       name: 'Malwarebytes', 
       url: 'https://data-cdn.mbamupdates.com/web/mb4-setup-consumer/offline/MBSetup.exe', 
-      icon: '🛡️',
+      icon: 'https://www.malwarebytes.com/favicon.ico',
       description: 'Anti-malware software for comprehensive protection',
       category: 'Security',
       size: '~5MB'
@@ -118,7 +118,7 @@ const Apps = () => {
     { 
       name: 'Faceit AC', 
       url: 'https://cdn.faceit.com/faceit/anticheat/FaceitAC_1.0.17.36.exe', 
-      icon: '⚔️',
+      icon: 'https://faceit-client.faceit-cdn.net/assets/play-faceit-logo.svg',
       description: 'Anti-cheat software for competitive gaming platform',
       category: 'Gaming',
       size: '~15MB'
@@ -126,7 +126,7 @@ const Apps = () => {
     { 
       name: '7-Zip', 
       url: 'https://www.7-zip.org/a/7z2301-x64.exe', 
-      icon: '🗜️',
+      icon: 'https://www.7-zip.org/7ziplogo.png',
       description: 'Free and open-source file archiver with high compression ratio',
       category: 'Utility',
       size: '~1.5MB'
@@ -134,7 +134,7 @@ const Apps = () => {
     { 
       name: 'Notepad++', 
       url: 'https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.5.8/npp.8.5.8.Installer.x64.exe', 
-      icon: '📝',
+      icon: 'https://notepad-plus-plus.org/favicon.ico',
       description: 'Free source code editor and Notepad replacement',
       category: 'Development',
       size: '~4MB'
@@ -142,7 +142,7 @@ const Apps = () => {
     { 
       name: 'Audacity', 
       url: 'https://github.com/audacity/audacity/releases/download/Audacity-3.4.2/audacity-win-3.4.2-x64.exe', 
-      icon: '🎙️',
+      icon: 'https://www.audacityteam.org/favicon.ico',
       description: 'Free, open source, cross-platform audio software',
       category: 'Media',
       size: '~30MB'
@@ -150,10 +150,74 @@ const Apps = () => {
     { 
       name: 'GIMP', 
       url: 'https://download.gimp.org/gimp/v2.10/windows/gimp-2.10.36-setup.exe', 
-      icon: '🎨',
+      icon: 'https://www.gimp.org/favicon.ico',
       description: 'GNU Image Manipulation Program - free image editor',
       category: 'Graphics',
       size: '~200MB'
+    },
+    { 
+      name: 'Telegram', 
+      url: 'https://telegram.org/dl/desktop/win64', 
+      icon: 'https://telegram.org/favicon.ico',
+      description: 'Fast, secure messaging app with cloud storage',
+      category: 'Communication',
+      size: '~35MB'
+    },
+    { 
+      name: 'WhatsApp', 
+      url: 'https://web.whatsapp.com/desktop/windows/release/x64/WhatsAppSetup.exe', 
+      icon: 'https://static.whatsapp.net/rsrc.php/v3/yz/r/ujTY9i_Jhs1.png',
+      description: 'Simple, reliable, private messaging and calling',
+      category: 'Communication',
+      size: '~120MB'
+    },
+    { 
+      name: 'Zoom', 
+      url: 'https://zoom.us/client/latest/ZoomInstaller.exe', 
+      icon: 'https://st1.zoom.us/zoom.ico',
+      description: 'Video conferencing and online meetings platform',
+      category: 'Communication',
+      size: '~5MB'
+    },
+    { 
+      name: 'Blender', 
+      url: 'https://download.blender.org/release/Blender4.0/blender-4.0.2-windows-x64.msi', 
+      icon: 'https://www.blender.org/favicon.ico',
+      description: 'Free and open source 3D creation suite',
+      category: 'Graphics',
+      size: '~300MB'
+    },
+    { 
+      name: 'Telegram', 
+      url: 'https://telegram.org/dl/desktop/win64', 
+      icon: 'https://telegram.org/favicon.ico',
+      description: 'Fast, secure messaging app with cloud storage',
+      category: 'Communication',
+      size: '~35MB'
+    },
+    { 
+      name: 'WhatsApp', 
+      url: 'https://web.whatsapp.com/desktop/windows/release/x64/WhatsAppSetup.exe', 
+      icon: 'https://static.whatsapp.net/rsrc.php/v3/yz/r/ujTY9i_Jhs1.png',
+      description: 'Simple, reliable, private messaging and calling',
+      category: 'Communication',
+      size: '~120MB'
+    },
+    { 
+      name: 'Zoom', 
+      url: 'https://zoom.us/client/latest/ZoomInstaller.exe', 
+      icon: 'https://st1.zoom.us/zoom.ico',
+      description: 'Video conferencing and online meetings platform',
+      category: 'Communication',
+      size: '~5MB'
+    },
+    { 
+      name: 'Blender', 
+      url: 'https://download.blender.org/release/Blender4.0/blender-4.0.2-windows-x64.msi', 
+      icon: 'https://www.blender.org/favicon.ico',
+      description: 'Free and open source 3D creation suite',
+      category: 'Graphics',
+      size: '~300MB'
     }
   ];
 
@@ -254,7 +318,75 @@ const Apps = () => {
       style={{ padding: '24px', height: '100vh', overflow: 'auto' }}
     >
       <motion.div variants={itemVariants} style={{ marginBottom: '32px' }}>
-        <h1 style={{ 
+        <div style={{
+          textAlign: 'center',
+          marginBottom: '16px'
+        }}>
+          <h1 style={{ 
+            fontSize: '36px', 
+            fontWeight: '800', 
+            color: '#ffffff', 
+            marginBottom: '12px',
+            background: `linear-gradient(135deg, ${accentColor}, ${accentColor}aa)`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            textShadow: `0 0 30px ${accentColor}66`
+          }}>
+            Application Downloads
+          </h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            style={{ 
+              fontSize: '18px', 
+              color: '#ffffff',
+              fontWeight: '500',
+              textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+            }}
+          >
+            Download and install popular applications with one click
+          </motion.p>
+        </div>
+      </motion.div>
+
+      {/* Remove the colored stripe by not adding it */}
+      <motion.div variants={itemVariants} style={{ marginBottom: '32px' }}>
+        <div style={{
+          textAlign: 'center',
+          marginBottom: '16px'
+        }}>
+          <h1 style={{ 
+            fontSize: '36px', 
+            fontWeight: '800', 
+            color: '#ffffff', 
+            marginBottom: '12px',
+            background: `linear-gradient(135deg, ${accentColor}, ${accentColor}aa)`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            textShadow: `0 0 30px ${accentColor}66`
+          }}>
+            Application Downloads
+          </h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            style={{ 
+              fontSize: '18px', 
+              color: '#ffffff',
+              fontWeight: '500',
+              textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+            }}
+          >
+            Download and install popular applications with one click
+          </motion.p>
+        </div>
+      </motion.div>
+
+      {/* Remove the colored stripe by not adding it */}
+      <motion.div variants={itemVariants} style={{ marginBottom: '32px' }}>
+        <h2 style={{ 
           fontSize: '32px', 
           fontWeight: '700', 
           color: '#ffffff', 
@@ -263,26 +395,14 @@ const Apps = () => {
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent'
         }}>
-          Application Downloads
-        </h1>
-        <p style={{ 
-          fontSize: '16px', 
-          color: '#a0a0a0' 
-        }}>
-          Download and install popular applications with one click
-        </p>
-      </motion.div>
-
-      {/* Category Filter */}
-      <motion.div 
-        variants={itemVariants}
-        style={{
+          Available Applications
+        </h2>
+        <div style={{
           display: 'flex',
           gap: '8px',
           marginBottom: '24px',
           flexWrap: 'wrap'
-        }}
-      >
+        }}>
         {categories.map((category) => (
           <motion.button
             key={category}
@@ -304,6 +424,7 @@ const Apps = () => {
             {category}
           </motion.button>
         ))}
+        </div>
       </motion.div>
 
       <motion.div 
@@ -351,9 +472,30 @@ const Apps = () => {
               <div style={{
                 fontSize: '48px',
                 marginBottom: '16px',
-                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
+                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}>
-                {app.icon}
+                {app.icon.startsWith('http') ? (
+                  <img 
+                    src={app.icon} 
+                    alt={app.name}
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      objectFit: 'contain',
+                      filter: `drop-shadow(0 0 10px ${accentColor}66)`
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
+                  />
+                ) : (
+                  <span>{app.icon}</span>
+                )}
+                <span style={{ display: 'none', fontSize: '48px' }}>📦</span>
               </div>
               
               <div style={{
