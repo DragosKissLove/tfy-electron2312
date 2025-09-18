@@ -141,6 +141,7 @@ const App = () => {
         return <Settings />;
       default:
         return <Dashboard />;
+        break;
     }
   };
 
