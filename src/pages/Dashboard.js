@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiDownload, FiTool, FiActivity, FiCpu, FiHardDrive, FiMonitor, FiWifi, FiShield, FiZap } from 'react-icons/fi';
 import { FaGamepad, FaMemory, FaThermometerHalf } from 'react-icons/fa';
-import { invoke } from '@tauri-apps/api/tauri';
 import { motion } from 'framer-motion';
 
 const Dashboard = () => {
@@ -34,7 +33,7 @@ const Dashboard = () => {
 
     const getSystemInfo = async () => {
       try {
-        const info = await invoke('get_system_info');
+        const info = await window.electron.runFunction('getSystemInfo');
         setSystemInfo(info);
       } catch (error) {
         console.error('Failed to get system info:', error);
@@ -123,16 +122,16 @@ const Dashboard = () => {
       let result;
       switch (action) {
         case 'clean_temp':
-          result = await invoke('run_function', { name: 'clean_temp' });
+          result = await window.electron.runFunction('cleanTemp');
           break;
         case 'run_optimization':
-          result = await invoke('run_function', { name: 'run_optimization' });
+          result = await window.electron.runFunction('runOptimization');
           break;
         case 'wifi_passwords':
-          result = await invoke('run_function', { name: 'wifi_passwords' });
+          result = await window.electron.runFunction('wifiPasswords');
           break;
         case 'activate_windows':
-          result = await invoke('run_function', { name: 'activate_windows' });
+          result = await window.electron.runFunction('activateWindows');
           break;
         default:
           console.log(`Action ${action} not implemented yet`);

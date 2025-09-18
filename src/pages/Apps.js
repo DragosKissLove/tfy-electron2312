@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { invoke } from '@tauri-apps/api/tauri';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiDownload, FiRefreshCw } from 'react-icons/fi';
 
@@ -234,7 +233,7 @@ const Apps = () => {
       setStatus(`🔄 Downloading ${app.name}...`);
       showNotification('Info', `Starting download of ${app.name}`);
       
-      const result = await invoke('download_and_run', { name: app.name, url: app.url });
+      const result = await window.electron.runFunction('downloadAndRun', { name: app.name, url: app.url });
       setStatus(`✅ ${result}`);
       showNotification('Success', `${app.name} downloaded and launched successfully!`);
     } catch (error) {

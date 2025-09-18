@@ -4,13 +4,12 @@ import {
   FiHome, 
   FiDownload, 
   FiTool, 
-  FiGamepad2, 
+  FiGamepad, 
   FiRefreshCw, 
   FiSettings,
   FiUser,
   FiLogOut
 } from 'react-icons/fi';
-import { invoke } from '@tauri-apps/api/tauri';
 import StarBorder from '../StarBorder';
 
 const Sidebar = ({ activeTab, setActiveTab, username, userProfilePic }) => {
@@ -37,7 +36,7 @@ const Sidebar = ({ activeTab, setActiveTab, username, userProfilePic }) => {
     // Get system info
     const getSystemInfo = async () => {
       try {
-        const info = await invoke('get_system_info');
+        const info = await window.electron.runFunction('getSystemInfo');
         setSystemInfo(info);
       } catch (error) {
         console.error('Failed to get system info:', error);
@@ -55,7 +54,7 @@ const Sidebar = ({ activeTab, setActiveTab, username, userProfilePic }) => {
     { id: 'Dashboard', label: 'Dashboard', icon: FiHome },
     { id: 'Apps', label: 'Downloads', icon: FiDownload },
     { id: 'Tools', label: 'Tweaks', icon: FiTool },
-    { id: 'Gaming', label: 'Gaming Tweaks', icon: FiGamepad2 },
+    { id: 'Gaming', label: 'Gaming Tweaks', icon: FiGamepad },
     { id: 'Updates', label: 'Updates', icon: FiRefreshCw },
     { id: 'Settings', label: 'Settings', icon: FiSettings }
   ];

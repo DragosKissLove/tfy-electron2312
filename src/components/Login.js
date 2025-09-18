@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
-import { invoke } from '@tauri-apps/api/tauri';
 
 const Login = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -35,7 +34,7 @@ const Login = ({ onLogin }) => {
     // Get system username
     const getSystemUsername = async () => {
       try {
-        const username = await invoke('get_system_username');
+        const username = await window.electron.runFunction('getUsername');
         setSystemUsername(username);
         if (!formData.username) {
           setFormData(prev => ({ ...prev, username }));
