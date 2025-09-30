@@ -29,6 +29,7 @@ contextBridge.exposeInMainWorld('electron', {
       });
       return await ipcRenderer.invoke('download-roblox', versionHash);
     } catch (error) {
+    validateUser: (username, password) => ipcRenderer.invoke('validate-user', username, password),
       console.error('Roblox download error:', error);
       throw error;
     }

@@ -48,16 +48,16 @@ const Login = ({ onLogin }) => {
   }, [formData.username]);
 
   const validateCredentials = async (username, password) => {
-    // GitHub API simulation for user validation
     try {
-      const response = await fetch(`https://api.github.com/users/${username}`);
-      if (response.ok) {
-        // For demo purposes, accept any password for existing GitHub users
-        return true;
+      if (window.electron && window.electron.validateUser) {
+        const result = await window.electron.validateUser(username, password);
+        return result;
+      } else {
+        // Fallback for development
+        return { valid: false, error: 'Electron not available' };
       }
-      return false;
     } catch (error) {
-      return false;
+      return { valid: false, error: 'Validation failed' };
     }
   };
 
@@ -74,16 +74,18 @@ const Login = ({ onLogin }) => {
           return;
         }
 
-        const isValid = await validateCredentials(formData.username, formData.password);
-        if (!isValid) {
-          setError('Invalid username or password. Please check your credentials.');
+        const validation = await validateCredentials(formData.username, formData.password);
+        if (!validation.valid) {
+          setError(validation.error || 'Invalid username or password. Please check your credentials.');
           return;
         }
 
         const userData = {
           id: Date.now(),
-          username: formData.username,
-          email: formData.email || `${formData.username}@github.com`,
+          username: validation.user?.username || formData.username,
+          email: validation.user?.email || formData.email || `${formData.username}@github.com`,
+          name: validation.user?.name || formData.username,
+          avatar: validation.user?.avatar,
           loginTime: new Date().toISOString(),
           type: 'registered'
         };
@@ -109,9 +111,9 @@ const Login = ({ onLogin }) => {
           return;
         }
 
-        // Check if user already exists
-        const userExists = await validateCredentials(formData.username, '');
-        if (userExists) {
+        // Check if user already exists on GitHub
+        const validation = await validateCredentials(formData.username, 'dummy');
+        if (validation.valid) {
           setError('Username already exists. Please choose a different one.');
           return;
         }
@@ -120,6 +122,7 @@ const Login = ({ onLogin }) => {
           id: Date.now(),
           username: formData.username,
           email: formData.email,
+          name: formData.username,
           loginTime: new Date().toISOString(),
           type: 'registered'
         };

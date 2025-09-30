@@ -43,8 +43,10 @@ const App = () => {
       try {
         // Get user profile picture
         try {
-          const profilePic = await window.electron.runFunction('getUserProfilePicture');
-          setUserProfilePic(profilePic);
+          if (window.electron && window.electron.runFunction) {
+            const profilePic = await window.electron.runFunction('getUserProfilePicture');
+            setUserProfilePic(profilePic);
+          }
         } catch (error) {
           console.log('Could not get profile picture:', error);
         }
@@ -57,9 +59,11 @@ const App = () => {
         }
         
         // Get system username
-        const systemUsername = await window.electron.runFunction('getUsername');
-        if (!savedSession) {
-          setUsername(systemUsername);
+        if (window.electron && window.electron.runFunction) {
+          const systemUsername = await window.electron.runFunction('getUsername');
+          if (!savedSession) {
+            setUsername(systemUsername);
+          }
         }
       } catch (error) {
         console.error('Failed to get username:', error);
@@ -112,15 +116,21 @@ const App = () => {
   };
 
   const handleMinimize = () => {
-    window.electron.minimize();
+    if (window.electron && window.electron.minimize) {
+      window.electron.minimize();
+    }
   };
 
   const handleMaximize = () => {
-    window.electron.toggleMaximize();
+    if (window.electron && window.electron.toggleMaximize) {
+      window.electron.toggleMaximize();
+    }
   };
 
   const handleClose = () => {
-    window.electron.close();
+    if (window.electron && window.electron.close) {
+      window.electron.close();
+    }
   };
 
   const renderContent = () => {
@@ -137,8 +147,6 @@ const App = () => {
         return <Updates />;
       case 'Settings':
         return <Settings />;
-      default:
-        return <Dashboard />;
       default:
         return <Dashboard />;
     }

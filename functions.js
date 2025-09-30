@@ -332,6 +332,33 @@ async function downloadRobloxPlayer(versionHash, progressCallback) {
   }
 }
 
+// Validate user credentials
+async function validateUser(username, password) {
+  try {
+    // Check if username exists on GitHub
+    const response = await axios.get(`https://api.github.com/users/${username}`);
+    if (response.status === 200) {
+      // For demo purposes, we'll accept any password for existing GitHub users
+      // In a real app, you'd validate against your own user database
+      return {
+        valid: true,
+        user: {
+          username: username,
+          email: response.data.email || `${username}@github.com`,
+          avatar: response.data.avatar_url,
+          name: response.data.name || username
+        }
+      };
+    }
+    return { valid: false, error: 'User not found' };
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      return { valid: false, error: 'Username does not exist' };
+    }
+    return { valid: false, error: 'Network error. Please try again.' };
+  }
+}
+
 module.exports = {
   downloadAndRun,
   cleanTemp,
@@ -343,5 +370,6 @@ module.exports = {
   getUsername,
   getUserProfilePicture,
   downloadRobloxPlayer,
-  getSystemInfo
+  getSystemInfo,
+  validateUser
 };
