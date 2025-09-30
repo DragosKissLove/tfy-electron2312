@@ -36,8 +36,10 @@ const Sidebar = ({ activeTab, setActiveTab, username, userProfilePic }) => {
     // Get system info
     const getSystemInfo = async () => {
       try {
-        const info = await window.electron.runFunction('getSystemInfo');
-        setSystemInfo(info);
+        if (window.electron && window.electron.runFunction) {
+          const info = await window.electron.runFunction('getSystemInfo');
+          setSystemInfo(info);
+        }
       } catch (error) {
         console.error('Failed to get system info:', error);
       }
@@ -148,17 +150,17 @@ const Sidebar = ({ activeTab, setActiveTab, username, userProfilePic }) => {
                     transition: 'all 0.2s',
                     boxShadow: isActive 
                       ? `0 8px 32px ${accentColor}33`
-                      : 'none'
+                      : 'none',
+                    textAlign: 'left'
                   }}
                 >
                   <Icon size={20} />
-                  {item.label}
+                  <span style={{ flex: 1 }}>{item.label}</span>
                   {isActive && (
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       style={{
-                        marginLeft: 'auto',
                         width: '6px',
                         height: '6px',
                         borderRadius: '50%',
