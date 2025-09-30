@@ -45,23 +45,6 @@ function createWindow() {
     mainWindow.close();
   });
 
-  ipcMain.handle('toggle-maximize-window', () => {
-    if (mainWindow.isMaximized()) {
-      mainWindow.unmaximize();
-    } else {
-      mainWindow.maximize();
-    }
-  });
-
-  // Handle user validation
-  ipcMain.handle('validate-user', async (event, username, password) => {
-    try {
-      return await functions.validateUser(username, password);
-    } catch (error) {
-      return { valid: false, error: error.message };
-    }
-  });
-
   // Check for updates immediately
   autoUpdater.checkForUpdates();
 }

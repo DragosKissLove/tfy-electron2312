@@ -1,0 +1,1 @@
+start "" "https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe"

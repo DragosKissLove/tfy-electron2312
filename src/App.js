@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FiMinus, FiX, FiMaximize2, FiUser } from 'react-icons/fi';
+import { appWindow } from '@tauri-apps/api/window';
 import { motion, AnimatePresence } from 'framer-motion';
+import { invoke } from '@tauri-apps/api/tauri';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Apps from './pages/Apps';
@@ -43,10 +45,8 @@ const App = () => {
       try {
         // Get user profile picture
         try {
-          if (window.electron && window.electron.runFunction) {
-            const profilePic = await window.electron.runFunction('getUserProfilePicture');
-            setUserProfilePic(profilePic);
-          }
+          const profilePic = await invoke('get_user_profile_picture');
+          setUserProfilePic(profilePic);
         } catch (error) {
           console.log('Could not get profile picture:', error);
         }
@@ -59,11 +59,9 @@ const App = () => {
         }
         
         // Get system username
-        if (window.electron && window.electron.runFunction) {
-          const systemUsername = await window.electron.runFunction('getUsername');
-          if (!savedSession) {
-            setUsername(systemUsername);
-          }
+        const systemUsername = await invoke('get_system_username');
+        if (!savedSession) {
+          setUsername(systemUsername);
         }
       } catch (error) {
         console.error('Failed to get username:', error);
@@ -96,7 +94,6 @@ const App = () => {
         case r: h = (g - b) / d + (g < b ? 6 : 0); break;
         case g: h = (b - r) / d + 2; break;
         case b: h = (r - g) / d + 4; break;
-        default: break;
       }
       h /= 6;
     }
@@ -117,21 +114,15 @@ const App = () => {
   };
 
   const handleMinimize = () => {
-    if (window.electron && window.electron.minimize) {
-      window.electron.minimize();
-    }
+    appWindow.minimize();
   };
 
   const handleMaximize = () => {
-    if (window.electron && window.electron.toggleMaximize) {
-      window.electron.toggleMaximize();
-    }
+    appWindow.toggleMaximize();
   };
 
   const handleClose = () => {
-    if (window.electron && window.electron.close) {
-      window.electron.close();
-    }
+    appWindow.close();
   };
 
   const renderContent = () => {
