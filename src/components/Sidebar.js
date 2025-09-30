@@ -4,12 +4,12 @@ import {
   FiHome, 
   FiDownload, 
   FiTool, 
-  FiGamepad, 
   FiRefreshCw, 
   FiSettings,
   FiUser,
   FiLogOut
 } from 'react-icons/fi';
+import { FaGamepad } from 'react-icons/fa';
 import StarBorder from '../StarBorder';
 
 const Sidebar = ({ activeTab, setActiveTab, username, userProfilePic }) => {
@@ -54,7 +54,7 @@ const Sidebar = ({ activeTab, setActiveTab, username, userProfilePic }) => {
     { id: 'Dashboard', label: 'Dashboard', icon: FiHome },
     { id: 'Apps', label: 'Downloads', icon: FiDownload },
     { id: 'Tools', label: 'Tweaks', icon: FiTool },
-    { id: 'Gaming', label: 'Gaming Tweaks', icon: FiGamepad },
+    { id: 'Gaming', label: 'Gaming Tweaks', icon: FaGamepad },
     { id: 'Updates', label: 'Updates', icon: FiRefreshCw },
     { id: 'Settings', label: 'Settings', icon: FiSettings }
   ];

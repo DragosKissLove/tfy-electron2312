@@ -45,6 +45,14 @@ function createWindow() {
     mainWindow.close();
   });
 
+  ipcMain.handle('toggle-maximize-window', () => {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
+    }
+  });
+
   // Check for updates immediately
   autoUpdater.checkForUpdates();
 }
