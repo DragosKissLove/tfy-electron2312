@@ -139,8 +139,6 @@ const App = () => {
         return <Settings />;
       default:
         return <Dashboard />;
-      default:
-        return <Dashboard />;
     }
   };
 
