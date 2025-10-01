@@ -13,6 +13,7 @@ contextBridge.exposeInMainWorld('electron', {
   saveSettings: (settings) => ipcRenderer.invoke('save-settings', settings),
   platform: process.platform,
   minimize: () => ipcRenderer.invoke('minimize-window'),
+  toggleMaximize: () => ipcRenderer.invoke('toggle-maximize-window'),
   close: () => ipcRenderer.invoke('close-window'),
   onUpdateStatus: (callback) => ipcRenderer.on('update-status', callback),
   onUpdateAvailable: (callback) => ipcRenderer.on('update-available', callback),

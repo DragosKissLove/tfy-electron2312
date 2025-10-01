@@ -1,1 +1,0 @@
-start "" "https://cdn.faceit.com/faceit/anticheat/FaceitAC_1.0.17.36.exe"

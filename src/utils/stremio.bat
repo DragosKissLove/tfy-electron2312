@@ -1,1 +1,0 @@
-start "" "https://dl.strem.io/stremio-shell-ng/v5.0.5/StremioSetup-v5.0.5.exe"

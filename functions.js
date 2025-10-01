@@ -232,6 +232,26 @@ function getUsername() {
   return os.userInfo().username;
 }
 
+// Get user profile picture
+function getUserProfilePicture() {
+  try {
+    const tempDir = os.tmpdir();
+    const possiblePaths = [
+      path.join(tempDir, 'user.bmp'),
+      path.join(os.homedir(), 'AppData', 'Roaming', 'Microsoft', 'Windows', 'AccountPictures', 'user.bmp')
+    ];
+    
+    for (const picPath of possiblePaths) {
+      if (fs.existsSync(picPath)) {
+        return `file://${picPath}`;
+      }
+    }
+    return null;
+  } catch (error) {
+    return null;
+  }
+}
+
 // Download Roblox player
 async function downloadRobloxPlayer(versionHash, progressCallback) {
   try {
@@ -321,6 +341,7 @@ module.exports = {
   installAtlasTools,
   wifiPasswords,
   getUsername,
+  getUserProfilePicture,
   downloadRobloxPlayer,
   getSystemInfo
 };

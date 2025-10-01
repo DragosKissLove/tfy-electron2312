@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiMinus, FiX, FiMaximize2, FiUser } from 'react-icons/fi';
-import { appWindow } from '@tauri-apps/api/window';
 import { motion, AnimatePresence } from 'framer-motion';
-import { invoke } from '@tauri-apps/api/tauri';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Apps from './pages/Apps';
@@ -45,7 +43,7 @@ const App = () => {
       try {
         // Get user profile picture
         try {
-          const profilePic = await invoke('get_user_profile_picture');
+          const profilePic = await window.electron.runFunction('getUserProfilePicture');
           setUserProfilePic(profilePic);
         } catch (error) {
           console.log('Could not get profile picture:', error);
@@ -59,7 +57,7 @@ const App = () => {
         }
         
         // Get system username
-        const systemUsername = await invoke('get_system_username');
+        const systemUsername = await window.electron.runFunction('getUsername');
         if (!savedSession) {
           setUsername(systemUsername);
         }
@@ -114,15 +112,15 @@ const App = () => {
   };
 
   const handleMinimize = () => {
-    appWindow.minimize();
+    window.electron.minimize();
   };
 
   const handleMaximize = () => {
-    appWindow.toggleMaximize();
+    window.electron.toggleMaximize();
   };
 
   const handleClose = () => {
-    appWindow.close();
+    window.electron.close();
   };
 
   const renderContent = () => {
@@ -139,6 +137,8 @@ const App = () => {
         return <Updates />;
       case 'Settings':
         return <Settings />;
+      default:
+        return <Dashboard />;
       default:
         return <Dashboard />;
     }
