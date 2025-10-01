@@ -94,20 +94,6 @@ ipcMain.handle('run-function', async (event, { name, args }) => {
   }
 });
 
-// Handle Roblox downgrade with progress callback
-ipcMain.handle('download-roblox', async (event, versionHash) => {
-  const functions = require('./functions');
-  try {
-    const progressCallback = (message) => {
-      event.sender.send('roblox-progress', message);
-    };
-    return await functions.downloadRobloxPlayer(versionHash, progressCallback);
-  } catch (error) {
-    console.error('Error downloading Roblox:', error);
-    throw error;
-  }
-});
-
 // Handle settings
 ipcMain.handle('get-settings', () => {
   return store.get('settings');

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiInfo, FiMessageCircle } from 'react-icons/fi';
 import { FaPalette } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { invoke } from '@tauri-apps/api/tauri';
 
 const Settings = () => {
   const [accentColor, setAccentColor] = useState('#8b5cf6');

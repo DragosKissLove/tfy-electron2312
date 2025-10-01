@@ -6,64 +6,6 @@ const { exec } = require('child_process');
 const axios = require('axios');
 const extract = require('extract-zip');
 
-// Get system information
-function getSystemInfo() {
-  return new Promise((resolve) => {
-    const totalMem = Math.round(os.totalmem() / (1024 * 1024 * 1024));
-    const freeMem = Math.round(os.freemem() / (1024 * 1024 * 1024));
-    const usedMem = totalMem - freeMem;
-    
-    // Get OS version
-    exec('wmic os get Caption /value', (error, stdout) => {
-      let osName = 'Windows';
-      if (!error && stdout) {
-        const match = stdout.match(/Caption=(.+)/);
-        if (match) {
-          osName = match[1].trim().replace('Microsoft ', '');
-        }
-      }
-      
-      // Get CPU info
-      exec('wmic cpu get Name /value', (error, stdout) => {
-        let cpuName = 'Unknown CPU';
-        if (!error && stdout) {
-          const match = stdout.match(/Name=(.+)/);
-          if (match) {
-            cpuName = match[1].trim();
-          }
-        }
-        
-        // Get GPU info
-        exec('wmic path win32_VideoController get Name /value', (error, stdout) => {
-          let gpuName = 'Unknown GPU';
-          if (!error && stdout) {
-            const match = stdout.match(/Name=(.+)/);
-            if (match) {
-              gpuName = match[1].trim();
-            }
-          }
-          
-          // Get uptime
-          const uptimeSeconds = os.uptime();
-          const hours = Math.floor(uptimeSeconds / 3600);
-          const minutes = Math.floor((uptimeSeconds % 3600) / 60);
-          
-          resolve({
-            os: osName,
-            ram: `${totalMem}GB DDR4`,
-            cpu: cpuName,
-            gpu: gpuName,
-            uptime: `${hours}h ${minutes}m`,
-            ramUsage: Math.round((usedMem / totalMem) * 100),
-            totalRam: totalMem,
-            usedRam: usedMem
-          });
-        });
-      });
-    });
-  });
-}
-
 // Apps installation function
 async function downloadAndRun(name, url) {
   try {
@@ -321,6 +263,5 @@ module.exports = {
   installAtlasTools,
   wifiPasswords,
   getUsername,
-  downloadRobloxPlayer,
-  getSystemInfo
+  downloadRobloxPlayer
 };

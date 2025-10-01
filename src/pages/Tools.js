@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { invoke } from '@tauri-apps/api/tauri';
 import { FiTool, FiTrash2, FiZap, FiShield, FiKey, FiDownload } from 'react-icons/fi';
 
 const Tools = () => {
@@ -54,7 +55,7 @@ const Tools = () => {
     try {
       setLoading(tool.function);
       setStatus(`Running ${tool.name}...`);
-      const result = await window.electron.runFunction(tool.function);
+      const result = await invoke('run_function', { name: tool.function });
       setStatus(result);
     } catch (error) {
       setStatus(`Error running ${tool.name}: ${error}`);

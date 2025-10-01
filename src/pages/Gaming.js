@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { invoke } from '@tauri-apps/api/tauri';
 import { FiDownload, FiClock, FiRefreshCw } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -73,7 +74,7 @@ const Gaming = () => {
       setStatus('🔄 Starting Roblox downgrade process...');
       showNotification('Info', 'Starting Roblox downgrade...');
       
-      const result = await window.electron.downloadRobloxPlayer(robloxVersion, (message) => setStatus(message));
+      const result = await invoke('download_roblox_player', { versionHash: robloxVersion });
       setStatus(`✅ ${result}`);
       showNotification('Success', 'Roblox downgrade completed successfully!');
     } catch (error) {
@@ -96,7 +97,7 @@ const Gaming = () => {
       setStatus(`🔄 Downloading ${executor.name}...`);
       showNotification('Info', `Downloading ${executor.name}...`);
       
-      const result = await window.electron.runFunction('downloadAndRun', { name: executor.name, url: executor.url });
+      const result = await invoke('download_and_run', { name: executor.name, url: executor.url });
       setStatus(`✅ ${result}`);
       showNotification('Success', `${executor.name} downloaded and launched successfully!`);
     } catch (error) {
@@ -114,7 +115,7 @@ const Gaming = () => {
       setStatus('🔄 Downloading CreamInstaller...');
       showNotification('Info', 'Downloading CreamInstaller...');
       
-      const result = await window.electron.runFunction('downloadAndRun', { 
+      const result = await invoke('download_and_run', { 
         name: 'CreamInstaller', 
         url: 'https://github.com/pointfeev/CreamInstaller/releases/latest/download/CreamInstaller.zip'
       });
