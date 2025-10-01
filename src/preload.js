@@ -14,22 +14,12 @@ contextBridge.exposeInMainWorld('electron', {
   platform: process.platform,
   minimize: () => ipcRenderer.invoke('minimize-window'),
   close: () => ipcRenderer.invoke('close-window'),
+  // Add update-related functions
   onUpdateStatus: (callback) => ipcRenderer.on('update-status', callback),
   onUpdateAvailable: (callback) => ipcRenderer.on('update-available', callback),
   onUpdateNotAvailable: (callback) => ipcRenderer.on('update-not-available', callback),
   onDownloadProgress: (callback) => ipcRenderer.on('download-progress', callback),
   onUpdateDownloaded: (callback) => ipcRenderer.on('update-downloaded', callback),
   startUpdate: () => ipcRenderer.invoke('start-update'),
-  installUpdate: () => ipcRenderer.invoke('install-update'),
-  downloadRobloxPlayer: async (versionHash, progressCallback) => {
-    try {
-      ipcRenderer.on('roblox-progress', (event, message) => {
-        if (progressCallback) progressCallback(message);
-      });
-      return await ipcRenderer.invoke('download-roblox', versionHash);
-    } catch (error) {
-      console.error('Roblox download error:', error);
-      throw error;
-    }
-  }
+  installUpdate: () => ipcRenderer.invoke('install-update')
 });
