@@ -46,7 +46,7 @@ const Login = ({ onLogin }) => {
     };
 
     getSystemUsername();
-  }, [formData.username]);
+  }, []);
 
   const validateCredentials = async (username, password) => {
     // GitHub API simulation for user validation
